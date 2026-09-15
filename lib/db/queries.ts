@@ -1,6 +1,15 @@
-import { desc, and, eq, isNull } from 'drizzle-orm';
+import { desc, and, eq, isNull, inArray } from 'drizzle-orm';
 import { db } from './drizzle';
-import { activityLogs, teamMembers, teams, users } from './schema';
+import {
+  activityLogs,
+  teamMembers,
+  teams,
+  users,
+  cases,
+  caseAnalyses,
+  Case,
+  CaseAnalysis,
+} from './schema';
 import { cookies } from 'next/headers';
 import { verifyToken } from '@/lib/auth/session';
 
@@ -127,4 +136,67 @@ export async function getTeamForUser() {
   });
 
   return result?.team || null;
+}
+
+export type CaseWithLatestAnalysis = Case & {
+  latestAnalysis: CaseAnalysis | null;
+};
+
+export async function getCasesForTeam(
+  teamId: number
+): Promise<CaseWithLatestAnalysis[]> {
+  const teamCases = await db
+    .select()
+    .from(cases)
+    .where(eq(cases.teamId, teamId))
+    .orderBy(desc(cases.createdAt));
+
+  if (teamCases.length === 0) {
+    return [];
+  }
+
+  const analyses = await db
+    .select()
+    .from(caseAnalyses)
+    .where(inArray(caseAnalyses.caseId, teamCases.map((c) => c.id)))
+    .orderBy(desc(caseAnalyses.createdAt));
+
+  const latestByCase = new Map<number, CaseAnalysis>();
+  for (const analysis of analyses) {
+    if (!latestByCase.has(analysis.caseId)) {
+      latestByCase.set(analysis.caseId, analysis);
+    }
+  }
+
+  return teamCases.map((caseRow) => ({
+    ...caseRow,
+    latestAnalysis: latestByCase.get(caseRow.id) ?? null
+  }));
+}
+
+export async function getCaseByIdForTeam(
+  caseId: number,
+  teamId: number
+): Promise<CaseWithLatestAnalysis | null> {
+  const [caseRow] = await db
+    .select()
+    .from(cases)
+    .where(and(eq(cases.id, caseId), eq(cases.teamId, teamId)))
+    .limit(1);
+
+  if (!caseRow) {
+    return null;
+  }
+
+  const [latestAnalysis] = await db
+    .select()
+    .from(caseAnalyses)
+    .where(eq(caseAnalyses.caseId, caseId))
+    .orderBy(desc(caseAnalyses.createdAt))
+    .limit(1);
+
+  return {
+    ...caseRow,
+    latestAnalysis: latestAnalysis ?? null
+  };
 }

@@ -5,6 +5,8 @@ import {
   text,
   timestamp,
   integer,
+  jsonb,
+  real,
 } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 
@@ -68,15 +70,102 @@ export const invitations = pgTable('invitations', {
   status: varchar('status', { length: 20 }).notNull().default('pending'),
 });
 
+export type ConversationTurn = {
+  role: 'customer' | 'agent';
+  content: string;
+};
+
+export const cases = pgTable('cases', {
+  id: serial('id').primaryKey(),
+  teamId: integer('team_id')
+    .notNull()
+    .references(() => teams.id),
+  subject: varchar('subject', { length: 255 }).notNull(),
+  customerEmail: varchar('customer_email', { length: 255 }),
+  category: varchar('category', { length: 50 }),
+  status: varchar('status', { length: 30 }).notNull().default('queued'),
+  customerMessage: text('customer_message').notNull(),
+  conversationHistory: jsonb('conversation_history')
+    .$type<ConversationTurn[]>()
+    .notNull()
+    .default([]),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at').notNull().defaultNow(),
+});
+
+export const caseAnalyses = pgTable('case_analyses', {
+  id: serial('id').primaryKey(),
+  caseId: integer('case_id')
+    .notNull()
+    .references(() => cases.id),
+  category: varchar('category', { length: 50 }),
+  summary: text('summary'),
+  intent: text('intent'),
+  urgency: varchar('urgency', { length: 20 }),
+  recommendedAction: text('recommended_action'),
+  draftResponse: text('draft_response'),
+  missingInformation: jsonb('missing_information')
+    .$type<string[]>()
+    .notNull()
+    .default([]),
+  sources: jsonb('sources').$type<string[]>().notNull().default([]),
+  confidence: real('confidence'),
+  model: varchar('model', { length: 100 }),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+});
+
+export const documents = pgTable('documents', {
+  id: serial('id').primaryKey(),
+  teamId: integer('team_id')
+    .notNull()
+    .references(() => teams.id),
+  title: varchar('title', { length: 255 }).notNull(),
+  type: varchar('type', { length: 30 }).notNull().default('guide'),
+  content: text('content').notNull(),
+  status: varchar('status', { length: 20 }).notNull().default('active'),
+  version: integer('version').notNull().default(1),
+  creatorId: integer('creator_id').references(() => users.id),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at').notNull().defaultNow(),
+});
+
 export const teamsRelations = relations(teams, ({ many }) => ({
   teamMembers: many(teamMembers),
   activityLogs: many(activityLogs),
   invitations: many(invitations),
+  cases: many(cases),
+  documents: many(documents),
 }));
 
 export const usersRelations = relations(users, ({ many }) => ({
   teamMembers: many(teamMembers),
   invitationsSent: many(invitations),
+  createdDocuments: many(documents),
+}));
+
+export const casesRelations = relations(cases, ({ one }) => ({
+  team: one(teams, {
+    fields: [cases.teamId],
+    references: [teams.id],
+  }),
+}));
+
+export const caseAnalysesRelations = relations(caseAnalyses, ({ one }) => ({
+  case: one(cases, {
+    fields: [caseAnalyses.caseId],
+    references: [cases.id],
+  }),
+}));
+
+export const documentsRelations = relations(documents, ({ one }) => ({
+  team: one(teams, {
+    fields: [documents.teamId],
+    references: [teams.id],
+  }),
+  creator: one(users, {
+    fields: [documents.creatorId],
+    references: [users.id],
+  }),
 }));
 
 export const invitationsRelations = relations(invitations, ({ one }) => ({
@@ -122,6 +211,12 @@ export type ActivityLog = typeof activityLogs.$inferSelect;
 export type NewActivityLog = typeof activityLogs.$inferInsert;
 export type Invitation = typeof invitations.$inferSelect;
 export type NewInvitation = typeof invitations.$inferInsert;
+export type Case = typeof cases.$inferSelect;
+export type NewCase = typeof cases.$inferInsert;
+export type CaseAnalysis = typeof caseAnalyses.$inferSelect;
+export type NewCaseAnalysis = typeof caseAnalyses.$inferInsert;
+export type Document = typeof documents.$inferSelect;
+export type NewDocument = typeof documents.$inferInsert;
 export type TeamDataWithMembers = Team & {
   teamMembers: (TeamMember & {
     user: Pick<User, 'id' | 'name' | 'email'>;
