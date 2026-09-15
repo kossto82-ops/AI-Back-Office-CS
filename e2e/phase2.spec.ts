@@ -52,9 +52,9 @@ test.describe.serial('Phase 2 E2E', () => {
   test('2. Cases nav shows the seeded list', async () => {
     await page.getByRole('link', { name: 'Cases' }).click();
     await page.waitForURL('**/dashboard/cases');
-    await expect(page.getByText('20 cases for Test Team')).toBeVisible();
+    await expect(page.getByText('21 cases for Test Team')).toBeVisible();
     const links = page.locator('a[href*="/dashboard/cases/"]');
-    await expect(links).toHaveCount(20);
+    await expect(links).toHaveCount(21);
     await page.screenshot({
       path: 'e2e/screenshots/02-cases-list.png',
       fullPage: true

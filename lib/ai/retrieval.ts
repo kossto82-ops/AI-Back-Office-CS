@@ -28,16 +28,84 @@ function escapeLike(input: string): string {
   return input.replace(/[\\%_]/g, (m) => `\\${m}`);
 }
 
+const STOPWORDS = new Set([
+  'the',
+  'and',
+  'are',
+  'for',
+  'but',
+  'not',
+  'you',
+  'your',
+  'that',
+  'this',
+  'with',
+  'from',
+  'have',
+  'has',
+  'had',
+  'was',
+  'were',
+  'will',
+  'would',
+  'which',
+  'than',
+  'into',
+  'been',
+  'being',
+  'their',
+  'them',
+  'they',
+  'there',
+  'here',
+  'when',
+  'where',
+  'about',
+  'between',
+  'because',
+  'what',
+  'how',
+  'can',
+  'could',
+  'should',
+  'just',
+  'then',
+  'want',
+  'would',
+  'also',
+  'more'
+]);
+
+function tokenize(input: string): string[] {
+  const words = input.toLowerCase().match(/[a-z0-9]+/g) ?? [];
+  const seen = new Set<string>();
+  const keywords: string[] = [];
+  for (const word of words) {
+    if (word.length < 4) continue;
+    if (STOPWORDS.has(word)) continue;
+    if (seen.has(word)) continue;
+    seen.add(word);
+    keywords.push(word);
+  }
+  return keywords.slice(0, 12);
+}
+
 function scoreDocument(
   doc: { title: string; content: string; status: string },
-  term: string
+  keywords: string[],
+  phrase: string
 ): number {
   const titleLower = doc.title.toLowerCase();
   const contentLower = doc.content.toLowerCase();
-  const termLower = term.toLowerCase();
   let score = 0;
-  if (titleLower.includes(termLower)) score += 3;
-  else if (contentLower.includes(termLower)) score += 1;
+  for (const keyword of keywords) {
+    if (titleLower.includes(keyword)) score += 3;
+    else if (contentLower.includes(keyword)) score += 1;
+  }
+  if (phrase.length > 0) {
+    if (titleLower.includes(phrase)) score += 3;
+    else if (contentLower.includes(phrase)) score += 1;
+  }
   if (doc.status === 'active') score += 1;
   return score;
 }
@@ -51,9 +119,11 @@ class PostgresTextRetrievalProvider implements RetrievalProvider {
     includeDrafts = false
   }: RetrievalQuery): Promise<RetrievedDocument[]> {
     const term = query.trim();
-    if (!term) return [];
+    const phrase = term.toLowerCase();
+    const keywords = tokenize(term);
+    if (keywords.length === 0) return [];
 
-    const escaped = escapeLike(term);
+    const escapedPhrase = escapeLike(phrase);
     const conditions = [eq(documents.teamId, teamId)];
 
     if (!includeDrafts) {
@@ -66,6 +136,21 @@ class PostgresTextRetrievalProvider implements RetrievalProvider {
       );
     }
 
+    const termMatches = [
+      ilike(documents.title, `%${escapedPhrase}%`),
+      ilike(documents.content, `%${escapedPhrase}%`)
+    ];
+    if (keywords.length > 1) {
+      for (const keyword of keywords) {
+        const escaped = escapeLike(keyword);
+        termMatches.push(
+          ilike(documents.title, `%${escaped}%`),
+          ilike(documents.content, `%${escaped}%`)
+        );
+      }
+    }
+    conditions.push(or(...termMatches)!);
+
     const rows = await db
       .select({
         id: documents.id,
@@ -76,15 +161,7 @@ class PostgresTextRetrievalProvider implements RetrievalProvider {
         content: documents.content
       })
       .from(documents)
-      .where(
-        and(
-          ...conditions,
-          or(
-            ilike(documents.title, `%${escaped}%`),
-            ilike(documents.content, `%${escaped}%`)
-          )!
-        )
-      )
+      .where(and(...conditions))
       .orderBy(desc(documents.updatedAt))
       .limit(100);
 
@@ -96,8 +173,9 @@ class PostgresTextRetrievalProvider implements RetrievalProvider {
         status: row.status,
         version: row.version,
         content: row.content,
-        score: scoreDocument(row, term)
+        score: scoreDocument(row, keywords, phrase)
       }))
+      .filter((row) => row.score > 0)
       .sort((a, b) => b.score - a.score)
       .slice(0, limit);
   }

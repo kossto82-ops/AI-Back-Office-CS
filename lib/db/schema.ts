@@ -93,6 +93,11 @@ export const cases = pgTable('cases', {
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
 });
 
+export type AnalysisSource = {
+  documentId: number;
+  relevance: number;
+};
+
 export const caseAnalyses = pgTable('case_analyses', {
   id: serial('id').primaryKey(),
   caseId: integer('case_id')
@@ -108,7 +113,7 @@ export const caseAnalyses = pgTable('case_analyses', {
     .$type<string[]>()
     .notNull()
     .default([]),
-  sources: jsonb('sources').$type<string[]>().notNull().default([]),
+  sources: jsonb('sources').$type<AnalysisSource[]>().notNull().default([]),
   confidence: real('confidence'),
   model: varchar('model', { length: 100 }),
   createdAt: timestamp('created_at').notNull().defaultNow(),

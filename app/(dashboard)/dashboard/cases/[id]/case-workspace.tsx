@@ -1,7 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, useActionState } from 'react';
+import { useEffect, useState, useActionState } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   ArrowLeft,
   Bot,
@@ -25,10 +26,20 @@ import {
 import { cn } from '@/lib/utils';
 import {
   caseCategoryLabel,
-  caseStatusLabel
+  caseStatusLabel,
+  documentTypeLabel
 } from '@/lib/db/case-categories';
-import { markCaseResolved } from '../actions';
+import { markCaseResolved, runCaseAnalysis } from '../actions';
 import type { ConversationTurn } from '@/lib/db/schema';
+
+export type WorkspaceSource = {
+  documentId: number | null;
+  relevance: number;
+  legacy: string | null;
+  title?: string;
+  type?: string;
+  version?: number;
+};
 
 type WorkspaceAnalysis = {
   category: string | null;
@@ -38,7 +49,7 @@ type WorkspaceAnalysis = {
   recommendedAction: string | null;
   draftResponse: string | null;
   missingInformation: string[];
-  sources: string[];
+  sources: WorkspaceSource[];
   confidence: number | null;
   model: string | null;
   createdAt: string | null;
@@ -111,16 +122,33 @@ function formatUrgency(urgency: string | null): string {
 }
 
 export function CaseWorkspace({ caseRow }: { caseRow: WorkspaceCaseRow }) {
+  const router = useRouter();
   const analysis = caseRow.latestAnalysis;
   const initialDraft = analysis?.draftResponse ?? '';
   const [draft, setDraft] = useState(initialDraft);
   const [isEditing, setIsEditing] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [rerunNotice, setRerunNotice] = useState<string | null>(null);
   const [resolveState, resolveAction, isResolvePending] = useActionState<
     ActionState,
     FormData
   >(markCaseResolved, {});
+  const [runState, runAction, isRunPending] = useActionState<ActionState, FormData>(
+    runCaseAnalysis,
+    {}
+  );
+
+  useEffect(() => {
+    if (runState.success) {
+      router.refresh();
+    }
+  }, [runState.success]);
+
+  useEffect(() => {
+    setIsEditing(false);
+    if (analysis?.createdAt) {
+      setDraft(analysis.draftResponse ?? '');
+    }
+  }, [analysis?.createdAt]);
 
   async function handleCopy() {
     if (!draft) return;
@@ -133,13 +161,10 @@ export function CaseWorkspace({ caseRow }: { caseRow: WorkspaceCaseRow }) {
     }
   }
 
-  function handleRerun() {
-    setRerunNotice(
-      'Analysis re-run is not implemented yet (planned for Phase 4).'
-    );
-  }
-
   const canEditDraft = Boolean(analysis);
+  const analysisUnavailable = analysis === null;
+  const isResolved = caseRow.status === 'resolved';
+  const runButtonLabel = analysisUnavailable ? 'Run analysis' : 'Re-run analysis';
 
   return (
     <section className="flex-1 p-4 lg:p-8">
@@ -176,7 +201,7 @@ export function CaseWorkspace({ caseRow }: { caseRow: WorkspaceCaseRow }) {
         </span>
       </div>
 
-      {/* Customer information */}
+      {/* WHAT CUSTOMER SAID */}
       <Card className="mb-6 bg-gray-50 border-gray-200">
         <CardHeader>
           <CardTitle className="text-sm text-gray-700">
@@ -217,7 +242,7 @@ export function CaseWorkspace({ caseRow }: { caseRow: WorkspaceCaseRow }) {
         </details>
       )}
 
-      {/* AI-generated information */}
+      {/* SYSTEM UNDERSTOOD */}
       <Card className="mb-6">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-sm text-gray-700">
@@ -230,6 +255,16 @@ export function CaseWorkspace({ caseRow }: { caseRow: WorkspaceCaseRow }) {
           </CardDescription>
         </CardHeader>
         <CardContent>
+          {runState.error ? (
+            <p className="mb-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+              {runState.error}
+            </p>
+          ) : null}
+          {runState.success && !analysis ? (
+            <p className="mb-4 rounded-md border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+              {runState.success}
+            </p>
+          ) : null}
           {analysis ? (
             <div className="space-y-5">
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -260,11 +295,56 @@ export function CaseWorkspace({ caseRow }: { caseRow: WorkspaceCaseRow }) {
               </div>
             </div>
           ) : (
-            <Placeholder text="This case has not been analyzed yet. AI analysis becomes available after the re-run pipeline is implemented (Phase 4)." />
+            <Placeholder text="This case has not been analyzed yet. Run the analysis to generate the AI result." />
           )}
         </CardContent>
       </Card>
 
+      {/* KNOWLEDGE */}
+      <Card className="mb-6">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-sm text-gray-700">
+            <Sparkles className="h-4 w-4 text-orange-500" />
+            Knowledge sources
+          </CardTitle>
+          <CardDescription>
+            Documents used to support this analysis.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {analysis && analysis.sources.length > 0 ? (
+            <ul className="space-y-2">
+              {analysis.sources.map((source, index) => (
+                <li
+                  key={index}
+                  className="flex items-start gap-2 text-sm text-gray-800"
+                >
+                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" />
+                  {source.legacy ? (
+                    <span>{source.legacy}</span>
+                  ) : (
+                    <span>
+                      <span className="font-medium text-gray-900">
+                        {source.title ?? `Document #${source.documentId ?? ''}`}
+                      </span>
+                      <span className="text-gray-500">
+                        {source.type ? ` · ${documentTypeLabel(source.type)}` : ''}
+                        {source.version ? ` · v${source.version}` : ''}
+                        {' · relevance '}
+                        {source.relevance}
+                      </span>
+                    </span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <Placeholder text="No sources retrieved yet." />
+          )}
+        </CardContent>
+      </Card>
+
+      {/* RECOMMENDS */}
       <Card
         className={cn(
           'mb-6',
@@ -288,6 +368,7 @@ export function CaseWorkspace({ caseRow }: { caseRow: WorkspaceCaseRow }) {
         </CardContent>
       </Card>
 
+      {/* RESPONSE + HUMAN REVIEW */}
       <Card className="mb-6">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-sm text-gray-700">
@@ -344,35 +425,6 @@ export function CaseWorkspace({ caseRow }: { caseRow: WorkspaceCaseRow }) {
         </CardFooter>
       </Card>
 
-      <Card className="mb-6">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-sm text-gray-700">
-            <Sparkles className="h-4 w-4 text-orange-500" />
-            Knowledge sources
-          </CardTitle>
-          <CardDescription>
-            Documents used to support this analysis.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          {analysis && analysis.sources.length > 0 ? (
-            <ul className="space-y-2">
-              {analysis.sources.map((source, index) => (
-                <li
-                  key={index}
-                  className="flex items-start gap-2 text-sm text-gray-800"
-                >
-                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" />
-                  {source}
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <Placeholder text="No sources retrieved yet." />
-          )}
-        </CardContent>
-      </Card>
-
       <div className="mb-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
         <Card>
           <CardHeader>
@@ -398,7 +450,9 @@ export function CaseWorkspace({ caseRow }: { caseRow: WorkspaceCaseRow }) {
                   />
                 </div>
                 {analysis.model && (
-                  <p className="text-xs text-gray-400">Model: {analysis.model}</p>
+                  <p className="text-xs text-gray-400">
+                    Model: {analysis.model}
+                  </p>
                 )}
               </div>
             ) : (
@@ -417,10 +471,7 @@ export function CaseWorkspace({ caseRow }: { caseRow: WorkspaceCaseRow }) {
             {analysis && analysis.missingInformation.length > 0 ? (
               <ul className="space-y-1.5">
                 {analysis.missingInformation.map((item, index) => (
-                  <li
-                    key={index}
-                    className="text-sm text-gray-800"
-                  >
+                  <li key={index} className="text-sm text-gray-800">
                     {'\u2022'} {item}
                   </li>
                 ))}
@@ -435,25 +486,36 @@ export function CaseWorkspace({ caseRow }: { caseRow: WorkspaceCaseRow }) {
       <Card>
         <CardFooter className="flex flex-wrap items-center justify-between gap-3 pt-6">
           <div className="flex items-center gap-3">
-            <Button variant="ghost" size="sm" onClick={handleRerun}>
-              <RotateCw className="mr-2 h-4 w-4" />
-              Re-run analysis
-            </Button>
-            {rerunNotice && (
-              <span className="text-xs text-gray-500">{rerunNotice}</span>
+            <form action={runAction}>
+              <input type="hidden" name="caseId" value={caseRow.id} />
+              <Button
+                type="submit"
+                variant="ghost"
+                size="sm"
+                disabled={isRunPending || isResolved}
+                title={isResolved ? 'Resolved cases cannot be re-analyzed' : undefined}
+              >
+                <RotateCw className="mr-2 h-4 w-4" />
+                {isRunPending ? 'Analyzing...' : runButtonLabel}
+              </Button>
+            </form>
+            {runState.success && analysis && (
+              <span className="text-xs text-emerald-600">
+                {runState.success}
+              </span>
             )}
           </div>
           <form action={resolveAction}>
             <input type="hidden" name="caseId" value={caseRow.id} />
             <Button
               type="submit"
-              variant={caseRow.status === 'resolved' ? 'outline' : 'default'}
-              disabled={isResolvePending || caseRow.status === 'resolved'}
+              variant={isResolved ? 'outline' : 'default'}
+              disabled={isResolvePending || isResolved}
               className="bg-orange-500 hover:bg-orange-600 text-white"
             >
               {isResolvePending
                 ? 'Marking...'
-                : caseRow.status === 'resolved'
+                : isResolved
                 ? 'Resolved'
                 : 'Mark as resolved'}
             </Button>

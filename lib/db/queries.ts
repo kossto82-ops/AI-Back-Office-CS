@@ -246,6 +246,19 @@ export async function getDocumentsForTeam(
     .orderBy(desc(documents.updatedAt));
 }
 
+export async function getDocumentsByIdsForTeam(
+  documentIds: number[],
+  teamId: number
+): Promise<Document[]> {
+  if (documentIds.length === 0) {
+    return [];
+  }
+  return db
+    .select()
+    .from(documents)
+    .where(and(eq(documents.teamId, teamId), inArray(documents.id, documentIds)));
+}
+
 export type DocumentDetail = Document & {
   creatorName: string | null;
 };

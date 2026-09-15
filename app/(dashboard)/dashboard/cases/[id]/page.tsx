@@ -1,8 +1,23 @@
 import { redirect, notFound } from 'next/navigation';
-import { getUser, getTeamForUser, getCaseByIdForTeam } from '@/lib/db/queries';
-import { CaseWorkspace } from './case-workspace';
+import {
+  getUser,
+  getTeamForUser,
+  getCaseByIdForTeam,
+  getDocumentsByIdsForTeam
+} from '@/lib/db/queries';
+import type { AnalysisSource } from '@/lib/db/schema';
+import { CaseWorkspace, type WorkspaceSource } from './case-workspace';
 
 export const dynamic = 'force-dynamic';
+
+function isStructuredSource(value: unknown): value is AnalysisSource {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    'documentId' in value &&
+    typeof (value as AnalysisSource).documentId === 'number'
+  );
+}
 
 export default async function CasePage({
   params
@@ -30,7 +45,66 @@ export default async function CasePage({
     notFound();
   }
 
+  let latestAnalysis: {
+    category: string | null;
+    summary: string | null;
+    intent: string | null;
+    urgency: string | null;
+    recommendedAction: string | null;
+    draftResponse: string | null;
+    missingInformation: string[];
+    confidence: number | null;
+    model: string | null;
+    createdAt: string;
+    sources: WorkspaceSource[];
+  } | null = null;
+
   const analysis = caseRow.latestAnalysis;
+  if (analysis) {
+    const rawSources: unknown[] = Array.isArray(analysis.sources)
+      ? analysis.sources
+      : [];
+    const structuredSources = rawSources.filter(isStructuredSource);
+    const documentIds = [
+      ...new Set(structuredSources.map((source) => source.documentId))
+    ];
+    const documents = await getDocumentsByIdsForTeam(documentIds, team.id);
+    const documentsById = new Map(documents.map((doc) => [doc.id, doc]));
+
+    const sources: WorkspaceSource[] = rawSources.map((source) => {
+      if (!isStructuredSource(source)) {
+        return {
+          documentId: null,
+          relevance: 0,
+          legacy: typeof source === 'string' ? source : null
+        };
+      }
+      const doc = documentsById.get(source.documentId);
+      return {
+        documentId: source.documentId,
+        relevance: source.relevance,
+        legacy: null,
+        title: doc?.title,
+        type: doc?.type,
+        version: doc?.version
+      };
+    });
+
+    latestAnalysis = {
+      category: analysis.category,
+      summary: analysis.summary,
+      intent: analysis.intent,
+      urgency: analysis.urgency,
+      recommendedAction: analysis.recommendedAction,
+      draftResponse: analysis.draftResponse,
+      missingInformation: analysis.missingInformation,
+      confidence: analysis.confidence,
+      model: analysis.model,
+      createdAt: analysis.createdAt.toISOString(),
+      sources
+    };
+  }
+
   return (
     <CaseWorkspace
       caseRow={{
@@ -42,21 +116,7 @@ export default async function CasePage({
         customerMessage: caseRow.customerMessage,
         conversationHistory: caseRow.conversationHistory,
         createdAt: caseRow.createdAt.toISOString(),
-        latestAnalysis: analysis
-          ? {
-              category: analysis.category,
-              summary: analysis.summary,
-              intent: analysis.intent,
-              urgency: analysis.urgency,
-              recommendedAction: analysis.recommendedAction,
-              draftResponse: analysis.draftResponse,
-              missingInformation: analysis.missingInformation,
-              sources: analysis.sources,
-              confidence: analysis.confidence,
-              model: analysis.model,
-              createdAt: analysis.createdAt.toISOString()
-            }
-          : null
+        latestAnalysis
       }}
     />
   );

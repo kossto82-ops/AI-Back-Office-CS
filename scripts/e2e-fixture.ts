@@ -1,13 +1,23 @@
 import 'dotenv/config';
-import { eq, and } from 'drizzle-orm';
+import { eq, and, inArray } from 'drizzle-orm';
 import { db } from '../lib/db/drizzle';
-import { caseAnalyses, cases } from '../lib/db/schema';
+import { caseAnalyses, cases, documents } from '../lib/db/schema';
 
 const ACTION = process.argv[2] ?? '';
 const CASE_ID = Number(process.argv[3] ?? 2);
 
+const SOURCE_TITLES = [
+  'New Line Activation Procedure',
+  'FAQ: How do I check the status of my refund?'
+];
+
 async function main() {
   if (ACTION === 'insert') {
+    const docRows = await db
+      .select({ id: documents.id, title: documents.title })
+      .from(documents)
+      .where(inArray(documents.title, SOURCE_TITLES));
+
     await db.insert(caseAnalyses).values({
       caseId: CASE_ID,
       category: 'billing',
@@ -24,10 +34,7 @@ async function main() {
         `You should see the refund on the original payment method within 5 business days.\n\n` +
         `Apologies for the inconvenience.\n\nBest regards,\nCustomer Service`,
       missingInformation: ['Order number'],
-      sources: [
-        'Procedure: New Line Activation Procedure (v3)',
-        'FAQ: How do I check the status of my refund?'
-      ],
+      sources: docRows.map((doc) => ({ documentId: doc.id, relevance: 1 })),
       confidence: 0.92,
       model: 'e2e-fixture'
     });
