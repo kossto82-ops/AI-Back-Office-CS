@@ -65,7 +65,7 @@ No external action should be executed automatically in the MVP.
 
 ## Technical constraints
 
-- Use the existing Next.js SaaS Starter architecture whenever practical.
+- Follow the existing codebase conventions (Next.js App Router, Drizzle, shadcn/ui, server actions).
 - Do not introduce additional infrastructure unless there is a clear reason.
 - Prefer:
   - TypeScript

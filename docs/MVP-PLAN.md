@@ -1,7 +1,7 @@
 # AI Back Office CS — MVP Implementation Plan
 
 Status: **DRAFT — awaiting approval**
-Audit basis: commit `6e33e58` of nextjs/saas-starter (inspected, nothing modified).
+Audit basis: the existing codebase (auth, tenants, billing, dashboard, UI primitives), inspected and kept unchanged.
 
 ## 1. Product summary
 
@@ -18,7 +18,7 @@ The MVP must NOT send emails or perform irreversible actions automatically.
 
 | Decision | Choice | Why |
 |---|---|---|
-| Base repo | nextjs/saas-starter (cloned, unchanged) | Ships auth, tenants, billing, dashboard, UI primitives |
+| Base | Existing codebase | Ships auth, tenants, billing, dashboard, UI primitives |
 | Tenant | existing `teams` + `teamMembers` = Organization | No new `organizations` table needed |
 | AI service | TypeScript + AI SDK structured outputs, validated with zod | Same contract as PydanticAI, zero extra infrastructure |
 | PydanticAI / Python | **Deferred**, behind `lib/ai` abstraction | No second runtime until architecture genuinely requires it |
@@ -109,7 +109,7 @@ documents       id, teamId→teams, title, type('procedure'|'faq'|'guide'),
 ### Phase 1 — Setup (no code changes)
 - `pnpm install`, `.env`, database up, `db:migrate` + `db:seed` working.
 - App boots at `http://localhost:3000` unmodified.
-- **Gate:** demo user logs in and sees original starter dashboard.
+- **Gate:** demo user logs in and sees the dashboard.
 
 ### Phase 2 — Schema + seed data + Case Workspace UI (demo-ready)
 - Add `cases`, `case_analyses`, `documents` schema + migration.

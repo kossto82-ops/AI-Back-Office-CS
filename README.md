@@ -1,119 +1,137 @@
-# Next.js SaaS Starter
+# AI Back Office CS
 
-This is a starter template for building a SaaS application using **Next.js** with support for authentication, Stripe integration for payments, and a dashboard for logged-in users.
+AI Back Office CS is a B2B SaaS for small customer-service teams. It helps
+agents process cases faster by analyzing customer requests, classifying them,
+and retrieving the relevant internal knowledge to draft a response — with a
+human reviewing every step.
 
-**Demo: [https://next-saas-start.vercel.app/](https://next-saas-start.vercel.app/)**
+The AI assists the agent, it never acts on its own. In the MVP no external
+action is executed automatically.
+
+## How it works
+
+```
+customer case
+  → AI analysis
+  → case classification
+  → knowledge retrieval
+  → recommended action
+  → draft response
+  → human review (approve / edit / copy)
+```
 
 ## Features
 
-- Marketing landing page (`/`) with animated Terminal element
-- Pricing page (`/pricing`) which connects to Stripe Checkout
-- Dashboard pages with CRUD operations on users/teams
-- Basic RBAC with Owner and Member roles
-- Subscription management with Stripe Customer Portal
-- Email/password authentication with JWTs stored to cookies
-- Global middleware to protect logged-in routes
-- Local middleware to protect Server Actions or validate Zod schemas
-- Activity logging system for any user events
+- **Tenant-scoped dashboard** (`/dashboard`) with role-based access (owner / member)
+- **Cases** — case list and workspace: customer message, AI analysis,
+  recommended action, draft response (edit / copy), sources, confidence,
+  missing information, mark-as-resolved
+- **Knowledge Base** — procedures, FAQs and guides with search and type/status
+  filters, versioning (draft / active), and a retrieval abstraction ready for
+  AI-assisted lookups
+- **Billing** — Stripe integration with subscription management
+- **Auth** — email/password sign-up and sign-in with JWT sessions
+- **Activity logging** for user events
 
-## Tech Stack
+## Tech stack
 
-- **Framework**: [Next.js](https://nextjs.org/)
-- **Database**: [Postgres](https://www.postgresql.org/)
-- **ORM**: [Drizzle](https://orm.drizzle.team/)
-- **Payments**: [Stripe](https://stripe.com/)
-- **UI Library**: [shadcn/ui](https://ui.shadcn.com/)
+- [Next.js](https://nextjs.org/) 15 (App Router, Turbopack) · React 19 · TypeScript
+- [Tailwind CSS](https://tailwindcss.com/) 4 + [shadcn/ui](https://ui.shadcn.com/) (Radix primitives)
+- [PostgreSQL](https://www.postgresql.org/) (Neon, serverless HTTP driver) + [Drizzle ORM](https://orm.drizzle.team/)
+- [Stripe](https://stripe.com/) for subscriptions
+- [Zod](https://zod.dev/) for server-side validation · [SWR](https://swr.vercel.app/) for client data fetching
+- [Playwright](https://playwright.dev/) for end-to-end tests
 
-## Getting Started
+## Getting started
+
+Prerequisites: Node.js 20+, pnpm, and access to a PostgreSQL database (this
+repo uses Neon; any Postgres reachable by connection string works).
 
 ```bash
-git clone https://github.com/nextjs/saas-starter
-cd saas-starter
+git clone https://github.com/kossto82-ops/AI-Back-Office-CS.git
+cd AI-Back-Office-CS
 pnpm install
-```
-
-## Running Locally
-
-[Install](https://docs.stripe.com/stripe-cli) and log in to your Stripe account:
-
-```bash
-stripe login
-```
-
-Use the included setup script to create your `.env` file:
-
-```bash
 pnpm db:setup
 ```
 
-Run the database migrations and seed the database with a default user and team:
+`pnpm db:setup` writes your `.env` from `.env.example`. Stripe keys can be left
+blank — auth and the app run without them during the MVP. If you do not use
+Stripe, create `.env` manually from `.env.example` instead.
+
+Run the migrations, seed the database, and start the dev server:
 
 ```bash
 pnpm db:migrate
 pnpm db:seed
-```
-
-This will create the following user and team:
-
-- User: `test@test.com`
-- Password: `admin123`
-
-You can also create new users through the `/sign-up` route.
-
-Finally, run the Next.js development server:
-
-```bash
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser to see the app in action.
+Open http://localhost:3000 and sign in with the seed account:
 
-You can listen for Stripe webhooks locally through their CLI to handle subscription change events:
+- Email: `test@test.com`
+- Password: `admin123`
 
-```bash
-stripe listen --forward-to localhost:3000/api/stripe/webhook
+You can also create new users through `/sign-up`.
+
+## Environment variables
+
+| Variable | Required | Purpose |
+|---|---|---|
+| `POSTGRES_URL` | Yes | Neon (or Postgres) connection string |
+| `AUTH_SECRET` | Yes | Secret used to sign the JWT session cookie (`openssl rand -base64 32`) |
+| `BASE_URL` | Yes | App base URL (dev: `http://localhost:3000`) |
+| `STRIPE_SECRET_KEY` | MVP optional | Stripe secret key (`sk_test_...`) — billing only |
+| `STRIPE_WEBHOOK_SECRET` | MVP optional | Stripe webhook signing secret |
+
+## Database
+
+- Schema: `lib/db/schema.ts` (Drizzle). Migrations: drizzle-kit + `scripts/migrate.ts`.
+- Seed: `lib/db/seed.ts` — fictional customers, 20 cases, 33+ knowledge
+  documents, scoped to the seed team. Seed is **not idempotent**: re-run only
+  on an empty database.
+- Multi-tenancy: every query and server action is scoped by `teamId` — data of
+  one organization is never readable by another.
+
+## Scripts
+
+| Script | Purpose |
+|---|---|
+| `pnpm dev` | Dev server (Turbopack) on http://localhost:3000 |
+| `pnpm build` | Production build |
+| `pnpm start` | Serve the production build |
+| `pnpm typecheck` | Type-check with `tsc --noEmit` |
+| `pnpm db:setup` | Generate `.env` from `.env.example` |
+| `pnpm db:migrate` | Apply Drizzle migrations |
+| `pnpm db:seed` | Seed the database |
+| `pnpm db:generate` | Generate a migration from schema changes |
+| `pnpm db:studio` | Open Drizzle Studio |
+| `pnpm exec playwright test` | Run the E2E suites |
+
+## Project structure
+
+```
+app/
+  (dashboard)/                    public landing + pricing
+  (login)/                        sign-in / sign-up
+  (dashboard)/dashboard/          protected app: cases, knowledge, security, activity, general
+lib/
+  auth/                           JWT sessions
+  db/                             Drizzle schema, queries, seed, case categories
+  ai/retrieval.ts                 retrieval abstraction (Postgres text provider today)
+  payments/                       Stripe
+e2e/                              Playwright suites (phase2, phase3)
+docs/                             implementation plans + E2E reports
 ```
 
-## Testing Payments
+## Security
 
-To test Stripe payments, use the following test card details:
+- **Tenant isolation at the query layer** — every read is scoped to `teamId`;
+  cross-team reads return 404.
+- JWT session cookies; API keys stay server-only, never sent to the browser.
+- Cross-tenant access is covered by E2E tests (real browser, two teams).
 
-- Card Number: `4242 4242 4242 4242`
-- Expiration: Any future date
-- CVC: Any 3-digit number
+## Testing
 
-## Going to Production
-
-When you're ready to deploy your SaaS application to production, follow these steps:
-
-### Set up a production Stripe webhook
-
-1. Go to the Stripe Dashboard and create a new webhook for your production environment.
-2. Set the endpoint URL to your production API route (e.g., `https://yourdomain.com/api/stripe/webhook`).
-3. Select the events you want to listen for (e.g., `checkout.session.completed`, `customer.subscription.updated`).
-
-### Deploy to Vercel
-
-1. Push your code to a GitHub repository.
-2. Connect your repository to [Vercel](https://vercel.com/) and deploy it.
-3. Follow the Vercel deployment process, which will guide you through setting up your project.
-
-### Add environment variables
-
-In your Vercel project settings (or during deployment), add all the necessary environment variables. Make sure to update the values for the production environment, including:
-
-1. `BASE_URL`: Set this to your production domain.
-2. `STRIPE_SECRET_KEY`: Use your Stripe secret key for the production environment.
-3. `STRIPE_WEBHOOK_SECRET`: Use the webhook secret from the production webhook you created in step 1.
-4. `POSTGRES_URL`: Set this to your production database URL.
-5. `AUTH_SECRET`: Set this to a random string. `openssl rand -base64 32` will generate one.
-
-## Other Templates
-
-While this template is intentionally minimal and to be used as a learning resource, there are other paid versions in the community which are more full-featured:
-
-- https://achromatic.dev
-- https://shipfa.st
-- https://makerkit.dev
-- https://zerotoshipped.com
-- https://turbostarter.dev
+- Type-check: `pnpm typecheck`
+- Production build: `pnpm build`
+- E2E: `pnpm exec playwright test` (real browser, requires the dev server running)

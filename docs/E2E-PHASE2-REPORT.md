@@ -98,7 +98,7 @@ No image rendering available in this environment. Assessment is based on compute
 | **Actual** | Disabled with no textual explanation; confusing for first-time agent |
 | **Blocks Phase 3?** | No |
 
-### LOW — "Mark as resolved" button contrast (inherited from starter)
+### LOW — "Mark as resolved" button contrast (existing design)
 
 | | |
 |---|---|
@@ -106,8 +106,8 @@ No image rendering available in this environment. Assessment is based on compute
 | **Element** | Submit button (`bg-orange-500 text-white`) |
 | **Reproduction** | Any workspace page |
 | **Expected** | Button text readable against background |
-| **Actual** | White on orange-500 = **2.80:1** contrast — below WCAG AA; inherited from starter design system |
-| **Blocks Phase 3?** | No — starter design, still readable in practice |
+| **Actual** | White on orange-500 = **2.80:1** contrast — below WCAG AA; inherited from the existing design system |
+| **Blocks Phase 3?** | No — existing design, still readable in practice |
 
 ## Bugs Fixed
 
@@ -119,7 +119,7 @@ No image rendering available in this environment. Assessment is based on compute
 
 | Issue | Classification | Action Required |
 |---|---|---|
-| Orange button contrast (2.80:1) | LOW | Out of scope — inherited from starter design system |
+| Orange button contrast (2.80:1) | LOW | Out of scope — existing design system |
 | Only 1 case has analysis (test fixture for case 2) | Expected | Phase 3 AI will populate all analyses |
 | DB state: 1 case resolved + 1 analysis fixture row | Info | Acceptable for dev; Phase 3 can clean or reuse |
 | Stray parent `package.json` + `node_modules` at `C:\Proyectos\AI Back Office CS\` | LOW | User can delete — causes Turbopack root warning |

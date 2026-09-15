@@ -96,7 +96,7 @@ Playwright (`e2e/phase3.spec.ts`), dev server on localhost:3000, system Chrome, 
 2. **No full version history** — only the current `version` counter with auto-increment. History/audit trail deferred.
 3. **Type/status filters are applied in JS** after a single team-scoped SQL query (not pushed to `WHERE`). Fine at this data size; fine to push into SQL later.
 4. **Uncontrolled `select`/`input` reset** had to be handled by keying the filter form to the search params — a plain `defaultValue` did not reset after client-side "Clear" navigation (found by E2E test 4 in the first run). Fixed and locked in by the suite.
-5. **No lint script** exists in `package.json` (`next lint`/eslint not configured in this starter). `tsc --noEmit` (typecheck), production build, and E2E suites are the enforced gates.
+5. **No lint script** exists in `package.json` (`next lint`/eslint not configured in this project). `tsc --noEmit` (typecheck), production build, and E2E suites are the enforced gates.
 6. Create/update errors surface inline via `useActionState`; with `redirect()` on success the client never renders a success banner (matches the existing cases pattern).
 7. Repeated E2E runs accumulate demo documents ("E2E Guide: Handling Refund Requests", "Isolation Team Document") in the dev DB — acceptable for a dev environment; the isolation test tolerates leftovers.
 
