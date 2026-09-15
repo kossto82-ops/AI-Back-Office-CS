@@ -83,7 +83,7 @@ function StatusBadge({ status }: { status: string }) {
 
 function Placeholder({ text }: { text: string }) {
   return (
-    <p className="rounded-md border border-dashed border-gray-300 bg-gray-50 px-4 py-3 text-sm text-gray-400">
+    <p className="rounded-md border border-dashed border-gray-300 bg-gray-50 px-4 py-3 text-sm text-gray-500">
       {text}
     </p>
   );
@@ -321,6 +321,7 @@ export function CaseWorkspace({ caseRow }: { caseRow: WorkspaceCaseRow }) {
             variant="outline"
             size="sm"
             disabled={!canEditDraft}
+            title={canEditDraft ? undefined : 'Available once an analysis exists'}
             onClick={() => setIsEditing((value) => !value)}
           >
             <PencilLine className="mr-2 h-4 w-4" />
@@ -330,6 +331,7 @@ export function CaseWorkspace({ caseRow }: { caseRow: WorkspaceCaseRow }) {
             variant="outline"
             size="sm"
             disabled={!draft}
+            title={draft ? undefined : 'No draft response available yet'}
             onClick={handleCopy}
           >
             {copied ? (
