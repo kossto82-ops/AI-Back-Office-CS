@@ -48,3 +48,16 @@ export const DOCUMENT_TYPE_LABELS: Record<DocumentType, string> = {
 export function documentTypeLabel(type: string): string {
   return DOCUMENT_TYPE_LABELS[type as DocumentType] ?? type;
 }
+
+export const DOCUMENT_STATUSES = ['draft', 'active'] as const;
+
+export type DocumentStatus = (typeof DOCUMENT_STATUSES)[number];
+
+export const DOCUMENT_STATUS_LABELS: Record<DocumentStatus, string> = {
+  draft: 'Draft',
+  active: 'Active',
+};
+
+export function documentStatusLabel(status: string): string {
+  return DOCUMENT_STATUS_LABELS[status as DocumentStatus] ?? status;
+}

@@ -365,6 +365,46 @@ const seedDocuments: Omit<NewDocument, 'teamId' | 'creatorId'>[] = [
       'Q: Can I share my plan data with a tablet or watch?\n\n' +
       'A: Multi-device sharing depends on your plan. Some plans include companion devices that share the allowance. Check your plan details or ask support to review the options for your account.',
   },
+
+  // Guides
+  {
+    title: 'Guide: Escalation Paths for Frontline Agents',
+    type: 'guide',
+    status: 'active',
+    version: 2,
+    content:
+      'When to escalate and which channel to use.\n\n' +
+      '1. Network Operations: signal, data, or SMS issues unresolved after the first-line checks in the relevant troubleshooting procedure.\n' +
+      '2. Billing and adjustments: any refund or credit beyond the standard adjustment limit needs a lead approval before it is offered.\n' +
+      '3. Fraud and security: suspected account takeover or fraud attempts must be escalated immediately without discussing suspicions with the customer.\n\n' +
+      'Always attach the case id, the customer device model where relevant, and the exact steps already taken.',
+  },
+  {
+    title: 'Guide: Writing a Customer-Safe Draft Response',
+    type: 'guide',
+    status: 'active',
+    version: 1,
+    content:
+      'Principles for drafting responses that are safe to send.\n\n' +
+      '1. Only reference prices, policies, and procedures that are confirmed in the Knowledge Base.\n' +
+      '2. Never promise compensation, refunds, or timelines that are not covered by an approved procedure.\n' +
+      '3. If a fact is unknown, say it will be verified instead of guessing.\n' +
+      '4. Keep a warm but factual tone; the customer should never feel they need to escalate to get a straight answer.\n\n' +
+      'A draft response is a starting point for the human agent, never a final send.',
+  },
+  {
+    title: 'Guide: Using the Case Workspace',
+    type: 'guide',
+    status: 'draft',
+    version: 1,
+    content:
+      'How to work a case from queue to resolution (draft in progress).\n\n' +
+      '1. Open the case from the Cases list and read the customer message and any conversation history.\n' +
+      '2. Check the AI analysis: category, summary, confidence, and missing information.\n' +
+      '3. Open the relevant procedure from the Knowledge Base and confirm the recommended action matches it.\n' +
+      '4. Edit or approve the draft response and copy it to the channel.\n' +
+      '5. Mark the case as resolved only once the outcome is confirmed with the customer.',
+  },
 ];
 
 const conversationHistory = (
@@ -650,6 +690,7 @@ async function seed() {
     .values([
       {
         email: email,
+        name: 'Test User',
         passwordHash: passwordHash,
         role: "owner",
       },
@@ -678,7 +719,7 @@ async function seed() {
   }));
   await db.insert(documents).values(documentsWithContext);
   console.log(
-    `Seeded ${seedDocuments.length} knowledge documents (procedures + FAQs).`
+    `Seeded ${seedDocuments.length} knowledge documents (procedures + FAQs + guides).`
   );
 
   const casesWithContext = seedCases.map((caseRow) => ({

@@ -1,4 +1,4 @@
-import { desc, and, eq, isNull, inArray } from 'drizzle-orm';
+import { desc, and, eq, isNull, inArray, or, ilike } from 'drizzle-orm';
 import { db } from './drizzle';
 import {
   activityLogs,
@@ -7,8 +7,10 @@ import {
   users,
   cases,
   caseAnalyses,
+  documents,
   Case,
   CaseAnalysis,
+  Document,
 } from './schema';
 import { cookies } from 'next/headers';
 import { verifyToken } from '@/lib/auth/session';
@@ -199,4 +201,77 @@ export async function getCaseByIdForTeam(
     ...caseRow,
     latestAnalysis: latestAnalysis ?? null
   };
+}
+
+// --- Documents ---
+
+export type DocumentWithCreator = Document & {
+  creatorName: string | null;
+};
+
+export async function getDocumentsForTeam(
+  teamId: number,
+  search?: string
+): Promise<DocumentWithCreator[]> {
+  const term = search?.trim() ?? '';
+  const conditions: ReturnType<typeof eq>[] = [eq(documents.teamId, teamId)];
+
+  if (term) {
+    const escaped = term.replace(/[\\%_]/g, (m) => `\\${m}`);
+    conditions.push(
+      or(
+        ilike(documents.title, `%${escaped}%`),
+        ilike(documents.content, `%${escaped}%`)
+      )!
+    );
+  }
+
+  return await db
+    .select({
+      id: documents.id,
+      teamId: documents.teamId,
+      title: documents.title,
+      type: documents.type,
+      content: documents.content,
+      status: documents.status,
+      version: documents.version,
+      creatorId: documents.creatorId,
+      createdAt: documents.createdAt,
+      updatedAt: documents.updatedAt,
+      creatorName: users.name,
+    })
+    .from(documents)
+    .leftJoin(users, eq(documents.creatorId, users.id))
+    .where(and(...conditions))
+    .orderBy(desc(documents.updatedAt));
+}
+
+export type DocumentDetail = Document & {
+  creatorName: string | null;
+};
+
+export async function getDocumentByIdForTeam(
+  documentId: number,
+  teamId: number
+): Promise<DocumentDetail | null> {
+  const [row] = await db
+    .select({
+      id: documents.id,
+      teamId: documents.teamId,
+      title: documents.title,
+      type: documents.type,
+      content: documents.content,
+      status: documents.status,
+      version: documents.version,
+      creatorId: documents.creatorId,
+      createdAt: documents.createdAt,
+      updatedAt: documents.updatedAt,
+      creatorName: users.name,
+    })
+    .from(documents)
+    .leftJoin(users, eq(documents.creatorId, users.id))
+    .where(and(eq(documents.id, documentId), eq(documents.teamId, teamId)))
+    .limit(1);
+
+  return row ?? null;
 }
