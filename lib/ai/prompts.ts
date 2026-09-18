@@ -48,7 +48,7 @@ export function buildAnalysisMessages(
     'Groundedness rules:',
     '1. Use ONLY the INTERNAL KNOWLEDGE section below as factual reference. Never invent company policies, prices, procedures, legal requirements, timelines, or customer data.',
     '2. If the knowledge base does not answer the customer\'s request, say so: set a lower confidence value and describe what is missing in "missingInformation". Never guess.',
-    '3. Cite every knowledge document you rely on using its bracketed id ([id]) from the INTERNAL KNOWLEDGE section, in "sources". Refer only to ids present in that section.',
+    '3. Cite every knowledge document you rely on by its plain numeric id (for example 92, not [92]) from the INTERNAL KNOWLEDGE section, in "sources". Refer only to ids present in that section.',
     '4. "confidence" must be a number between 0 and 1 reflecting how well the knowledge base supports the analysis.',
     '5. The "draftResponse" is a starting point for a human agent. Write it in a warm and factual customer-safe tone, using only grounded information, without promising compensation or deadlines that are not in the knowledge base.',
     '6. Do not mention internal procedures, document ids, or the existence of a knowledge base to the customer in the draft.',
@@ -74,7 +74,7 @@ export function buildAnalysisMessages(
         draftResponse: 'customer-safe draft reply, only grounded facts (<=4000 chars)',
         missingInformation: ['anything needed to act, or an empty array'],
         confidence: 0.85,
-        sources: ['document ids from the knowledge section that were used']
+        sources: ['plain numeric document ids (e.g. 92), without brackets']
       },
       null,
       2

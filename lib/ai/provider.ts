@@ -17,10 +17,18 @@ export type AnalysisRequest = {
   retrievedDocs: RetrievedDocument[];
 };
 
+export type ProviderUsage = {
+  promptTokens: number;
+  completionTokens: number;
+  totalTokens: number;
+};
+
 export interface AnalysisProvider {
   readonly id: string;
   readonly model: string;
   analyze(request: AnalysisRequest): Promise<unknown>;
+  /** Token usage of the most recent analyze() call, if the provider reports it. */
+  readonly lastUsage: ProviderUsage | null;
 }
 
 export const OPENAI_DEFAULT_MODEL = 'gpt-4o-mini';
@@ -28,8 +36,14 @@ export const OPENAI_DEFAULT_MODEL = 'gpt-4o-mini';
 export class OpenAiAnalysisProvider implements AnalysisProvider {
   readonly id = 'openai';
 
+  private latestUsage: ProviderUsage | null = null;
+
   get model(): string {
     return process.env.AI_MODEL || OPENAI_DEFAULT_MODEL;
+  }
+
+  get lastUsage(): ProviderUsage | null {
+    return this.latestUsage;
   }
 
   async analyze(request: AnalysisRequest): Promise<unknown> {
@@ -44,7 +58,7 @@ export class OpenAiAnalysisProvider implements AnalysisProvider {
     const openai = createOpenAI({ apiKey, baseURL });
 
     try {
-      const { object } = await generateObject({
+      const result = await generateObject({
         model: openai(this.model),
         schemaName: 'caseAnalysis',
         schema: zodSchema(rawAnalysisSchema),
@@ -52,7 +66,14 @@ export class OpenAiAnalysisProvider implements AnalysisProvider {
         prompt: request.prompt,
         temperature: 0.2
       });
-      return object;
+      this.latestUsage = result.usage
+        ? {
+            promptTokens: result.usage.inputTokens ?? 0,
+            completionTokens: result.usage.outputTokens ?? 0,
+            totalTokens: result.usage.totalTokens ?? 0
+          }
+        : null;
+      return result.object;
     } catch (error) {
       if (error instanceof NoObjectGeneratedError) {
         throw new AiInvalidOutputError(
@@ -231,6 +252,7 @@ function buildMockAnalysis(
 export class MockAnalysisProvider implements AnalysisProvider {
   readonly id = 'mock';
   readonly model = 'mock-deterministic';
+  readonly lastUsage: ProviderUsage | null = null;
 
   async analyze(request: AnalysisRequest): Promise<unknown> {
     const behavior: MockBehavior =

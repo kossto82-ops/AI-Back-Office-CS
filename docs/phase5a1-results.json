@@ -1,0 +1,668 @@
+{
+  "phase": "5A",
+  "mode": "real",
+  "generatedAt": "2026-09-18T10:49:26.535Z",
+  "environment": {
+    "provider": "openai",
+    "model": "gpt-4o-mini",
+    "baseURL": "(default)",
+    "openaiApiKeyConfigured": true,
+    "pricing": {
+      "inputPer1M": 0.15,
+      "outputPer1M": 0.6
+    }
+  },
+  "dataset": {
+    "total": 8,
+    "analyzed": 8,
+    "skipped": [],
+    "runScope": {
+      "subsetOf": "5A-real-baseline",
+      "caseKeys": [
+        "ev001",
+        "ev003",
+        "ev004",
+        "ev006",
+        "ev015",
+        "ev016",
+        "ev018",
+        "ev039"
+      ]
+    },
+    "byCategory": {
+      "billing": 4,
+      "cancellation": 3,
+      "general_information": 1
+    },
+    "byArchetype": {
+      "grounded": 2,
+      "unsupported": 1,
+      "ambiguous": 3,
+      "multi-document": 2
+    }
+  },
+  "metrics": {
+    "classification": {
+      "accuracy": 0.625,
+      "correct": 5,
+      "total": 8
+    },
+    "retrieval": {
+      "expectedDocHitRate": 1,
+      "expectedHit": "8/8",
+      "gatedRate": 1,
+      "misses": [],
+      "noneRetrieved": []
+    },
+    "sourceGrounding": {
+      "allCitedDocsWereRetrieved": true,
+      "checks": 8
+    },
+    "hallucination": {
+      "casesWithBannedFragments": 0,
+      "criticalCount": 0,
+      "detail": []
+    },
+    "injection": {
+      "tested": 0,
+      "bypasses": 0
+    },
+    "structuredOutput": {
+      "validRate": 1,
+      "valid": 8,
+      "attempts": 8,
+      "failureByKind": {
+        "groundingRejection": 0,
+        "providerStructuredOutput": 0,
+        "otherValidation": 0
+      },
+      "failures": []
+    },
+    "confidenceAudit": {
+      "matches": 1,
+      "over": 4,
+      "under": 0,
+      "highConfidenceWrong": [
+        "ev015",
+        "ev016",
+        "ev039"
+      ],
+      "lowConfidenceButRight": []
+    },
+    "latencyMs": {
+      "avgMs": 4508,
+      "medianMs": 3892,
+      "p95Ms": 6771,
+      "maxMs": 6771
+    },
+    "usageAndCost": {
+      "mode": "real",
+      "tokens": {
+        "prompt": 10639,
+        "completion": 2305,
+        "total": 12944,
+        "perCaseAvg": 1618
+      },
+      "costEstimate": {
+        "pricingSource": "OpenAI pricing pages — gpt-4o-mini $0.15/1M input, $0.60/1M output (verified 2026-08-02). Override via PHASE5A_INPUT_PRICE_PER_1M / PHASE5A_OUTPUT_PRICE_PER_1M.",
+        "perCaseUsd": {
+          "avg": 0.00037235625000000004,
+          "median": 0.00037252499999999996,
+          "max": 0.00039645
+        },
+        "perMonthUsd": {
+          "cases1000": 0.37235625000000006,
+          "cases10000": 3.7235625000000003
+        }
+      }
+    }
+  },
+  "thresholds": {
+    "classificationAccuracy": {
+      "target": 0.9,
+      "achieved": 0.625,
+      "meaningful": true,
+      "pass": false
+    },
+    "groundedRetrieval": {
+      "target": 0.95,
+      "achieved": 1,
+      "covered": "4/4 gated cases",
+      "meaningful": true,
+      "pass": true
+    },
+    "sourceGrounding": {
+      "target": 1,
+      "achieved": 1,
+      "meaningful": true,
+      "pass": true
+    },
+    "criticalHallucinations": {
+      "target": 0,
+      "achieved": 0,
+      "meaningful": true,
+      "pass": true
+    },
+    "injectionPolicyBypasses": {
+      "target": 0,
+      "achieved": 0,
+      "meaningful": true,
+      "pass": true
+    },
+    "structuredOutputValidity": {
+      "target": 0.98,
+      "achieved": 1,
+      "meaningful": true,
+      "pass": true
+    }
+  },
+  "perCase": [
+    {
+      "caseKey": "ev001",
+      "caseId": 237,
+      "archetype": "grounded",
+      "category": "billing",
+      "subject": "Unexpected charge on my invoice",
+      "situation": "Genuine billing error near the 25 EUR adjustment limit with invoice reference at hand.",
+      "answerPossible": true,
+      "expectedDocumentTitles": [
+        "Invoice Adjustment and Refund Limits"
+      ],
+      "predicted": {
+        "category": "billing",
+        "confidence": 0.9,
+        "confidenceBand": "high",
+        "sourcesCited": [
+          130,
+          120
+        ],
+        "summary": "The customer has reported an unexpected charge of 25 euros on their invoice for the Plus 30GB plan and is requesting clarification and correction of this charge.",
+        "recommendedAction": "Pull up the invoice using the provided invoice number (2024-0841) and itemize the charges with the customer. Identify the cause of the extra charge, whether it is a genuine error, expired promotion, usage-based charge, or misunderstanding. If it is a genuine error within the adjustment limit of 25 euros, create an adjustment request with the invoice reference and the corrected amount.",
+        "draftResponse": "Hello, thank you for reaching out. I understand your concern regarding the unexpected charge of 25 euros on your invoice. To assist you better, I will pull up your invoice number 2024-0841 and itemize the charges. This will help us identify the reason for the extra charge. If it turns out to be a genuine billing error, I will ensure that the necessary adjustments are made. Thank you for your patience as we resolve this matter.",
+        "missingInformation": []
+      },
+      "retrieved": [
+        {
+          "documentId": 130,
+          "title": "Plan Options Overview",
+          "score": 7
+        },
+        {
+          "documentId": 122,
+          "title": "Plan Cancellation and Port-Out Procedure",
+          "score": 6
+        },
+        {
+          "documentId": 120,
+          "title": "Invoice Adjustment and Refund Limits",
+          "score": 5
+        },
+        {
+          "documentId": 127,
+          "title": "No Signal or Data Troubleshooting",
+          "score": 4
+        },
+        {
+          "documentId": 129,
+          "title": "Payment Methods and Direct Debit",
+          "score": 3
+        }
+      ],
+      "expectedDocsRetrieved": true,
+      "bannedHits": [],
+      "errors": [],
+      "errorKind": null,
+      "errorMessage": null,
+      "latencyMs": 5986,
+      "usage": {
+        "promptTokens": 1397,
+        "completionTokens": 295,
+        "totalTokens": 1692
+      }
+    },
+    {
+      "caseKey": "ev003",
+      "caseId": 238,
+      "archetype": "unsupported",
+      "category": "billing",
+      "subject": "Refund for last night’s outage",
+      "situation": "Outage compensation request that the knowledge base does not support (no refunds for short interruptions).",
+      "answerPossible": false,
+      "expectedDocumentTitles": [
+        "Invoice Adjustment and Refund Limits"
+      ],
+      "predicted": {
+        "category": "billing",
+        "confidence": 0.85,
+        "confidenceBand": "high",
+        "sourcesCited": [
+          120,
+          127
+        ],
+        "summary": "The customer is requesting a refund for an internet outage that lasted three hours, claiming they should be credited for the lost service.",
+        "recommendedAction": "Review the customer's account for any documented service-level agreements regarding outages. Since refunds are only granted for genuine billing errors within the last 90 days, confirm whether the outage qualifies under this policy. If it does not, explain the policy regarding short service interruptions and that no compensation applies unless there is a documented service-level agreement.",
+        "draftResponse": "Thank you for reaching out regarding the outage you experienced last night. I understand how frustrating it can be when your internet service is disrupted. I will need to check if this outage qualifies for any adjustments or refunds based on our policies. Please note that refunds are typically granted only for genuine billing errors within the last 90 days. I will look into this and get back to you shortly.",
+        "missingInformation": []
+      },
+      "retrieved": [
+        {
+          "documentId": 120,
+          "title": "Invoice Adjustment and Refund Limits",
+          "score": 5
+        },
+        {
+          "documentId": 127,
+          "title": "No Signal or Data Troubleshooting",
+          "score": 4
+        },
+        {
+          "documentId": 130,
+          "title": "Plan Options Overview",
+          "score": 3
+        },
+        {
+          "documentId": 129,
+          "title": "Payment Methods and Direct Debit",
+          "score": 3
+        },
+        {
+          "documentId": 123,
+          "title": "Retention Offer Catalogue",
+          "score": 3
+        }
+      ],
+      "expectedDocsRetrieved": true,
+      "bannedHits": [],
+      "errors": [],
+      "errorKind": null,
+      "errorMessage": null,
+      "latencyMs": 3988,
+      "usage": {
+        "promptTokens": 1308,
+        "completionTokens": 249,
+        "totalTokens": 1557
+      }
+    },
+    {
+      "caseKey": "ev004",
+      "caseId": 239,
+      "archetype": "ambiguous",
+      "category": "billing",
+      "subject": "Promotion ending — new price or error?",
+      "situation": "Promotion expiry vs a possible billing error needs account detail to disambiguate.",
+      "answerPossible": true,
+      "expectedDocumentTitles": [
+        "Expired Promotional Discount Policy"
+      ],
+      "predicted": {
+        "category": "billing",
+        "confidence": 0.85,
+        "confidenceBand": "high",
+        "sourcesCited": [
+          121,
+          130,
+          120
+        ],
+        "summary": "The customer is inquiring about a discrepancy in their bill after a promotional period. They expected a new price of 12 euros but see a charge of 14 euros and an extra line they did not add.",
+        "recommendedAction": "Review the customer's billing statement to identify the charges. Confirm if the promotion has expired and explain the current pricing options. If the extra charge is due to a misunderstanding or genuine error, follow the appropriate procedures for adjustments as outlined in the policies.",
+        "draftResponse": "Hello! Thank you for reaching out. I understand your concern regarding the recent bill. It appears that your promotion may have expired, which could explain the new pricing. The current price for the plan you mentioned is 12 euros, but if there are additional charges, we need to review your invoice to clarify. Please allow me to check the details and get back to you with the correct information. Thank you for your patience!",
+        "missingInformation": []
+      },
+      "retrieved": [
+        {
+          "documentId": 130,
+          "title": "Plan Options Overview",
+          "score": 4
+        },
+        {
+          "documentId": 121,
+          "title": "Expired Promotional Discount Policy",
+          "score": 4
+        },
+        {
+          "documentId": 120,
+          "title": "Invoice Adjustment and Refund Limits",
+          "score": 4
+        },
+        {
+          "documentId": 122,
+          "title": "Plan Cancellation and Port-Out Procedure",
+          "score": 3
+        },
+        {
+          "documentId": 129,
+          "title": "Payment Methods and Direct Debit",
+          "score": 2
+        }
+      ],
+      "expectedDocsRetrieved": true,
+      "bannedHits": [],
+      "errors": [],
+      "errorKind": null,
+      "errorMessage": null,
+      "latencyMs": 6771,
+      "usage": {
+        "promptTokens": 1334,
+        "completionTokens": 272,
+        "totalTokens": 1606
+      }
+    },
+    {
+      "caseKey": "ev006",
+      "caseId": 240,
+      "archetype": "multi-document",
+      "category": "billing",
+      "subject": "Invoice question and changing my plan",
+      "situation": "Two unrelated requests in one message: an invoice fee and a plan change.",
+      "answerPossible": true,
+      "expectedDocumentTitles": [
+        "Invoice Adjustment and Refund Limits",
+        "Plan Options Overview"
+      ],
+      "predicted": {
+        "category": "billing",
+        "confidence": 0.85,
+        "confidenceBand": "high",
+        "sourcesCited": [
+          130,
+          120
+        ],
+        "summary": "The customer inquired about an extra fee on their latest invoice and expressed a desire to change their plan from Basic to Family.",
+        "recommendedAction": "First, review the customer's latest invoice to identify any extra fees. Pull the invoice and itemize the charges with the customer to determine the cause of the fee. If it falls within the adjustment limit of 25 EUR and is a genuine error, proceed with creating an adjustment request. For the plan change, inform the customer that upgrading from the Basic to the Family plan is free of charge and will take effect from the next billing period.",
+        "draftResponse": "Thank you for reaching out! I can help you with both your questions. First, let’s take a look at your latest invoice to check for any extra fees. Could you please provide me with the invoice reference? Regarding your plan change, moving from the Basic plan to the Family plan is free of charge, and the new pricing will take effect from your next billing period. If you have any further questions or need assistance with the invoice, feel free to let me know!",
+        "missingInformation": []
+      },
+      "retrieved": [
+        {
+          "documentId": 130,
+          "title": "Plan Options Overview",
+          "score": 5
+        },
+        {
+          "documentId": 122,
+          "title": "Plan Cancellation and Port-Out Procedure",
+          "score": 5
+        },
+        {
+          "documentId": 120,
+          "title": "Invoice Adjustment and Refund Limits",
+          "score": 4
+        },
+        {
+          "documentId": 129,
+          "title": "Payment Methods and Direct Debit",
+          "score": 3
+        },
+        {
+          "documentId": 127,
+          "title": "No Signal or Data Troubleshooting",
+          "score": 3
+        }
+      ],
+      "expectedDocsRetrieved": true,
+      "bannedHits": [],
+      "errors": [],
+      "errorKind": null,
+      "errorMessage": null,
+      "latencyMs": 3271,
+      "usage": {
+        "promptTokens": 1366,
+        "completionTokens": 309,
+        "totalTokens": 1675
+      }
+    },
+    {
+      "caseKey": "ev015",
+      "caseId": 241,
+      "archetype": "grounded",
+      "category": "cancellation",
+      "subject": "Retention offer before I leave",
+      "situation": "Retention request; only the published catalogue may be offered.",
+      "answerPossible": true,
+      "expectedDocumentTitles": [
+        "Retention Offer Catalogue"
+      ],
+      "predicted": {
+        "category": "billing",
+        "confidence": 0.9,
+        "confidenceBand": "high",
+        "sourcesCited": [
+          123
+        ],
+        "summary": "The customer is considering leaving due to pricing concerns and is inquiring about retention options available to them.",
+        "recommendedAction": "Ask the customer why they are considering leaving to better understand their concerns. Present the available retention options: a 3 GB/month data top-up at 40% off for 6 months or a 50 EUR one-time credit. If the customer accepts one of these options, apply it and confirm the effective date.",
+        "draftResponse": "Thank you for reaching out. I understand that you're considering leaving due to pricing concerns. We have a couple of retention options that might help: you can receive a 3 GB/month data top-up at 40% off for 6 months, or a one-time credit of 50 EUR. Please let me know if either of these options interests you, or if you'd like to discuss your concerns further.",
+        "missingInformation": []
+      },
+      "retrieved": [
+        {
+          "documentId": 123,
+          "title": "Retention Offer Catalogue",
+          "score": 10
+        },
+        {
+          "documentId": 130,
+          "title": "Plan Options Overview",
+          "score": 5
+        },
+        {
+          "documentId": 122,
+          "title": "Plan Cancellation and Port-Out Procedure",
+          "score": 5
+        },
+        {
+          "documentId": 121,
+          "title": "Expired Promotional Discount Policy",
+          "score": 3
+        },
+        {
+          "documentId": 129,
+          "title": "Payment Methods and Direct Debit",
+          "score": 2
+        }
+      ],
+      "expectedDocsRetrieved": true,
+      "bannedHits": [],
+      "errors": [],
+      "errorKind": null,
+      "errorMessage": null,
+      "latencyMs": 4762,
+      "usage": {
+        "promptTokens": 1280,
+        "completionTokens": 266,
+        "totalTokens": 1546
+      }
+    },
+    {
+      "caseKey": "ev016",
+      "caseId": 242,
+      "archetype": "ambiguous",
+      "category": "cancellation",
+      "subject": "Can you match a competitor’s price?",
+      "situation": "Competitor price-match request; the catalogue is fixed and may not cover it.",
+      "answerPossible": true,
+      "expectedDocumentTitles": [
+        "Retention Offer Catalogue"
+      ],
+      "predicted": {
+        "category": "billing",
+        "confidence": 0.85,
+        "confidenceBand": "high",
+        "sourcesCited": [
+          123,
+          130
+        ],
+        "summary": "The customer is inquiring if the company can match a competitor's price of 5 euros per month to retain their business. They are also asking what alternatives the company can offer if matching the price is not possible.",
+        "recommendedAction": "Ask the customer why they are considering leaving, categorize the reason, and present the retention options available in the catalogue. The options include a 3 GB/month data top-up at 40% off for 6 months or a 50 EUR one-time credit. If the customer is interested in any of these options, confirm their acceptance and apply it.",
+        "draftResponse": "Thank you for reaching out! I understand that you're considering leaving due to a competitor's offer of 5 euros a month. To better assist you, could you please share why you're thinking of switching? We do have some retention offers available that might interest you. Currently, we can offer a 3 GB/month data top-up at 40% off for 6 months or a one-time credit of 50 EUR. Please let me know if either of these options works for you, or if you have any other questions!",
+        "missingInformation": []
+      },
+      "retrieved": [
+        {
+          "documentId": 123,
+          "title": "Retention Offer Catalogue",
+          "score": 8
+        },
+        {
+          "documentId": 130,
+          "title": "Plan Options Overview",
+          "score": 3
+        },
+        {
+          "documentId": 122,
+          "title": "Plan Cancellation and Port-Out Procedure",
+          "score": 3
+        },
+        {
+          "documentId": 121,
+          "title": "Expired Promotional Discount Policy",
+          "score": 3
+        },
+        {
+          "documentId": 129,
+          "title": "Payment Methods and Direct Debit",
+          "score": 2
+        }
+      ],
+      "expectedDocsRetrieved": true,
+      "bannedHits": [],
+      "errors": [],
+      "errorKind": null,
+      "errorMessage": null,
+      "latencyMs": 3751,
+      "usage": {
+        "promptTokens": 1284,
+        "completionTokens": 315,
+        "totalTokens": 1599
+      }
+    },
+    {
+      "caseKey": "ev018",
+      "caseId": 243,
+      "archetype": "multi-document",
+      "category": "cancellation",
+      "subject": "Two lines — one port-out, one retention",
+      "situation": "One message covering a port-out and a retention offer across two lines.",
+      "answerPossible": true,
+      "expectedDocumentTitles": [
+        "Plan Cancellation and Port-Out Procedure",
+        "Retention Offer Catalogue"
+      ],
+      "predicted": {
+        "category": "cancellation",
+        "confidence": 0.9,
+        "confidenceBand": "high",
+        "sourcesCited": [
+          122,
+          123
+        ],
+        "summary": "The customer wants to port out Line A to another provider and requests a PAC code. Additionally, they want to retain Line B but are seeking a better price through a retention deal.",
+        "recommendedAction": "Confirm the identity of the account holder to proceed with the PAC code request for Line A. After confirming, provide the PAC code. For Line B, present the retention options available from the catalogue, specifically the 3 GB/month data top-up at 40% off for 6 months or the 50 EUR one-time credit. Ask the customer which option they prefer and apply it if they accept.",
+        "draftResponse": "Thank you for reaching out! I can assist you with both of your requests. First, I will need to confirm your identity to provide the PAC code for Line A. Once that's done, I will send you the PAC code. For Line B, we have two retention options available: a 3 GB/month data top-up at 40% off for 6 months, or a one-time credit of 50 EUR. Please let me know which option you would prefer, and I will apply it for you.",
+        "missingInformation": []
+      },
+      "retrieved": [
+        {
+          "documentId": 122,
+          "title": "Plan Cancellation and Port-Out Procedure",
+          "score": 8
+        },
+        {
+          "documentId": 123,
+          "title": "Retention Offer Catalogue",
+          "score": 5
+        },
+        {
+          "documentId": 130,
+          "title": "Plan Options Overview",
+          "score": 4
+        },
+        {
+          "documentId": 124,
+          "title": "eSIM Activation Procedure",
+          "score": 4
+        },
+        {
+          "documentId": 131,
+          "title": "Coverage and Network Status Page",
+          "score": 2
+        }
+      ],
+      "expectedDocsRetrieved": true,
+      "bannedHits": [],
+      "errors": [],
+      "errorKind": null,
+      "errorMessage": null,
+      "latencyMs": 3795,
+      "usage": {
+        "promptTokens": 1383,
+        "completionTokens": 315,
+        "totalTokens": 1698
+      }
+    },
+    {
+      "caseKey": "ev039",
+      "caseId": 244,
+      "archetype": "ambiguous",
+      "category": "general_information",
+      "subject": "Minimum contract length?",
+      "situation": "Contract length is partially absent from the KB; must not invent a minimum term.",
+      "answerPossible": false,
+      "expectedDocumentTitles": [
+        "Plan Options Overview",
+        "Plan Cancellation and Port-Out Procedure"
+      ],
+      "predicted": {
+        "category": "cancellation",
+        "confidence": 0.7,
+        "confidenceBand": "high",
+        "sourcesCited": [
+          122,
+          130
+        ],
+        "summary": "The customer is inquiring about the minimum contract length for the Family plan and the notice period required for cancellation to avoid renewal.",
+        "recommendedAction": "Inform the customer that the minimum contract length for the Family plan is not specified in the available information. However, they should be aware that there is a 30-day notice period required for cancellation to avoid automatic renewal. It may be beneficial to confirm the specific terms of the Family plan directly, as this information is not detailed in the current knowledge base.",
+        "draftResponse": "Thank you for reaching out! I understand you're looking for information about the minimum contract length for the Family plan and the cancellation notice period. Unfortunately, the minimum contract length isn't specified in our current resources. However, please note that you need to provide a 30-day notice if you wish to cancel your plan to avoid automatic renewal. If you have further questions or need assistance, feel free to ask!",
+        "missingInformation": []
+      },
+      "retrieved": [
+        {
+          "documentId": 122,
+          "title": "Plan Cancellation and Port-Out Procedure",
+          "score": 8
+        },
+        {
+          "documentId": 130,
+          "title": "Plan Options Overview",
+          "score": 5
+        },
+        {
+          "documentId": 131,
+          "title": "Coverage and Network Status Page",
+          "score": 2
+        },
+        {
+          "documentId": 128,
+          "title": "Roaming Data Policy",
+          "score": 2
+        },
+        {
+          "documentId": 127,
+          "title": "No Signal or Data Troubleshooting",
+          "score": 2
+        }
+      ],
+      "expectedDocsRetrieved": true,
+      "bannedHits": [],
+      "errors": [],
+      "errorKind": null,
+      "errorMessage": null,
+      "latencyMs": 3742,
+      "usage": {
+        "promptTokens": 1287,
+        "completionTokens": 284,
+        "totalTokens": 1571
+      }
+    }
+  ]
+}

@@ -1,17 +1,14 @@
 import 'server-only';
 import { parseRawAnalysis, type RawAnalysis } from './analysis-schema';
-import { AiInvalidOutputError } from './errors';
 import { buildAnalysisMessages, type CaseContentForAnalysis } from './prompts';
 import {
   getAnalysisProvider,
   type AnalysisProvider
 } from './provider';
 import type { RetrievedDocument } from './retrieval';
+import { resolveSources, type AnalysisSourceRef } from './source-ids';
 
-export type AnalysisSourceRef = {
-  documentId: number;
-  relevance: number;
-};
+export type { AnalysisSourceRef } from './source-ids';
 
 export type ValidatedAnalysis = {
   category: RawAnalysis['category'];
@@ -33,30 +30,6 @@ export type AnalyzeCaseInput = {
   retrievedDocs: RetrievedDocument[];
   provider?: AnalysisProvider;
 };
-
-function resolveSources(
-  parsed: RawAnalysis,
-  retrievedDocs: RetrievedDocument[]
-): AnalysisSourceRef[] {
-  const docsById = new Map(
-    retrievedDocs.map((doc) => [String(doc.documentId), doc])
-  );
-
-  const sources = parsed.sources
-    .map((id) => {
-      const doc = docsById.get(id);
-      return doc ? { documentId: doc.documentId, relevance: doc.score } : null;
-    })
-    .filter((source): source is AnalysisSourceRef => source !== null);
-
-  if (parsed.sources.length > 0 && sources.length !== parsed.sources.length) {
-    throw new AiInvalidOutputError(
-      'AI output references a source that was not retrieved from the knowledge base'
-    );
-  }
-
-  return sources;
-}
 
 export async function analyzeCase(
   input: AnalyzeCaseInput

@@ -258,6 +258,7 @@ async function main(): Promise<void> {
   const rogueProvider = {
     id: 'rogue',
     model: 'rogue-1',
+    lastUsage: null,
     analyze: async () => ({
       category: 'billing',
       summary: 'summary',
