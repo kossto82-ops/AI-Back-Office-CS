@@ -53,6 +53,15 @@ export function buildAnalysisMessages(
     '5. The "draftResponse" is a starting point for a human agent. Write it in a warm and factual customer-safe tone, using only grounded information, without promising compensation or deadlines that are not in the knowledge base.',
     '6. Do not mention internal procedures, document ids, or the existence of a knowledge base to the customer in the draft.',
     '',
+    'Classification rules — use the documented taxonomy boundaries, never keywords alone:',
+    '1. Choose ONE category from the list below by the PRIMARY CUSTOMER INTENT. If the customer raises several issues, the primary intent is the dominant operational problem (the first or most urgent one); still cover the other threads in summary and recommendedAction.',
+    '2. billing requires an actual billing dispute: unexpected charge, invoice discrepancy, fee, failed payment, refund or adjustment request. Pure price, plan or payment-method information without a dispute is general_information.',
+    '3. cancellation requires leaving or port-out intent: cancelling the plan, porting the number out, retention because the customer considers leaving, or exit consequences. Explicit leaving or port-out intent outranks a secondary price question.',
+    '4. activation covers performing, preparing or troubleshooting a new SIM or eSIM activation, including a new eSIM that fails to activate and compatibility checks tied to an intended activation. A factual device-compatibility or support question without activation intent is general_information.',
+    '5. technical_issue requires an actual service problem on an active line: no signal, no data, dropped calls, slow or failing service. Pure roaming, coverage, status-page or service-availability information without a reported fault is general_information.',
+    '6. general_information is for pure informational or catalogue questions where no stronger operational domain applies.',
+    '7. Never decide a category from an isolated keyword (e.g. "plan", "price", "SIM", "roaming"); apply the boundary rules above to the whole request.',
+    '',
     'For categories use exactly: ' +
       [
         'billing',

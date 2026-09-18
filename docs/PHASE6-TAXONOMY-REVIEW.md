@@ -1,13 +1,15 @@
 # Phase 6 — Taxonomy Adjudication Review
 
-> **Status: PENDING HUMAN ADJUDICATION — no gold labels were changed.**
+> **Status: ADJUDICATED 2026-09-18 — decisions applied to the Phase 6 dataset.**
 >
 > This document is the classification decision table for Phase 6. It records, per
 > flagged case, the gold category, the predicted category, the confidence, the
-> archetype, the taxonomy boundary involved, and a recommended interpretation.
-> The human decision (keep gold / relabel to predicted / relabel to a third
-> category) is left **blank** for the human reviewer. Nothing here auto-relabels
-> the evaluation dataset; that is a separate, explicitly reviewed change.
+> archetype, the taxonomy boundary involved, and the human decision. The human
+> decisions (apply gold / relabel to a third category) were recorded on
+> 2026-09-18 and **applied** to the Phase 6 evaluation dataset
+> (`scripts/phase6/dataset.ts`) — Phase 5A artifacts were left untouched. The
+> authoritative Phase 6 validation report is
+> `docs/PHASE6-CLASSIFICATION-VALIDATION.md`.
 
 Source of truth for the numbers below: `docs/phase5a-baseline-results.json`
 (baseline real run) and `docs/phase5a1-results.json` (post-fix revalidation of 8
@@ -69,44 +71,44 @@ deterministic unit tests.
 
 ## 3. Adjudication table
 
-Legend: **Decision** (blank for human): `[ ] keep gold` | `[ ] relabel → predicted`
-| `[ ] relabel → <category>`. Recommended interpretation is the reviewer-facing
-suggestion only; it does not change the dataset.
+Legend: **Decision** (filled by the human reviewer on 2026-09-18):
+`keep gold` | `relabel → <category>`. Recommended interpretation is the
+reviewer-facing suggestion only.
 
 ### 3.1 Billing boundary
 
 | Case | Subject | Gold | Predicted | Conf | Archetype | Boundary | Recommended interpretation | Decision |
 |---|---|---|---|---|---|---|---|---|
-| ev008 | How much is the Plus plan? | billing | general_information | 1.00 | grounded | billing/general (R1) | Factual plan-price query, no dispute → `general_information` per R1. This is the strongest R1 candidate; compare ev008 vs ev035/ev041 (both plan-catalogue questions with gold `general_information`) — ev008 is inconsistent with its catalogue siblings. | |
-| ev036 | Do you accept PayPal? | general_information | billing | 1.00 | grounded | billing/general (R1) | Pure payment-method information, no dispute → `general_information` per R1 (gold correct). | |
-| ev037 | Upgrade my plan mid-month | general_information | billing | 1.00 | grounded | billing/general (R1) | Plan-change timing/fee info, no dispute → `general_information` per R1 (gold correct). Plan changes with a billing consequence are the advertised edge; R1 says no dispute → general. | |
-| ev040 | Cheaper plan options | general_information | billing | 0.90 | injection | billing/general (R1) | Options query = general info; the injection attempt must not change the category. `general_information` per R1 (gold correct). | |
-| ev039 | Minimum contract length? | general_information | cancellation | 0.70 | ambiguous | billing/cancellation/general (R1, R2) | Contract-length question, customer has NOT stated intent to cancel → `general_information` per R1/R2 (gold correct; predicted `cancellation` over-read by the 30-day-notice KB fragment). | |
+| ev008 | How much is the Plus plan? | billing | general_information | 1.00 | grounded | billing/general (R1) | Factual plan-price query, no dispute → `general_information` per R1. This is the strongest R1 candidate; compare ev008 vs ev035/ev041 (both plan-catalogue questions with gold `general_information`) — ev008 is inconsistent with its catalogue siblings. | **relabel → general_information** |
+| ev036 | Do you accept PayPal? | general_information | billing | 1.00 | grounded | billing/general (R1) | Pure payment-method information, no dispute → `general_information` per R1 (gold correct). | **keep gold** |
+| ev037 | Upgrade my plan mid-month | general_information | billing | 1.00 | grounded | billing/general (R1) | Plan-change timing/fee info, no dispute → `general_information` per R1 (gold correct). Plan changes with a billing consequence are the advertised edge; R1 says no dispute → general. | **keep gold** |
+| ev040 | Cheaper plan options | general_information | billing | 0.90 | injection | billing/general (R1) | Options query = general info; the injection attempt must not change the category. `general_information` per R1 (gold correct). | **keep gold** |
+| ev039 | Minimum contract length? | general_information | cancellation | 0.70 | ambiguous | billing/cancellation/general (R1, R2) | Contract-length question, customer has NOT stated intent to cancel → `general_information` per R1/R2 (gold correct; predicted `cancellation` over-read by the 30-day-notice KB fragment). | **keep gold** |
 
 ### 3.2 Cancellation boundary
 
 | Case | Subject | Gold | Predicted | Conf | Archetype | Boundary | Recommended interpretation | Decision |
 |---|---|---|---|---|---|---|---|---|
-| ev012 | Port my number to a new provider | cancellation | general_information | 0.95 | grounded | cancellation/general (R2) | Port-out with explicit leaving intent + PAC-code request → `cancellation` per R2 (gold correct). Predicted `general_information` ignores the stated intent to port/leave. This is the clearest model-side miss. | |
-| ev015 | Retention offer before I leave | cancellation | billing | 0.90 | grounded | cancellation/billing (R2) | Customer states intent to leave for price → retention is part of the exit flow → `cancellation` per R2. Predicted `billing` over-focuses on the price/offer content. | |
-| ev016 | Can you match a competitor's price? | cancellation | billing | 0.85 | ambiguous | cancellation/billing (R2) | Same as ev015: retention/price-match inside leaving intent → `cancellation` (gold correct). | |
+| ev012 | Port my number to a new provider | cancellation | general_information | 0.95 | grounded | cancellation/general (R2) | Port-out with explicit leaving intent + PAC-code request → `cancellation` per R2 (gold correct). Predicted `general_information` ignores the stated intent to port/leave. This is the clearest model-side miss. | **keep gold** |
+| ev015 | Retention offer before I leave | cancellation | billing | 0.90 | grounded | cancellation/billing (R2) | Customer states intent to leave for price → retention is part of the exit flow → `cancellation` per R2. Predicted `billing` over-focuses on the price/offer content. | **keep gold** |
+| ev016 | Can you match a competitor's price? | cancellation | billing | 0.85 | ambiguous | cancellation/billing (R2) | Same as ev015: retention/price-match inside leaving intent → `cancellation` (gold correct). | **keep gold** |
 
 ### 3.3 Activation boundary
 
 | Case | Subject | Gold | Predicted | Conf | Archetype | Boundary | Recommended interpretation | Decision |
 |---|---|---|---|---|---|---|---|---|
-| ev021 | Is my phone eSIM compatible? | activation | general_information | 0.90 | grounded | activation/general (R3) | Device-compatibility pre-check for eSIM start → `activation` per R3 (gold correct). Factual support question with implied start intent. Borderline; see ev022. | |
-| ev022 | eSIM on my wifi-only tablet | activation | general_information | 0.90 | ambiguous | activation/general (R3) | Wifi-only tablet is not eSIM-capable; KB directs to physical SIM instead of activation → gold `activation` is strained, predicted `general_information` actually refuses an activation (no route exists). R3 makes this `general_information` (device-not-supported, no start possible). **Relabel candidate** to keep R1–R5 consistent. | |
-| ev026 | MY ESIM BROKEN | activation | technical_issue | 0.85 | edge | activation/technical (R4) | Short all-caps "not working" with no prior-worked state → activation failure = `activation` per R4 (gold correct). It is a NEW eSIM whose activation fails, not a degraded service. Predicted `technical_issue` treats "broken/not working" as a technical fault. Note: sentence-level keyword models (mock) also read this as `technical_issue`; R4 is needed to disambiguate. | |
+| ev021 | Is my phone eSIM compatible? | activation | general_information | 0.90 | grounded | activation/general (R3) | Device-compatibility pre-check for eSIM start → `activation` per R3 (gold correct). Factual support question with implied start intent. Borderline; see ev022. | **keep gold** |
+| ev022 | eSIM on my wifi-only tablet | activation | general_information | 0.90 | ambiguous | activation/general (R3) | Wifi-only tablet is not eSIM-capable; KB directs to physical SIM instead of activation → gold `activation` is strained, predicted `general_information` actually refuses an activation (no route exists). R3 makes this `general_information` (device-not-supported, no start possible). **Relabel candidate** to keep R1–R5 consistent. | **relabel → general_information** |
+| ev026 | MY ESIM BROKEN | activation | technical_issue | 0.85 | edge | activation/technical (R4) | Short all-caps "not working" with no prior-worked state → activation failure = `activation` per R4 (gold correct). It is a NEW eSIM whose activation fails, not a degraded service. Predicted `technical_issue` treats "broken/not working" as a technical fault. Note: sentence-level keyword models (mock) also read this as `technical_issue`; R4 is needed to disambiguate. | **keep gold** |
 
 ### 3.4 Technical issue boundary
 
 | Case | Subject | Gold | Predicted | Conf | Archetype | Boundary | Recommended interpretation | Decision |
 |---|---|---|---|---|---|---|---|---|
-| ev028 | Roaming data in France | technical_issue | general_information | 0.95 | grounded | technical/general (R5) | Roaming-allowance fact query, no active service complaint → `general_information` per R5. `technical_issue` is only correct when service is actually impaired. **Relabel candidate.** | |
-| ev029 | Roaming costs outside the EU | technical_issue | general_information | 0.95 | grounded | technical/general (R5) | Same as ev028: non-EU roaming price query, no complaint → `general_information` per R5. **Relabel candidate.** | |
-| ev032 | Check network problems in my area | technical_issue | general_information | 0.90 | grounded | technical/general (R5) | Customer wants to self-serve via the network status page — an info request, no reported fault → `general_information` per R5. **Relabel candidate.** | |
-| ev034 | Double charge and no signal | technical_issue | billing | 0.90 | edge | mixed multi-intent (R6) | Primary intent = "no signal at home since yesterday … fix NOW" (technical first, most severe); billing thread is secondary. → `technical_issue` per R6 (gold correct). Predicted `billing` prioritizes the double-charge thread. R6 (primary-intent rule) is the fix. | |
+| ev028 | Roaming data in France | technical_issue | general_information | 0.95 | grounded | technical/general (R5) | Roaming-allowance fact query, no active service complaint → `general_information` per R5. `technical_issue` is only correct when service is actually impaired. **Relabel candidate.** | **relabel → general_information** |
+| ev029 | Roaming costs outside the EU | technical_issue | general_information | 0.95 | grounded | technical/general (R5) | Same as ev028: non-EU roaming price query, no complaint → `general_information` per R5. **Relabel candidate.** | **relabel → general_information** |
+| ev032 | Check network problems in my area | technical_issue | general_information | 0.90 | grounded | technical/general (R5) | Customer wants to self-serve via the network status page — an info request, no reported fault → `general_information` per R5. **Relabel candidate.** | **relabel → general_information** |
+| ev034 | Double charge and no signal | technical_issue | billing | 0.90 | edge | mixed multi-intent (R6) | Primary intent = "no signal at home since yesterday … fix NOW" (technical first, most severe); billing thread is secondary. → `technical_issue` per R6 (gold correct). Predicted `billing` prioritizes the double-charge thread. R6 (primary-intent rule) is the fix. | **keep gold** |
 
 ### 3.5 Cross-cutting: what this means for accuracy
 
@@ -126,21 +128,37 @@ suggestion only; it does not change the dataset.
 
 ---
 
-## 4. Human decision record (to be filled)
+## 4. Human decision record (filled 2026-09-18)
 
-Human reviewer: fill the Decision column for each case above (keep gold / relabel
-to predicted / relabel to third category) and confirm R1–R6 (or edit them) once.
-Then Phase 6 proceeds:
+Human reviewer decisions on the 15 adjudication rows above, applied once:
 
-1. Lock the boundary rules (R1–R6, as edited).
-2. Align the evaluation dataset's gold labels only where the human marked "relabel".
-3. Encode R1–R6 in the classification-only evaluation mode + deterministic unit
-   tests (boundary fixtures).
-4. Apply the minimal prompt change in `lib/ai/prompts.ts` stating R1–R6
-   (primary-intent + boundary rules; no keyword-only classification).
-5. Re-run the full 42-case evaluation and compare against this adjudication table.
+- **Relabel → `general_information` (5):** ev008, ev022, ev028, ev029, ev032.
+  Rationale: the gold label describes the KB topic (plan catalogue, roaming,
+  status page, compatibility) while the actual query is a pure information
+  request with no dispute/fault/start/leave action — `general_information` per
+  R1/R3/R5. ev008 chosen because it is inconsistent with its plan-catalogue
+  siblings ev035/ev041.
+- **Keep gold (10):** ev012 (cancellation), ev015 (cancellation), ev016
+  (cancellation), ev021 (activation), ev026 (activation), ev034
+  (technical_issue), ev036 (general_information), ev037 (general_information),
+  ev039 (general_information), ev040 (general_information).
+- **R1–R6 as written above are confirmed** and were the basis for the Phase 6
+  prompt block in `lib/ai/prompts.ts` and the deterministic regression tests.
 
-Baseline for comparison: accuracy 0.636 (21/33), 12 baseline misses +
-ev015/ev016/ev039 in revalidation. After R1–R6 + relabels (if any), re-measure
-overall accuracy, per-category accuracy, boundary-accuracy (cases on a boundary),
-and high-confidence-wrong count.
+What Phase 6 applied (nothing in Phase 5A artifacts was modified):
+
+1. Locked boundary rules R1–R6 (see `lib/ai/prompts.ts` "Classification rules").
+2. Aligned the evaluation-dataset golds: 5 relabels + 10 kept
+   (`scripts/phase6/dataset.ts`: PHASE6_RELABELS, PHASE6_KEEP_GOLD, and a
+   per-case boundary map covering all 42 cases incl. 20 boundary cases).
+3. Encoded R1–R6 in deterministic unit tests with 16 regression fixtures
+   (`scripts/tests/classification-boundaries.test.ts`, §3 fixtures incl. 3
+   unlinked examples).
+4. Added the minimal prompt change stating R1–R6 (primary-intent + boundary
+   rules; no keyword-only classification).
+5. Re-ran the full 42-case evaluation and compared against this table
+   (`docs/phase6-results.json`, `docs/phase6-classification-results.json`).
+
+Numbering baseline for comparison: accuracy 0.636 (21/33), 12 baseline misses +
+ev015/ev016/ev039 in revalidation. Phase 6 result and per-category / boundary /
+high-confidence-wrong details are in `docs/PHASE6-CLASSIFICATION-VALIDATION.md`.

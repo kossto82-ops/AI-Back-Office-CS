@@ -1,0 +1,1303 @@
+{
+  "phase": "6-classification",
+  "generatedAt": "2026-09-18T11:59:42.795Z",
+  "dataset": {
+    "total": 42,
+    "relabeled": [
+      "ev008",
+      "ev022",
+      "ev028",
+      "ev029",
+      "ev032"
+    ],
+    "kept": [
+      "ev012",
+      "ev015",
+      "ev016",
+      "ev021",
+      "ev026",
+      "ev034",
+      "ev036",
+      "ev037",
+      "ev039",
+      "ev040"
+    ],
+    "boundaries": {
+      "core": 22,
+      "mixed/multi-intent": 3,
+      "billing/general": 5,
+      "cancellation/general": 2,
+      "cancellation/billing": 2,
+      "activation/general": 2,
+      "activation/technical": 1,
+      "technical/general": 5
+    }
+  },
+  "references": {
+    "originalGold": "Phase 5A original gold labels (historical baseline)",
+    "adjudicatedGold": "Phase 6 human-adjudicated gold labels"
+  },
+  "runs": {
+    "baseline": {
+      "model": "gpt-4o-mini",
+      "prompt": "Phase 5A prompt (baseline)",
+      "originalGold": {
+        "label": "baseline",
+        "sourceFile": "phase5a-baseline-results.json",
+        "overall": {
+          "ran": 33,
+          "skipped": [
+            "ev001",
+            "ev003",
+            "ev004",
+            "ev006",
+            "ev015",
+            "ev016",
+            "ev018",
+            "ev039",
+            "ev042"
+          ],
+          "correct": 21,
+          "accuracy": 0.6364,
+          "accuracyOverRetrievable": 0.5122
+        },
+        "byCategory": {
+          "billing": {
+            "correct": 5,
+            "total": 6,
+            "accuracy": 0.8333
+          },
+          "cancellation": {
+            "correct": 4,
+            "total": 5,
+            "accuracy": 0.8
+          },
+          "activation": {
+            "correct": 5,
+            "total": 8,
+            "accuracy": 0.625
+          },
+          "technical_issue": {
+            "correct": 4,
+            "total": 8,
+            "accuracy": 0.5
+          },
+          "general_information": {
+            "correct": 3,
+            "total": 6,
+            "accuracy": 0.5
+          }
+        },
+        "confusionMatrix": {
+          "billing": {
+            "billing": 5,
+            "general_information": 1
+          },
+          "cancellation": {
+            "cancellation": 4,
+            "general_information": 1
+          },
+          "activation": {
+            "activation": 5,
+            "general_information": 2,
+            "technical_issue": 1
+          },
+          "technical_issue": {
+            "technical_issue": 4,
+            "general_information": 3,
+            "billing": 1
+          },
+          "general_information": {
+            "general_information": 3,
+            "billing": 3
+          }
+        },
+        "boundaries": {
+          "boundaryCasesCovered": 15,
+          "accuracy": 0.2,
+          "byBoundary": {
+            "billing/general": {
+              "correct": 1,
+              "total": 5,
+              "accuracy": 0.2
+            },
+            "cancellation/general": {
+              "correct": 0,
+              "total": 1,
+              "accuracy": 0
+            },
+            "cancellation/billing": {
+              "correct": 0,
+              "total": 0,
+              "accuracy": 0
+            },
+            "activation/general": {
+              "correct": 0,
+              "total": 2,
+              "accuracy": 0
+            },
+            "activation/technical": {
+              "correct": 0,
+              "total": 1,
+              "accuracy": 0
+            },
+            "technical/general": {
+              "correct": 2,
+              "total": 5,
+              "accuracy": 0.4
+            },
+            "mixed/multi-intent": {
+              "correct": 0,
+              "total": 1,
+              "accuracy": 0
+            }
+          }
+        },
+        "highConfidenceWrong": {
+          "threshold": 0.85,
+          "count": 12,
+          "cases": [
+            "ev008",
+            "ev012",
+            "ev021",
+            "ev022",
+            "ev026",
+            "ev028",
+            "ev029",
+            "ev032",
+            "ev034",
+            "ev036",
+            "ev037",
+            "ev040"
+          ]
+        }
+      },
+      "adjudicatedGold": {
+        "label": "baseline",
+        "sourceFile": "phase5a-baseline-results.json",
+        "overall": {
+          "ran": 33,
+          "skipped": [
+            "ev001",
+            "ev003",
+            "ev004",
+            "ev006",
+            "ev015",
+            "ev016",
+            "ev018",
+            "ev039",
+            "ev042"
+          ],
+          "correct": 26,
+          "accuracy": 0.7879,
+          "accuracyOverRetrievable": 0.6341
+        },
+        "byCategory": {
+          "billing": {
+            "correct": 5,
+            "total": 5,
+            "accuracy": 1
+          },
+          "cancellation": {
+            "correct": 4,
+            "total": 5,
+            "accuracy": 0.8
+          },
+          "activation": {
+            "correct": 5,
+            "total": 7,
+            "accuracy": 0.7143
+          },
+          "technical_issue": {
+            "correct": 4,
+            "total": 5,
+            "accuracy": 0.8
+          },
+          "general_information": {
+            "correct": 8,
+            "total": 11,
+            "accuracy": 0.7273
+          }
+        },
+        "confusionMatrix": {
+          "billing": {
+            "billing": 5
+          },
+          "general_information": {
+            "general_information": 8,
+            "billing": 3
+          },
+          "cancellation": {
+            "cancellation": 4,
+            "general_information": 1
+          },
+          "activation": {
+            "activation": 5,
+            "general_information": 1,
+            "technical_issue": 1
+          },
+          "technical_issue": {
+            "technical_issue": 4,
+            "billing": 1
+          }
+        },
+        "boundaries": {
+          "boundaryCasesCovered": 15,
+          "accuracy": 0.5333,
+          "byBoundary": {
+            "billing/general": {
+              "correct": 2,
+              "total": 5,
+              "accuracy": 0.4
+            },
+            "cancellation/general": {
+              "correct": 0,
+              "total": 1,
+              "accuracy": 0
+            },
+            "cancellation/billing": {
+              "correct": 0,
+              "total": 0,
+              "accuracy": 0
+            },
+            "activation/general": {
+              "correct": 1,
+              "total": 2,
+              "accuracy": 0.5
+            },
+            "activation/technical": {
+              "correct": 0,
+              "total": 1,
+              "accuracy": 0
+            },
+            "technical/general": {
+              "correct": 5,
+              "total": 5,
+              "accuracy": 1
+            },
+            "mixed/multi-intent": {
+              "correct": 0,
+              "total": 1,
+              "accuracy": 0
+            }
+          }
+        },
+        "highConfidenceWrong": {
+          "threshold": 0.85,
+          "count": 7,
+          "cases": [
+            "ev012",
+            "ev021",
+            "ev026",
+            "ev034",
+            "ev036",
+            "ev037",
+            "ev040"
+          ]
+        }
+      }
+    },
+    "phase6": {
+      "model": "gpt-4o-mini",
+      "prompt": "Phase 6 prompt (primary-intent + boundary rules)",
+      "originalGold": {
+        "label": "phase6",
+        "sourceFile": "phase6-results.json",
+        "overall": {
+          "ran": 41,
+          "skipped": [
+            "ev042"
+          ],
+          "correct": 32,
+          "accuracy": 0.7805,
+          "accuracyOverRetrievable": 0.7805
+        },
+        "byCategory": {
+          "billing": {
+            "correct": 9,
+            "total": 10,
+            "accuracy": 0.9
+          },
+          "cancellation": {
+            "correct": 8,
+            "total": 8,
+            "accuracy": 1
+          },
+          "activation": {
+            "correct": 6,
+            "total": 8,
+            "accuracy": 0.75
+          },
+          "technical_issue": {
+            "correct": 4,
+            "total": 8,
+            "accuracy": 0.5
+          },
+          "general_information": {
+            "correct": 5,
+            "total": 7,
+            "accuracy": 0.7143
+          }
+        },
+        "confusionMatrix": {
+          "billing": {
+            "billing": 9,
+            "general_information": 1
+          },
+          "cancellation": {
+            "cancellation": 8
+          },
+          "activation": {
+            "activation": 6,
+            "general_information": 2
+          },
+          "technical_issue": {
+            "technical_issue": 4,
+            "general_information": 3,
+            "billing": 1
+          },
+          "general_information": {
+            "general_information": 5,
+            "cancellation": 1,
+            "billing": 1
+          }
+        },
+        "boundaries": {
+          "boundaryCasesCovered": 20,
+          "accuracy": 0.55,
+          "byBoundary": {
+            "billing/general": {
+              "correct": 3,
+              "total": 5,
+              "accuracy": 0.6
+            },
+            "cancellation/general": {
+              "correct": 1,
+              "total": 2,
+              "accuracy": 0.5
+            },
+            "cancellation/billing": {
+              "correct": 2,
+              "total": 2,
+              "accuracy": 1
+            },
+            "activation/general": {
+              "correct": 0,
+              "total": 2,
+              "accuracy": 0
+            },
+            "activation/technical": {
+              "correct": 1,
+              "total": 1,
+              "accuracy": 1
+            },
+            "technical/general": {
+              "correct": 2,
+              "total": 5,
+              "accuracy": 0.4
+            },
+            "mixed/multi-intent": {
+              "correct": 2,
+              "total": 3,
+              "accuracy": 0.6667
+            }
+          }
+        },
+        "highConfidenceWrong": {
+          "threshold": 0.85,
+          "count": 9,
+          "cases": [
+            "ev008",
+            "ev021",
+            "ev022",
+            "ev028",
+            "ev029",
+            "ev032",
+            "ev034",
+            "ev039",
+            "ev040"
+          ]
+        }
+      },
+      "adjudicatedGold": {
+        "label": "phase6",
+        "sourceFile": "phase6-results.json",
+        "overall": {
+          "ran": 41,
+          "skipped": [
+            "ev042"
+          ],
+          "correct": 37,
+          "accuracy": 0.9024,
+          "accuracyOverRetrievable": 0.9024
+        },
+        "byCategory": {
+          "billing": {
+            "correct": 9,
+            "total": 9,
+            "accuracy": 1
+          },
+          "cancellation": {
+            "correct": 8,
+            "total": 8,
+            "accuracy": 1
+          },
+          "activation": {
+            "correct": 6,
+            "total": 7,
+            "accuracy": 0.8571
+          },
+          "technical_issue": {
+            "correct": 4,
+            "total": 5,
+            "accuracy": 0.8
+          },
+          "general_information": {
+            "correct": 10,
+            "total": 12,
+            "accuracy": 0.8333
+          }
+        },
+        "confusionMatrix": {
+          "billing": {
+            "billing": 9
+          },
+          "general_information": {
+            "general_information": 10,
+            "cancellation": 1,
+            "billing": 1
+          },
+          "cancellation": {
+            "cancellation": 8
+          },
+          "activation": {
+            "activation": 6,
+            "general_information": 1
+          },
+          "technical_issue": {
+            "technical_issue": 4,
+            "billing": 1
+          }
+        },
+        "boundaries": {
+          "boundaryCasesCovered": 20,
+          "accuracy": 0.8,
+          "byBoundary": {
+            "billing/general": {
+              "correct": 4,
+              "total": 5,
+              "accuracy": 0.8
+            },
+            "cancellation/general": {
+              "correct": 1,
+              "total": 2,
+              "accuracy": 0.5
+            },
+            "cancellation/billing": {
+              "correct": 2,
+              "total": 2,
+              "accuracy": 1
+            },
+            "activation/general": {
+              "correct": 1,
+              "total": 2,
+              "accuracy": 0.5
+            },
+            "activation/technical": {
+              "correct": 1,
+              "total": 1,
+              "accuracy": 1
+            },
+            "technical/general": {
+              "correct": 5,
+              "total": 5,
+              "accuracy": 1
+            },
+            "mixed/multi-intent": {
+              "correct": 2,
+              "total": 3,
+              "accuracy": 0.6667
+            }
+          }
+        },
+        "highConfidenceWrong": {
+          "threshold": 0.85,
+          "count": 4,
+          "cases": [
+            "ev021",
+            "ev034",
+            "ev039",
+            "ev040"
+          ]
+        }
+      }
+    }
+  },
+  "decomposition": {
+    "A_baselineVsOriginalGold": 0.6364,
+    "A_prime_baselineVsAdjudicatedGold": 0.7879,
+    "B_phase6VsAdjudicatedGold": 0.9024,
+    "B_prime_phase6VsOriginalGold": 0.7805,
+    "taxonomyContribution": 0.1515,
+    "promptContribution": 0.1145,
+    "totalDelta": 0.266
+  },
+  "perCase": [
+    {
+      "caseKey": "ev001",
+      "archetype": "grounded",
+      "boundary": "core",
+      "originalGold": "billing",
+      "adjudicatedGold": "billing",
+      "baselinePredicted": null,
+      "baselineConfidence": null,
+      "baselineErred": true,
+      "phase6Predicted": "billing",
+      "phase6Confidence": 0.9,
+      "phase6Erred": false,
+      "correctVsAdjudicatedBaseline": false,
+      "correctVsAdjudicatedPhase6": true,
+      "correctVsOriginalBaseline": false,
+      "correctVsOriginalPhase6": true,
+      "boundaryCase": false
+    },
+    {
+      "caseKey": "ev002",
+      "archetype": "grounded",
+      "boundary": "core",
+      "originalGold": "billing",
+      "adjudicatedGold": "billing",
+      "baselinePredicted": "billing",
+      "baselineConfidence": 0.9,
+      "baselineErred": false,
+      "phase6Predicted": "billing",
+      "phase6Confidence": 0.9,
+      "phase6Erred": false,
+      "correctVsAdjudicatedBaseline": true,
+      "correctVsAdjudicatedPhase6": true,
+      "correctVsOriginalBaseline": true,
+      "correctVsOriginalPhase6": true,
+      "boundaryCase": false
+    },
+    {
+      "caseKey": "ev003",
+      "archetype": "unsupported",
+      "boundary": "core",
+      "originalGold": "billing",
+      "adjudicatedGold": "billing",
+      "baselinePredicted": null,
+      "baselineConfidence": null,
+      "baselineErred": true,
+      "phase6Predicted": "billing",
+      "phase6Confidence": 0.85,
+      "phase6Erred": false,
+      "correctVsAdjudicatedBaseline": false,
+      "correctVsAdjudicatedPhase6": true,
+      "correctVsOriginalBaseline": false,
+      "correctVsOriginalPhase6": true,
+      "boundaryCase": false
+    },
+    {
+      "caseKey": "ev004",
+      "archetype": "ambiguous",
+      "boundary": "core",
+      "originalGold": "billing",
+      "adjudicatedGold": "billing",
+      "baselinePredicted": null,
+      "baselineConfidence": null,
+      "baselineErred": true,
+      "phase6Predicted": "billing",
+      "phase6Confidence": 0.85,
+      "phase6Erred": false,
+      "correctVsAdjudicatedBaseline": false,
+      "correctVsAdjudicatedPhase6": true,
+      "correctVsOriginalBaseline": false,
+      "correctVsOriginalPhase6": true,
+      "boundaryCase": false
+    },
+    {
+      "caseKey": "ev005",
+      "archetype": "grounded",
+      "boundary": "core",
+      "originalGold": "billing",
+      "adjudicatedGold": "billing",
+      "baselinePredicted": "billing",
+      "baselineConfidence": 0.85,
+      "baselineErred": false,
+      "phase6Predicted": "billing",
+      "phase6Confidence": 0.9,
+      "phase6Erred": false,
+      "correctVsAdjudicatedBaseline": true,
+      "correctVsAdjudicatedPhase6": true,
+      "correctVsOriginalBaseline": true,
+      "correctVsOriginalPhase6": true,
+      "boundaryCase": false
+    },
+    {
+      "caseKey": "ev006",
+      "archetype": "multi-document",
+      "boundary": "mixed/multi-intent",
+      "originalGold": "billing",
+      "adjudicatedGold": "billing",
+      "baselinePredicted": null,
+      "baselineConfidence": null,
+      "baselineErred": true,
+      "phase6Predicted": "billing",
+      "phase6Confidence": 0.85,
+      "phase6Erred": false,
+      "correctVsAdjudicatedBaseline": false,
+      "correctVsAdjudicatedPhase6": true,
+      "correctVsOriginalBaseline": false,
+      "correctVsOriginalPhase6": true,
+      "boundaryCase": true
+    },
+    {
+      "caseKey": "ev007",
+      "archetype": "grounded",
+      "boundary": "core",
+      "originalGold": "billing",
+      "adjudicatedGold": "billing",
+      "baselinePredicted": "billing",
+      "baselineConfidence": 0.95,
+      "baselineErred": false,
+      "phase6Predicted": "billing",
+      "phase6Confidence": 0.95,
+      "phase6Erred": false,
+      "correctVsAdjudicatedBaseline": true,
+      "correctVsAdjudicatedPhase6": true,
+      "correctVsOriginalBaseline": true,
+      "correctVsOriginalPhase6": true,
+      "boundaryCase": false
+    },
+    {
+      "caseKey": "ev008",
+      "archetype": "grounded",
+      "boundary": "billing/general",
+      "originalGold": "billing",
+      "adjudicatedGold": "general_information",
+      "baselinePredicted": "general_information",
+      "baselineConfidence": 1,
+      "baselineErred": false,
+      "phase6Predicted": "general_information",
+      "phase6Confidence": 0.95,
+      "phase6Erred": false,
+      "correctVsAdjudicatedBaseline": true,
+      "correctVsAdjudicatedPhase6": true,
+      "correctVsOriginalBaseline": false,
+      "correctVsOriginalPhase6": false,
+      "boundaryCase": true
+    },
+    {
+      "caseKey": "ev009",
+      "archetype": "injection",
+      "boundary": "core",
+      "originalGold": "billing",
+      "adjudicatedGold": "billing",
+      "baselinePredicted": "billing",
+      "baselineConfidence": 0.85,
+      "baselineErred": false,
+      "phase6Predicted": "billing",
+      "phase6Confidence": 0.85,
+      "phase6Erred": false,
+      "correctVsAdjudicatedBaseline": true,
+      "correctVsAdjudicatedPhase6": true,
+      "correctVsOriginalBaseline": true,
+      "correctVsOriginalPhase6": true,
+      "boundaryCase": false
+    },
+    {
+      "caseKey": "ev010",
+      "archetype": "edge",
+      "boundary": "core",
+      "originalGold": "billing",
+      "adjudicatedGold": "billing",
+      "baselinePredicted": "billing",
+      "baselineConfidence": 0.9,
+      "baselineErred": false,
+      "phase6Predicted": "billing",
+      "phase6Confidence": 0.9,
+      "phase6Erred": false,
+      "correctVsAdjudicatedBaseline": true,
+      "correctVsAdjudicatedPhase6": true,
+      "correctVsOriginalBaseline": true,
+      "correctVsOriginalPhase6": true,
+      "boundaryCase": false
+    },
+    {
+      "caseKey": "ev011",
+      "archetype": "grounded",
+      "boundary": "core",
+      "originalGold": "cancellation",
+      "adjudicatedGold": "cancellation",
+      "baselinePredicted": "cancellation",
+      "baselineConfidence": 0.95,
+      "baselineErred": false,
+      "phase6Predicted": "cancellation",
+      "phase6Confidence": 0.9,
+      "phase6Erred": false,
+      "correctVsAdjudicatedBaseline": true,
+      "correctVsAdjudicatedPhase6": true,
+      "correctVsOriginalBaseline": true,
+      "correctVsOriginalPhase6": true,
+      "boundaryCase": false
+    },
+    {
+      "caseKey": "ev012",
+      "archetype": "grounded",
+      "boundary": "cancellation/general",
+      "originalGold": "cancellation",
+      "adjudicatedGold": "cancellation",
+      "baselinePredicted": "general_information",
+      "baselineConfidence": 0.95,
+      "baselineErred": false,
+      "phase6Predicted": "cancellation",
+      "phase6Confidence": 0.95,
+      "phase6Erred": false,
+      "correctVsAdjudicatedBaseline": false,
+      "correctVsAdjudicatedPhase6": true,
+      "correctVsOriginalBaseline": false,
+      "correctVsOriginalPhase6": true,
+      "boundaryCase": true
+    },
+    {
+      "caseKey": "ev013",
+      "archetype": "grounded",
+      "boundary": "core",
+      "originalGold": "cancellation",
+      "adjudicatedGold": "cancellation",
+      "baselinePredicted": "cancellation",
+      "baselineConfidence": 0.9,
+      "baselineErred": false,
+      "phase6Predicted": "cancellation",
+      "phase6Confidence": 0.9,
+      "phase6Erred": false,
+      "correctVsAdjudicatedBaseline": true,
+      "correctVsAdjudicatedPhase6": true,
+      "correctVsOriginalBaseline": true,
+      "correctVsOriginalPhase6": true,
+      "boundaryCase": false
+    },
+    {
+      "caseKey": "ev014",
+      "archetype": "unsupported",
+      "boundary": "core",
+      "originalGold": "cancellation",
+      "adjudicatedGold": "cancellation",
+      "baselinePredicted": "cancellation",
+      "baselineConfidence": 0.85,
+      "baselineErred": false,
+      "phase6Predicted": "cancellation",
+      "phase6Confidence": 0.85,
+      "phase6Erred": false,
+      "correctVsAdjudicatedBaseline": true,
+      "correctVsAdjudicatedPhase6": true,
+      "correctVsOriginalBaseline": true,
+      "correctVsOriginalPhase6": true,
+      "boundaryCase": false
+    },
+    {
+      "caseKey": "ev015",
+      "archetype": "grounded",
+      "boundary": "cancellation/billing",
+      "originalGold": "cancellation",
+      "adjudicatedGold": "cancellation",
+      "baselinePredicted": null,
+      "baselineConfidence": null,
+      "baselineErred": true,
+      "phase6Predicted": "cancellation",
+      "phase6Confidence": 0.9,
+      "phase6Erred": false,
+      "correctVsAdjudicatedBaseline": false,
+      "correctVsAdjudicatedPhase6": true,
+      "correctVsOriginalBaseline": false,
+      "correctVsOriginalPhase6": true,
+      "boundaryCase": true
+    },
+    {
+      "caseKey": "ev016",
+      "archetype": "ambiguous",
+      "boundary": "cancellation/billing",
+      "originalGold": "cancellation",
+      "adjudicatedGold": "cancellation",
+      "baselinePredicted": null,
+      "baselineConfidence": null,
+      "baselineErred": true,
+      "phase6Predicted": "cancellation",
+      "phase6Confidence": 0.85,
+      "phase6Erred": false,
+      "correctVsAdjudicatedBaseline": false,
+      "correctVsAdjudicatedPhase6": true,
+      "correctVsOriginalBaseline": false,
+      "correctVsOriginalPhase6": true,
+      "boundaryCase": true
+    },
+    {
+      "caseKey": "ev017",
+      "archetype": "injection",
+      "boundary": "core",
+      "originalGold": "cancellation",
+      "adjudicatedGold": "cancellation",
+      "baselinePredicted": "cancellation",
+      "baselineConfidence": 0.75,
+      "baselineErred": false,
+      "phase6Predicted": "cancellation",
+      "phase6Confidence": 0.75,
+      "phase6Erred": false,
+      "correctVsAdjudicatedBaseline": true,
+      "correctVsAdjudicatedPhase6": true,
+      "correctVsOriginalBaseline": true,
+      "correctVsOriginalPhase6": true,
+      "boundaryCase": false
+    },
+    {
+      "caseKey": "ev018",
+      "archetype": "multi-document",
+      "boundary": "mixed/multi-intent",
+      "originalGold": "cancellation",
+      "adjudicatedGold": "cancellation",
+      "baselinePredicted": null,
+      "baselineConfidence": null,
+      "baselineErred": true,
+      "phase6Predicted": "cancellation",
+      "phase6Confidence": 0.9,
+      "phase6Erred": false,
+      "correctVsAdjudicatedBaseline": false,
+      "correctVsAdjudicatedPhase6": true,
+      "correctVsOriginalBaseline": false,
+      "correctVsOriginalPhase6": true,
+      "boundaryCase": true
+    },
+    {
+      "caseKey": "ev019",
+      "archetype": "grounded",
+      "boundary": "core",
+      "originalGold": "activation",
+      "adjudicatedGold": "activation",
+      "baselinePredicted": "activation",
+      "baselineConfidence": 0.9,
+      "baselineErred": false,
+      "phase6Predicted": "activation",
+      "phase6Confidence": 0.9,
+      "phase6Erred": false,
+      "correctVsAdjudicatedBaseline": true,
+      "correctVsAdjudicatedPhase6": true,
+      "correctVsOriginalBaseline": true,
+      "correctVsOriginalPhase6": true,
+      "boundaryCase": false
+    },
+    {
+      "caseKey": "ev020",
+      "archetype": "grounded",
+      "boundary": "core",
+      "originalGold": "activation",
+      "adjudicatedGold": "activation",
+      "baselinePredicted": "activation",
+      "baselineConfidence": 0.9,
+      "baselineErred": false,
+      "phase6Predicted": "activation",
+      "phase6Confidence": 0.9,
+      "phase6Erred": false,
+      "correctVsAdjudicatedBaseline": true,
+      "correctVsAdjudicatedPhase6": true,
+      "correctVsOriginalBaseline": true,
+      "correctVsOriginalPhase6": true,
+      "boundaryCase": false
+    },
+    {
+      "caseKey": "ev021",
+      "archetype": "grounded",
+      "boundary": "activation/general",
+      "originalGold": "activation",
+      "adjudicatedGold": "activation",
+      "baselinePredicted": "general_information",
+      "baselineConfidence": 0.9,
+      "baselineErred": false,
+      "phase6Predicted": "general_information",
+      "phase6Confidence": 0.9,
+      "phase6Erred": false,
+      "correctVsAdjudicatedBaseline": false,
+      "correctVsAdjudicatedPhase6": false,
+      "correctVsOriginalBaseline": false,
+      "correctVsOriginalPhase6": false,
+      "boundaryCase": true
+    },
+    {
+      "caseKey": "ev022",
+      "archetype": "ambiguous",
+      "boundary": "activation/general",
+      "originalGold": "activation",
+      "adjudicatedGold": "general_information",
+      "baselinePredicted": "general_information",
+      "baselineConfidence": 0.9,
+      "baselineErred": false,
+      "phase6Predicted": "general_information",
+      "phase6Confidence": 0.9,
+      "phase6Erred": false,
+      "correctVsAdjudicatedBaseline": true,
+      "correctVsAdjudicatedPhase6": true,
+      "correctVsOriginalBaseline": false,
+      "correctVsOriginalPhase6": false,
+      "boundaryCase": true
+    },
+    {
+      "caseKey": "ev023",
+      "archetype": "grounded",
+      "boundary": "core",
+      "originalGold": "activation",
+      "adjudicatedGold": "activation",
+      "baselinePredicted": "activation",
+      "baselineConfidence": 0.9,
+      "baselineErred": false,
+      "phase6Predicted": "activation",
+      "phase6Confidence": 0.9,
+      "phase6Erred": false,
+      "correctVsAdjudicatedBaseline": true,
+      "correctVsAdjudicatedPhase6": true,
+      "correctVsOriginalBaseline": true,
+      "correctVsOriginalPhase6": true,
+      "boundaryCase": false
+    },
+    {
+      "caseKey": "ev024",
+      "archetype": "grounded",
+      "boundary": "core",
+      "originalGold": "activation",
+      "adjudicatedGold": "activation",
+      "baselinePredicted": "activation",
+      "baselineConfidence": 0.9,
+      "baselineErred": false,
+      "phase6Predicted": "activation",
+      "phase6Confidence": 0.9,
+      "phase6Erred": false,
+      "correctVsAdjudicatedBaseline": true,
+      "correctVsAdjudicatedPhase6": true,
+      "correctVsOriginalBaseline": true,
+      "correctVsOriginalPhase6": true,
+      "boundaryCase": false
+    },
+    {
+      "caseKey": "ev025",
+      "archetype": "grounded",
+      "boundary": "core",
+      "originalGold": "activation",
+      "adjudicatedGold": "activation",
+      "baselinePredicted": "activation",
+      "baselineConfidence": 0.9,
+      "baselineErred": false,
+      "phase6Predicted": "activation",
+      "phase6Confidence": 0.9,
+      "phase6Erred": false,
+      "correctVsAdjudicatedBaseline": true,
+      "correctVsAdjudicatedPhase6": true,
+      "correctVsOriginalBaseline": true,
+      "correctVsOriginalPhase6": true,
+      "boundaryCase": false
+    },
+    {
+      "caseKey": "ev026",
+      "archetype": "edge",
+      "boundary": "activation/technical",
+      "originalGold": "activation",
+      "adjudicatedGold": "activation",
+      "baselinePredicted": "technical_issue",
+      "baselineConfidence": 0.85,
+      "baselineErred": false,
+      "phase6Predicted": "activation",
+      "phase6Confidence": 0.85,
+      "phase6Erred": false,
+      "correctVsAdjudicatedBaseline": false,
+      "correctVsAdjudicatedPhase6": true,
+      "correctVsOriginalBaseline": false,
+      "correctVsOriginalPhase6": true,
+      "boundaryCase": true
+    },
+    {
+      "caseKey": "ev027",
+      "archetype": "grounded",
+      "boundary": "technical/general",
+      "originalGold": "technical_issue",
+      "adjudicatedGold": "technical_issue",
+      "baselinePredicted": "technical_issue",
+      "baselineConfidence": 0.9,
+      "baselineErred": false,
+      "phase6Predicted": "technical_issue",
+      "phase6Confidence": 0.9,
+      "phase6Erred": false,
+      "correctVsAdjudicatedBaseline": true,
+      "correctVsAdjudicatedPhase6": true,
+      "correctVsOriginalBaseline": true,
+      "correctVsOriginalPhase6": true,
+      "boundaryCase": true
+    },
+    {
+      "caseKey": "ev028",
+      "archetype": "grounded",
+      "boundary": "technical/general",
+      "originalGold": "technical_issue",
+      "adjudicatedGold": "general_information",
+      "baselinePredicted": "general_information",
+      "baselineConfidence": 0.95,
+      "baselineErred": false,
+      "phase6Predicted": "general_information",
+      "phase6Confidence": 0.9,
+      "phase6Erred": false,
+      "correctVsAdjudicatedBaseline": true,
+      "correctVsAdjudicatedPhase6": true,
+      "correctVsOriginalBaseline": false,
+      "correctVsOriginalPhase6": false,
+      "boundaryCase": true
+    },
+    {
+      "caseKey": "ev029",
+      "archetype": "grounded",
+      "boundary": "technical/general",
+      "originalGold": "technical_issue",
+      "adjudicatedGold": "general_information",
+      "baselinePredicted": "general_information",
+      "baselineConfidence": 0.95,
+      "baselineErred": false,
+      "phase6Predicted": "general_information",
+      "phase6Confidence": 0.9,
+      "phase6Erred": false,
+      "correctVsAdjudicatedBaseline": true,
+      "correctVsAdjudicatedPhase6": true,
+      "correctVsOriginalBaseline": false,
+      "correctVsOriginalPhase6": false,
+      "boundaryCase": true
+    },
+    {
+      "caseKey": "ev030",
+      "archetype": "unsupported",
+      "boundary": "core",
+      "originalGold": "technical_issue",
+      "adjudicatedGold": "technical_issue",
+      "baselinePredicted": "technical_issue",
+      "baselineConfidence": 0.85,
+      "baselineErred": false,
+      "phase6Predicted": "technical_issue",
+      "phase6Confidence": 0.85,
+      "phase6Erred": false,
+      "correctVsAdjudicatedBaseline": true,
+      "correctVsAdjudicatedPhase6": true,
+      "correctVsOriginalBaseline": true,
+      "correctVsOriginalPhase6": true,
+      "boundaryCase": false
+    },
+    {
+      "caseKey": "ev031",
+      "archetype": "ambiguous",
+      "boundary": "core",
+      "originalGold": "technical_issue",
+      "adjudicatedGold": "technical_issue",
+      "baselinePredicted": "technical_issue",
+      "baselineConfidence": 0.9,
+      "baselineErred": false,
+      "phase6Predicted": "technical_issue",
+      "phase6Confidence": 0.9,
+      "phase6Erred": false,
+      "correctVsAdjudicatedBaseline": true,
+      "correctVsAdjudicatedPhase6": true,
+      "correctVsOriginalBaseline": true,
+      "correctVsOriginalPhase6": true,
+      "boundaryCase": false
+    },
+    {
+      "caseKey": "ev032",
+      "archetype": "grounded",
+      "boundary": "technical/general",
+      "originalGold": "technical_issue",
+      "adjudicatedGold": "general_information",
+      "baselinePredicted": "general_information",
+      "baselineConfidence": 0.9,
+      "baselineErred": false,
+      "phase6Predicted": "general_information",
+      "phase6Confidence": 0.9,
+      "phase6Erred": false,
+      "correctVsAdjudicatedBaseline": true,
+      "correctVsAdjudicatedPhase6": true,
+      "correctVsOriginalBaseline": false,
+      "correctVsOriginalPhase6": false,
+      "boundaryCase": true
+    },
+    {
+      "caseKey": "ev033",
+      "archetype": "grounded",
+      "boundary": "core",
+      "originalGold": "technical_issue",
+      "adjudicatedGold": "technical_issue",
+      "baselinePredicted": "technical_issue",
+      "baselineConfidence": 0.85,
+      "baselineErred": false,
+      "phase6Predicted": "technical_issue",
+      "phase6Confidence": 0.85,
+      "phase6Erred": false,
+      "correctVsAdjudicatedBaseline": true,
+      "correctVsAdjudicatedPhase6": true,
+      "correctVsOriginalBaseline": true,
+      "correctVsOriginalPhase6": true,
+      "boundaryCase": false
+    },
+    {
+      "caseKey": "ev034",
+      "archetype": "edge",
+      "boundary": "mixed/multi-intent",
+      "originalGold": "technical_issue",
+      "adjudicatedGold": "technical_issue",
+      "baselinePredicted": "billing",
+      "baselineConfidence": 0.9,
+      "baselineErred": false,
+      "phase6Predicted": "billing",
+      "phase6Confidence": 0.9,
+      "phase6Erred": false,
+      "correctVsAdjudicatedBaseline": false,
+      "correctVsAdjudicatedPhase6": false,
+      "correctVsOriginalBaseline": false,
+      "correctVsOriginalPhase6": false,
+      "boundaryCase": true
+    },
+    {
+      "caseKey": "ev035",
+      "archetype": "grounded",
+      "boundary": "billing/general",
+      "originalGold": "general_information",
+      "adjudicatedGold": "general_information",
+      "baselinePredicted": "general_information",
+      "baselineConfidence": 0.95,
+      "baselineErred": false,
+      "phase6Predicted": "general_information",
+      "phase6Confidence": 0.95,
+      "phase6Erred": false,
+      "correctVsAdjudicatedBaseline": true,
+      "correctVsAdjudicatedPhase6": true,
+      "correctVsOriginalBaseline": true,
+      "correctVsOriginalPhase6": true,
+      "boundaryCase": true
+    },
+    {
+      "caseKey": "ev036",
+      "archetype": "grounded",
+      "boundary": "billing/general",
+      "originalGold": "general_information",
+      "adjudicatedGold": "general_information",
+      "baselinePredicted": "billing",
+      "baselineConfidence": 1,
+      "baselineErred": false,
+      "phase6Predicted": "general_information",
+      "phase6Confidence": 1,
+      "phase6Erred": false,
+      "correctVsAdjudicatedBaseline": false,
+      "correctVsAdjudicatedPhase6": true,
+      "correctVsOriginalBaseline": false,
+      "correctVsOriginalPhase6": true,
+      "boundaryCase": true
+    },
+    {
+      "caseKey": "ev037",
+      "archetype": "grounded",
+      "boundary": "billing/general",
+      "originalGold": "general_information",
+      "adjudicatedGold": "general_information",
+      "baselinePredicted": "billing",
+      "baselineConfidence": 1,
+      "baselineErred": false,
+      "phase6Predicted": "general_information",
+      "phase6Confidence": 0.9,
+      "phase6Erred": false,
+      "correctVsAdjudicatedBaseline": false,
+      "correctVsAdjudicatedPhase6": true,
+      "correctVsOriginalBaseline": false,
+      "correctVsOriginalPhase6": true,
+      "boundaryCase": true
+    },
+    {
+      "caseKey": "ev038",
+      "archetype": "grounded",
+      "boundary": "technical/general",
+      "originalGold": "general_information",
+      "adjudicatedGold": "general_information",
+      "baselinePredicted": "general_information",
+      "baselineConfidence": 0.95,
+      "baselineErred": false,
+      "phase6Predicted": "general_information",
+      "phase6Confidence": 0.9,
+      "phase6Erred": false,
+      "correctVsAdjudicatedBaseline": true,
+      "correctVsAdjudicatedPhase6": true,
+      "correctVsOriginalBaseline": true,
+      "correctVsOriginalPhase6": true,
+      "boundaryCase": true
+    },
+    {
+      "caseKey": "ev039",
+      "archetype": "ambiguous",
+      "boundary": "cancellation/general",
+      "originalGold": "general_information",
+      "adjudicatedGold": "general_information",
+      "baselinePredicted": null,
+      "baselineConfidence": null,
+      "baselineErred": true,
+      "phase6Predicted": "cancellation",
+      "phase6Confidence": 0.9,
+      "phase6Erred": false,
+      "correctVsAdjudicatedBaseline": false,
+      "correctVsAdjudicatedPhase6": false,
+      "correctVsOriginalBaseline": false,
+      "correctVsOriginalPhase6": false,
+      "boundaryCase": true
+    },
+    {
+      "caseKey": "ev040",
+      "archetype": "injection",
+      "boundary": "billing/general",
+      "originalGold": "general_information",
+      "adjudicatedGold": "general_information",
+      "baselinePredicted": "billing",
+      "baselineConfidence": 0.9,
+      "baselineErred": false,
+      "phase6Predicted": "billing",
+      "phase6Confidence": 0.9,
+      "phase6Erred": false,
+      "correctVsAdjudicatedBaseline": false,
+      "correctVsAdjudicatedPhase6": false,
+      "correctVsOriginalBaseline": false,
+      "correctVsOriginalPhase6": false,
+      "boundaryCase": true
+    },
+    {
+      "caseKey": "ev041",
+      "archetype": "grounded",
+      "boundary": "core",
+      "originalGold": "general_information",
+      "adjudicatedGold": "general_information",
+      "baselinePredicted": "general_information",
+      "baselineConfidence": 0.85,
+      "baselineErred": false,
+      "phase6Predicted": "general_information",
+      "phase6Confidence": 0.85,
+      "phase6Erred": false,
+      "correctVsAdjudicatedBaseline": true,
+      "correctVsAdjudicatedPhase6": true,
+      "correctVsOriginalBaseline": true,
+      "correctVsOriginalPhase6": true,
+      "boundaryCase": false
+    },
+    {
+      "caseKey": "ev042",
+      "archetype": "edge",
+      "boundary": "core",
+      "originalGold": "general_information",
+      "adjudicatedGold": "general_information",
+      "baselinePredicted": null,
+      "baselineConfidence": null,
+      "baselineErred": true,
+      "phase6Predicted": null,
+      "phase6Confidence": null,
+      "phase6Erred": true,
+      "correctVsAdjudicatedBaseline": false,
+      "correctVsAdjudicatedPhase6": false,
+      "correctVsOriginalBaseline": false,
+      "correctVsOriginalPhase6": false,
+      "boundaryCase": false
+    }
+  ]
+}
