@@ -1,6 +1,8 @@
 # Phase 5A — Human Review Worksheet
 
-> **Status: PENDING HUMAN REVIEW — human acceptance is NOT recorded yet.**
+> **Status: REVIEW IN PROGRESS — 15 sampled cases reviewed on 2026-09-18; 27 pending.**
+> Verdicts recorded (8 ACCEPT, 7 ACCEPT WITH EDIT, 0 REJECT = 100% on the sample):
+> see `docs/phase5a-human-review-sample.md`.
 > Baseline: real provider `openai/gpt-4o-mini`, 2026-09-18T10:18:59.129Z (full 42-case run).
 > Revalidation: real provider `openai/gpt-4o-mini`, 2026-09-18T10:49:26.535Z after the minimal source-id fix (8 previously-failed cases).
 
@@ -37,7 +39,7 @@ Full customer message text is intentionally NOT reproduced (evaluation guardrail
   - action: Pull up the invoice using the provided invoice number (2024-0841) and itemize the charges with the customer. Identify the cause of the extra charge, whether it is a genuine error, expired promotion, usage-based charge, or misunderstanding. If it is a genuine error within the adjustment limit of 25 euros, create an adjustment request with the invoice reference and the corrected amount.
   - draft: Hello, thank you for reaching out. I understand your concern regarding the unexpected charge of 25 euros on your invoice. To assist you better, I will pull up your invoice number 2024-0841 and itemize the charges. This will help us identify the reason for the extra charge. If it turns out to be a genuine billing error, I will ensure that the necessary adjustments are made. Thank you for your patience as we resolve this matter.
 
-VERDICT: `[ ] ACCEPT    [ ] ACCEPT WITH EDIT    [ ] REJECT`
+VERDICT: `[x] ACCEPT    [ ] ACCEPT WITH EDIT    [ ] REJECT`
 
   Ratings (optional): factual accuracy __ / 5 | usefulness __ / 5 | grounding __ / 5 | tone __ / 5
 
@@ -147,7 +149,7 @@ VERDICT: `[ ] ACCEPT    [ ] ACCEPT WITH EDIT    [ ] REJECT`
   - action: First, review the customer's latest invoice to identify any extra fees. Pull the invoice and itemize the charges with the customer to determine the cause of the fee. If it falls within the adjustment limit of 25 EUR and is a genuine error, proceed with creating an adjustment request. For the plan change, inform the customer that upgrading from the Basic to the Family plan is free of charge and will take effect from the next billing period.
   - draft: Thank you for reaching out! I can help you with both your questions. First, let’s take a look at your latest invoice to check for any extra fees. Could you please provide me with the invoice reference? Regarding your plan change, moving from the Basic plan to the Family plan is free of charge, and the new pricing will take effect from your next billing period. If you have any further questions or need assistance with the invoice, feel free to let me know!
 
-VERDICT: `[ ] ACCEPT    [ ] ACCEPT WITH EDIT    [ ] REJECT`
+VERDICT: `[ ] ACCEPT    [x] ACCEPT WITH EDIT    [ ] REJECT`
 
   Ratings (optional): factual accuracy __ / 5 | usefulness __ / 5 | grounding __ / 5 | tone __ / 5
 
@@ -206,7 +208,7 @@ VERDICT: `[ ] ACCEPT    [ ] ACCEPT WITH EDIT    [ ] REJECT`
   - draft: Thank you for reaching out regarding the double charge on your account. I understand your concern and would like to assist you with this. To proceed, I will need to pull your invoice and itemize the charges to identify the cause of the double charge. Refunds can only be granted for genuine billing errors within the last 90 days, and I will ensure we address this promptly. However, I must inform you that I cannot apply a lifetime discount or provide personal contact details for management. Thank you for your understanding, and I will follow up with you shortly.
   - BANNED FRAGMENTS DETECTED: lifetime discount
 
-VERDICT: `[ ] ACCEPT    [ ] ACCEPT WITH EDIT    [ ] REJECT`
+VERDICT: `[ ] ACCEPT    [x] ACCEPT WITH EDIT    [ ] REJECT`
 
   Ratings (optional): factual accuracy __ / 5 | usefulness __ / 5 | grounding __ / 5 | tone __ / 5
 
@@ -263,7 +265,7 @@ VERDICT: `[ ] ACCEPT    [ ] ACCEPT WITH EDIT    [ ] REJECT`
   - action: Inform the customer that they can obtain a PAC code from us and that their line will remain active until the new provider completes the porting process.
   - draft: Thank you for reaching out! To obtain your PAC code for porting your number to a new provider, please let us know, and we will provide it to you. Additionally, your line will remain active until the porting process is completed by your new provider, so you don't need to worry about losing service during this transition. If you have any further questions or need assistance, feel free to ask!
 
-VERDICT: `[ ] ACCEPT    [ ] ACCEPT WITH EDIT    [ ] REJECT`
+VERDICT: `[x] ACCEPT    [ ] ACCEPT WITH EDIT    [ ] REJECT`
 
   Ratings (optional): factual accuracy __ / 5 | usefulness __ / 5 | grounding __ / 5 | tone __ / 5
 
@@ -303,7 +305,7 @@ VERDICT: `[ ] ACCEPT    [ ] ACCEPT WITH EDIT    [ ] REJECT`
   - draft: Thank you for reaching out. I understand that you would like to cancel your line immediately and receive your remaining credit as a cheque. To proceed, I need to confirm your identity. Please note that our standard cancellation process requires a 30-day notice period, and immediate cancellation may not be possible unless a loss is confirmed. Regarding your remaining credit, refunds are typically issued for billing errors within the last 90 days. I can also offer you some options to retain your service if you're interested. Please let me know how you would like to proceed.
   - BANNED FRAGMENTS DETECTED: cheque
 
-VERDICT: `[ ] ACCEPT    [ ] ACCEPT WITH EDIT    [ ] REJECT`
+VERDICT: `[ ] ACCEPT    [x] ACCEPT WITH EDIT    [ ] REJECT`
 
   Ratings (optional): factual accuracy __ / 5 | usefulness __ / 5 | grounding __ / 5 | tone __ / 5
 
@@ -394,7 +396,7 @@ VERDICT: `[ ] ACCEPT    [ ] ACCEPT WITH EDIT    [ ] REJECT`
   - action: Confirm the identity of the account holder to proceed with the PAC code request for Line A. After confirming, provide the PAC code. For Line B, present the retention options available from the catalogue, specifically the 3 GB/month data top-up at 40% off for 6 months or the 50 EUR one-time credit. Ask the customer which option they prefer and apply it if they accept.
   - draft: Thank you for reaching out! I can assist you with both of your requests. First, I will need to confirm your identity to provide the PAC code for Line A. Once that's done, I will send you the PAC code. For Line B, we have two retention options available: a 3 GB/month data top-up at 40% off for 6 months, or a one-time credit of 50 EUR. Please let me know which option you would prefer, and I will apply it for you.
 
-VERDICT: `[ ] ACCEPT    [ ] ACCEPT WITH EDIT    [ ] REJECT`
+VERDICT: `[x] ACCEPT    [ ] ACCEPT WITH EDIT    [ ] REJECT`
 
   Ratings (optional): factual accuracy __ / 5 | usefulness __ / 5 | grounding __ / 5 | tone __ / 5
 
@@ -413,7 +415,7 @@ VERDICT: `[ ] ACCEPT    [ ] ACCEPT WITH EDIT    [ ] REJECT`
   - action: Verify that the customer's device is indeed unlocked and compatible with eSIM. Check if the eSIM profile has already been installed and ensure that there is a data connection available. If the QR code continues to fail, consider re-issuing the QR code up to two times. If the issue persists after that, escalate the case with the error code and device model for further assistance.
   - draft: Thank you for reaching out. I understand that you're having trouble activating your new eSIM due to the QR code not scanning. First, please confirm that your device is unlocked and compatible with eSIM. If you haven't already, try scanning the QR code in your device's Settings under Cellular > Add eSIM. Make sure you have a data connection available. If the scan continues to fail, I can re-issue the QR code for you. We can do this up to two times. If the issue persists after that, I will need to escalate the matter with the error code and your device model. Please let me know how you would like to proceed.
 
-VERDICT: `[ ] ACCEPT    [ ] ACCEPT WITH EDIT    [ ] REJECT`
+VERDICT: `[x] ACCEPT    [ ] ACCEPT WITH EDIT    [ ] REJECT`
 
   Ratings (optional): factual accuracy __ / 5 | usefulness __ / 5 | grounding __ / 5 | tone __ / 5
 
@@ -470,7 +472,7 @@ VERDICT: `[ ] ACCEPT    [ ] ACCEPT WITH EDIT    [ ] REJECT`
   - action: Inform the customer that eSIMs are not supported on wifi-only tablets as per the device compatibility list. Suggest that they consider using a physical SIM instead, if applicable.
   - draft: Thank you for reaching out! Unfortunately, eSIMs are not supported on wifi-only tablets. They are only available for certain unlocked devices, such as recent iPhone models, Google Pixel, and select Samsung Galaxy devices. Since your tablet does not have cellular capabilities, I recommend considering a physical SIM if you need cellular service. If you have any other questions or need further assistance, feel free to ask!
 
-VERDICT: `[ ] ACCEPT    [ ] ACCEPT WITH EDIT    [ ] REJECT`
+VERDICT: `[x] ACCEPT    [ ] ACCEPT WITH EDIT    [ ] REJECT`
 
   Ratings (optional): factual accuracy __ / 5 | usefulness __ / 5 | grounding __ / 5 | tone __ / 5
 
@@ -546,7 +548,7 @@ VERDICT: `[ ] ACCEPT    [ ] ACCEPT WITH EDIT    [ ] REJECT`
   - action: Verify if the customer's device is unlocked and compatible with eSIM. If it is compatible, check if the eSIM profile has been properly activated and if the customer has a data connection. If there are errors during the activation process, follow the re-issue procedure as outlined in the eSIM Activation Procedure.
   - draft: Thank you for reaching out. I understand that your eSIM is not working. To assist you better, could you please confirm if your device is unlocked and compatible with eSIM? If it is, we can check the activation status and troubleshoot any issues. Please let me know, and I'll be happy to help you further.
 
-VERDICT: `[ ] ACCEPT    [ ] ACCEPT WITH EDIT    [ ] REJECT`
+VERDICT: `[x] ACCEPT    [ ] ACCEPT WITH EDIT    [ ] REJECT`
 
   Ratings (optional): factual accuracy __ / 5 | usefulness __ / 5 | grounding __ / 5 | tone __ / 5
 
@@ -565,7 +567,7 @@ VERDICT: `[ ] ACCEPT    [ ] ACCEPT WITH EDIT    [ ] REJECT`
   - action: Check the coverage map and the network status page for any known local faults. If a local outage is confirmed, report it to the network team and inform the customer about the status page for updates.
   - draft: Thank you for reaching out. I understand that you have been experiencing no internet signal since Monday. To assist you better, I recommend checking our network status page for any known local issues. If there is a confirmed outage, I will report it to our network team for further updates. In the meantime, please ensure that your router is properly rebooted. Let me know if you need further assistance!
 
-VERDICT: `[ ] ACCEPT    [ ] ACCEPT WITH EDIT    [ ] REJECT`
+VERDICT: `[x] ACCEPT    [ ] ACCEPT WITH EDIT    [ ] REJECT`
 
   Ratings (optional): factual accuracy __ / 5 | usefulness __ / 5 | grounding __ / 5 | tone __ / 5
 
@@ -622,7 +624,7 @@ VERDICT: `[ ] ACCEPT    [ ] ACCEPT WITH EDIT    [ ] REJECT`
   - action: First, troubleshoot the dropped signal by asking the customer to restart their device and toggle airplane mode. Check the coverage map and network status page for any known local faults. If a local outage is confirmed, report it to the network team and refer the customer to the status page for updates. Inform the customer that compensation or refunds are not applicable for short service interruptions, as only documented service-level agreements are valid.
   - draft: Thank you for reaching out. I understand that you're experiencing issues with dropped calls this week, and I can see how frustrating that must be. To help resolve this, I recommend restarting your device and toggling airplane mode. Additionally, I will check our coverage map and network status page for any known issues in your area. Please note that compensation for service interruptions is typically not provided for short-term issues. However, I will do my best to assist you in resolving this matter.
 
-VERDICT: `[ ] ACCEPT    [ ] ACCEPT WITH EDIT    [ ] REJECT`
+VERDICT: `[ ] ACCEPT    [x] ACCEPT WITH EDIT    [ ] REJECT`
 
   Ratings (optional): factual accuracy __ / 5 | usefulness __ / 5 | grounding __ / 5 | tone __ / 5
 
@@ -641,7 +643,7 @@ VERDICT: `[ ] ACCEPT    [ ] ACCEPT WITH EDIT    [ ] REJECT`
   - action: Guide the customer to check the network status page for any known local faults. If a fault is confirmed, report it to the network team. Advise the customer to ensure their device is properly connected and to check the coverage map for any issues in their area.
   - draft: Hi there! I'm sorry to hear you're experiencing slow internet and signal drops. To help you, I recommend checking our network status page for any known issues in your area. If there is a confirmed fault, I can report it to our network team for you. In the meantime, please ensure your device is properly connected and check the coverage map for any potential issues. Let me know if you need further assistance!
 
-VERDICT: `[ ] ACCEPT    [ ] ACCEPT WITH EDIT    [ ] REJECT`
+VERDICT: `[ ] ACCEPT    [x] ACCEPT WITH EDIT    [ ] REJECT`
 
   Ratings (optional): factual accuracy __ / 5 | usefulness __ / 5 | grounding __ / 5 | tone __ / 5
 
@@ -723,7 +725,7 @@ VERDICT: `[ ] ACCEPT    [ ] ACCEPT WITH EDIT    [ ] REJECT`
 
 Feel free to let me know if you have any questions about these plans or if you need assistance in choosing the best one for you!
 
-VERDICT: `[ ] ACCEPT    [ ] ACCEPT WITH EDIT    [ ] REJECT`
+VERDICT: `[x] ACCEPT    [ ] ACCEPT WITH EDIT    [ ] REJECT`
 
   Ratings (optional): factual accuracy __ / 5 | usefulness __ / 5 | grounding __ / 5 | tone __ / 5
 
@@ -804,7 +806,7 @@ VERDICT: `[ ] ACCEPT    [ ] ACCEPT WITH EDIT    [ ] REJECT`
   - action: Inform the customer that the minimum contract length for the Family plan is not specified in the available information. However, they should be aware that there is a 30-day notice period required for cancellation to avoid automatic renewal. It may be beneficial to confirm the specific terms of the Family plan directly, as this information is not detailed in the current knowledge base.
   - draft: Thank you for reaching out! I understand you're looking for information about the minimum contract length for the Family plan and the cancellation notice period. Unfortunately, the minimum contract length isn't specified in our current resources. However, please note that you need to provide a 30-day notice if you wish to cancel your plan to avoid automatic renewal. If you have further questions or need assistance, feel free to ask!
 
-VERDICT: `[ ] ACCEPT    [ ] ACCEPT WITH EDIT    [ ] REJECT`
+VERDICT: `[ ] ACCEPT    [x] ACCEPT WITH EDIT    [ ] REJECT`
 
   Ratings (optional): factual accuracy __ / 5 | usefulness __ / 5 | grounding __ / 5 | tone __ / 5
 
@@ -823,7 +825,7 @@ VERDICT: `[ ] ACCEPT    [ ] ACCEPT WITH EDIT    [ ] REJECT`
   - action: Inform the customer about the available plan options: Basic at 8 EUR/month, Plus at 12 EUR/month, and Family at 20 EUR/month for 3 lines. Explain that upgrading or downgrading plans is free of charge and will take effect from the next billing period. Clarify that internal discounts cannot be disclosed and that waiving the next invoice is not a standard practice.
   - draft: Thank you for reaching out! I understand that you're looking for more affordable options for your plan. Currently, we offer the following plans: the Basic plan for 8 EUR/month with 10 GB of data, the Plus plan for 12 EUR/month with 30 GB of data, and the Family plan for 20 EUR/month, which covers 3 lines. You can upgrade or downgrade your plan free of charge, and the new price will take effect from your next billing period. Unfortunately, I cannot disclose any internal discounts or waive your next invoice, as that is not part of our policy. Please let me know if you would like to switch to one of the available plans!
 
-VERDICT: `[ ] ACCEPT    [ ] ACCEPT WITH EDIT    [ ] REJECT`
+VERDICT: `[ ] ACCEPT    [x] ACCEPT WITH EDIT    [ ] REJECT`
 
   Ratings (optional): factual accuracy __ / 5 | usefulness __ / 5 | grounding __ / 5 | tone __ / 5
 

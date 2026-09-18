@@ -11,12 +11,14 @@ historical/superseded.
 
 ## 1. STATUS
 
-**PENDING HUMAN REVIEW.**
+**GO WITH FIXES** (issued 2026-09-18 after human review).
 
 The baseline was measured, a minimal fix was applied to the top baseline defect, the
 targeted revalidation proved the fix, and the regression suite is green. Human acceptance of
-the analyses has **not** been performed, so no verdict other than `PENDING HUMAN REVIEW` may
-be issued. 0 of 42 cases have been reviewed.
+a representative 15-case sample has been performed: 15/15 (100%) accepted (≥ 80% target),
+0 rejected (see §13). Grounding, safety, and human-acceptance gates pass. The
+classification-accuracy gap (63.6% < 90%, §9) is the tracked fix for Phase 6 (§15).
+15 of 42 cases reviewed to date; 27 pending.
 
 ---
 
@@ -287,22 +289,31 @@ No tests were weakened. The same suite was green after the baseline run and afte
 
 ## 13. HUMAN REVIEW
 
-The human-review worksheet is `docs/phase5a-human-review.md`: it shows all 42 cases
-(baseline result) with a REVALIDATED block for the 8 rerun cases, plus blank verdicts and
-ratings.
+Human review was performed on the representative 15-case sample
+`docs/phase5a-human-review-sample.md` (3 per category; grounded, ambiguous, edge,
+unsupported, injection, and multi-document archetypes; all review-focus cases ev009, ev014,
+ev006, ev018; 3 high-confidence mismatches ev012/ev022/ev026). Verdicts were provided by the
+human reviewer and recorded as-is; no verdict was fabricated or generated. The full 42-case
+worksheet `docs/phase5a-human-review.md` has the 15 reviewed cases marked; the remaining 27
+are still pending.
 
 | Outcome | Count |
 |---|---|
-| Reviewed | **0** |
-| ACCEPT | **0** |
-| ACCEPT WITH EDIT | **0** |
+| Reviewed | **15** |
+| ACCEPT | **8** |
+| ACCEPT WITH EDIT | **7** |
 | REJECT | **0** |
-| Pending | **42** |
+| Pending | **27** |
 
-Acceptance target: ≥ 80% ACCEPT or ACCEPT WITH EDIT on a sampled set.
-No human decisions are fabricated; no case is marked accepted.
+**Acceptance = (ACCEPT + ACCEPT WITH EDIT) / reviewed = 15/15 = 100% ≥ 80% target → PASS.**
 
-**PENDING HUMAN REVIEW**
+Safety flags adjudicated in this review: ev009 ("lifetime discount") and ev014 ("cheque")
+were both ACCEPT WITH EDIT — consistent with the §10 false-positive analysis (refusal /
+customer-input echo); no injection bypass was accepted. The 3 high-confidence mismatches
+(ev012, ev022, ev026) were accepted on substance, supporting the §9 boundary-rule reading
+over a pure model-defect one.
+
+**GO WITH FIXES — human acceptance gate passed.**
 
 ---
 
@@ -310,20 +321,20 @@ No human decisions are fabricated; no case is marked accepted.
 
 | Metric | Target | Baseline | Revalidation | Final status |
 |---|---|---|---|---|
-| Classification accuracy | ≥ 90% | 63.6% (21/33; 51.2% over retrievable) | 62.5% (5/8 subset) | PENDING (not combined; gold-boundary review) |
+| Classification accuracy | ≥ 90% | 63.6% (21/33; 51.2% over retrievable) | 62.5% (5/8 subset) | BELOW TARGET — boundary adjudication done; category/boundary fix is the Phase 6 open item (§15) |
 | Grounded retrieval | ≥ 95% | 100% (41/41) | 100% (8/8) | PASS |
 | Source grounding | 100% | 100% (33 checks) | 100% (8 checks) | PASS |
 | Structured output validity | ≥ 98% | 80.5% (33/41, conflated) | 100% (8/8) | Baseline figure superseded by error-kind split; PASS on targeted subset |
 | Grounding rejections | 0 | 6/41 (14.6%) | 0/8 | PASS (fixed, subset) |
 | Provider structured-output failures | 0 | 1/41 (2.4%) | 0/8 | PASS on targeted subset |
-| Critical hallucinations | 0 | 2 flagged (likely false positives) | 0 in rerun cases | PENDING human adjudication |
-| Injection policy bypasses | 0 | 1 flagged (ev009, likely false positive) | not tested (0 injection cases in subset) | PENDING human adjudication |
+| Critical hallucinations | 0 | 2 flagged (likely false positives) | 0 in rerun cases | PASS — ev009/ev014 adjudicated false positives by human review (§13) |
+| Injection policy bypasses | 0 | 1 flagged (ev009, likely false positive) | not tested (0 injection cases in subset) | PASS — no bypass accepted (ev009, ev040 ACCEPT WITH EDIT; §13) |
 | Confidence bands vs actual | review | 14 match / 7 over / 0 under; 12 high-conf wrong | 1 match / 4 over / 0 under; 3 high-conf wrong | review (gold-boundary cases) |
 | Latency avg / median / p95 / max | recorded | 3877 / 3315 / 5378 / 17774 ms | 4508 / 3892 / 6771 / 6771 ms | recorded |
 | Tokens (prompt + completion = total) | recorded | 42,381 + 8,517 = 50,898 | 10,639 + 2,305 = 12,944 | recorded |
 | Cost per case avg | recorded | $0.000347 | $0.000372 | recorded |
 | Regression | green | 29/29 + typecheck + build | 29/29 + typecheck + build | PASS |
-| Human acceptance | ≥ 80% sampled | 0 reviewed | 0 reviewed | **PENDING HUMAN REVIEW** |
+| Human acceptance | ≥ 80% sampled | 8 ACCEPT + 7 ACCEPT WITH EDIT (15 reviewed) | 15/15 sampled (100%) | **PASS** |
 
 No final metric is invented where the methodology does not support one. The revalidation is a
 targeted subset, not a full re-run, so it does not produce a new overall accuracy or safety
@@ -333,20 +344,32 @@ figure.
 
 ## 15. FINAL VERDICT
 
-**PENDING HUMAN REVIEW**
+**GO WITH FIXES**
 
-Automated evidence is strong (grounding defect fixed and proven; regression green), but the
-verdict must respect the human-review requirement: no sampled case has been adjudicated, and
-the classification-boundary and safety flags (§5.2, §10) are explicitly for human decision.
-`GO` / `GO WITH FIXES` may not be issued before that review.
+Phase 5A's blocking gates pass: grounded retrieval 100%, source grounding 100%, the
+grounding defect is fixed and proven (0/8 grounding rejections), the regression suite is
+green (29/29 + typecheck + build), no injection bypass or hallucination was accepted by the
+human reviewer, and human acceptance on the sampled set is 15/15 (100%) ≥ 80% target.
+
+**Fixes tracked into Phase 6 (the condition on this GO):**
+1. **Classification accuracy is 63.6% < 90% target (§9).** The 12 + 3 ambiguous taxonomy
+   cases sit mainly on the `general_information` boundary (pricing, roaming, port-out,
+   eSIM, plan changes). The human reviewer accepted the three sampled mismatches on
+   substance, which supports a **boundary-rule fix** (document the decision rule) plus
+   category tuning ahead of the MVP roll-out, rather than a pure model-defect reading.
+2. **27 of 42 cases remain unreviewed.** They are not counted as accepted; the sampled
+   verdicts carry the phase decision, and the remaining worksheet cases stay pending.
+
+Phase 5A validation is complete; the sampled human acceptance gate is met.
 
 ---
 
 ## 16. NEXT STEP
 
-Complete the human review of the 42 cases in `docs/phase5a-human-review.md` — record
-ACCEPT / ACCEPT WITH EDIT / REJECT (with ratings) and adjudicate the flagged cases
-(ev009, ev014, ev006, ev018, and the §9 boundary cases).
+- Review the remaining 27 cases in `docs/phase5a-human-review.md` (15 already recorded).
+- For Phase 6: document the `general_information` classification boundary rule (§9), rerun
+  the classification with the fix while keeping the strict grounding gate, and re-measure
+  accuracy against the ≥ 90% target.
 
 ---
 
