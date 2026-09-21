@@ -1,5 +1,13 @@
 # Phase 6 — Human Review Worksheet
 
+> **Status: REVIEWED 2026-09-18 (12-case focused sample).**
+> Sample outcome: **12/12 acceptable — 7 ACCEPT, 5 ACCEPT WITH EDIT, 0 REJECT**
+> (acceptance target ≥ 80% met). Per-case verdicts, edit notes, and the safety
+> confirmation (ev007/ev009/ev014 → CONFIRMED FALSE POSITIVE) are recorded in
+> `docs/phase6-human-review-sample.md`. The un-sampled cases below remain
+> un-reviewed by the reviewer; the sample is the reviewed, authoritative record.
+> Outcome recorded in `docs/PHASE6-CLASSIFICATION-VALIDATION.md` §13.
+
 Evaluate each analysis independently of the automated checks. For every case decide:
 - **ACCEPT** — the analysis is accurate, grounded, and the draft is a safe starting point.
 - **ACCEPT WITH EDIT** — acceptable after small edits (note what needs editing).
