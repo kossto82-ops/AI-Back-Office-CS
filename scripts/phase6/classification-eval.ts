@@ -3,8 +3,8 @@
  *
  * Computes the classification-only metrics for the Phase 6 validation from the
  * two real-provider result artifacts:
- *   - docs/phase5a-baseline-results.json  (Phase 5A baseline, original prompt)
- *   - docs/phase6-results.json            (Phase 6, adjudicated gold + new prompt)
+ *   - docs/PHASES/phase5a-baseline-results.json  (Phase 5A baseline, original prompt)
+ *   - docs/PHASES/phase6-results.json            (Phase 6, adjudicated gold + new prompt)
  *
  * Both runs use the same model (gpt-4o-mini), the same retrieval/grounding
  * pipeline and the same 42-case dataset; only the gold labels used for scoring
@@ -14,7 +14,7 @@
  * equal, relabeled gold) and a prompt component (new instructions).
  *
  * Deterministic: no provider calls, no DB. Write-only output artifact:
- *   - docs/phase6-classification-results.json
+ *   - docs/PHASES/phase6-classification-results.json
  *
  * Run: pnpm db:phase6-classify
  */
@@ -31,7 +31,7 @@ import {
 } from './dataset';
 import type { Category } from '../phase5a/dataset';
 
-const DOCS = join(dirname(fileURLToPath(import.meta.url)), '../../docs');
+const DOCS = join(dirname(fileURLToPath(import.meta.url)), '../../docs/PHASES');
 
 const HIGH_CONFIDENCE_THRESHOLD = 0.85;
 const CATEGORIES: Category[] = [
@@ -337,7 +337,7 @@ results.dataset.boundaries = PHASE6_CASES.reduce<Record<string, number>>(
 const outPath = join(DOCS, 'phase6-classification-results.json');
 writeFileSync(outPath, JSON.stringify(results, null, 2), 'utf8');
 
-console.log('[phase6-classify] wrote docs/phase6-classification-results.json');
+console.log('[phase6-classify] wrote docs/PHASES/phase6-classification-results.json');
 console.log('');
 console.log('[phase6-classify] classification accuracy');
 console.log(

@@ -10,8 +10,8 @@
  * instructions in lib/ai/prompts.ts differ from the Phase 5A baseline.
  *
  * Captures latency / token usage / metrics and writes:
- *   - docs/phase6-results.json      (metrics + per-case results)
- *   - docs/phase6-human-review.md   (human evaluation worksheet)
+ *   - docs/PHASES/phase6-results.json      (metrics + per-case results)
+ *   - docs/PHASES/phase6-human-review.md   (human evaluation worksheet)
  *
  * Classification accuracy is reported against BOTH gold references: the
  * adjudicated gold (Phase 6, the gated metric) and the original Phase 5A gold.
@@ -60,7 +60,7 @@ type RunScope = {
   mode: Mode;
   /** Optional subset of case keys to seed/run. null = all. */
   cases: string[] | null;
-  /** Output filename prefix: writes docs/{out}-results.json + docs/{out}-human-review.md. */
+  /** Output filename prefix: writes docs/PHASES/{out}-results.json + docs/PHASES/{out}-human-review.md. */
   out: string;
 };
 
@@ -821,7 +821,7 @@ async function main(): Promise<void> {
   const { dirname, join } = await import('node:path');
   const { fileURLToPath } = await import('node:url');
 
-  const docsDir = join(dirname(fileURLToPath(import.meta.url)), '../../docs');
+  const docsDir = join(dirname(fileURLToPath(import.meta.url)), '../../docs/PHASES');
   await mkdir(docsDir, { recursive: true });
   await writeFile(
     join(docsDir, `${out}-results.json`),
@@ -856,7 +856,7 @@ async function main(): Promise<void> {
     );
   }
   console.log(
-    `[phase6] wrote docs/${out}-results.json and docs/${out}-human-review.md`
+    `[phase6] wrote docs/PHASES/${out}-results.json and docs/PHASES/${out}-human-review.md`
   );
 
   // dry run removes its own rows so the DB stays clean; real run keeps them for traceability.
