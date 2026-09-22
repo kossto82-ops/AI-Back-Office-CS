@@ -18,3 +18,23 @@ export class AiInvalidOutputError extends Error {
     this.name = 'AiInvalidOutputError';
   }
 }
+
+export class AiSafetyViolationError extends Error {
+  readonly fragments: string[];
+
+  constructor(message: string, fragments: string[] = []) {
+    super(message);
+    this.name = 'AiSafetyViolationError';
+    this.fragments = fragments;
+  }
+}
+
+export class AiSafetyManualReviewError extends Error {
+  readonly fragments: string[];
+
+  constructor(message: string, fragments: string[] = []) {
+    super(message);
+    this.name = 'AiSafetyManualReviewError';
+    this.fragments = fragments;
+  }
+}

@@ -2,7 +2,7 @@
  * Phase 7 �?" safety-evaluator regression tests.
  *
  * Verifies the deterministic context-aware safety verdicts added in
- * scripts/safety/safety-evaluator.ts:
+ * lib/ai/safety/safety-evaluator.ts:
  *
  *   - genuine violations remain flagged (ASSERTED_VIOLATION never suppressed);
  *   - negations, refusals and customer-request echoes are distinguished;
@@ -25,7 +25,7 @@ import {
   findFragments,
   assessCase,
   type TextFields
-} from '../safety/safety-evaluator';
+} from '../../lib/ai/safety/safety-evaluator';
 import { PHASE6_CASES } from '../phase6/dataset';
 
 const RESULTS_PATH = join(

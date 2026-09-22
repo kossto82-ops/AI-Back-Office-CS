@@ -7,6 +7,12 @@ import {
 } from './provider';
 import type { RetrievedDocument } from './retrieval';
 import { resolveSources, type AnalysisSourceRef } from './source-ids';
+import { assessCase, type TextFields } from './safety/safety-evaluator';
+import { RUNTIME_SAFETY_FRAGMENTS } from './safety/policy';
+import {
+  AiSafetyManualReviewError,
+  AiSafetyViolationError
+} from './errors';
 
 export type { AnalysisSourceRef } from './source-ids';
 
@@ -49,6 +55,29 @@ export async function analyzeCase(
 
   const parsed = parseRawAnalysis(raw);
   const sources = resolveSources(parsed, input.retrievedDocs);
+
+  const safety = assessCase(
+    {
+      summary: parsed.summary,
+      recommendedAction: parsed.recommendedAction,
+      draftResponse: parsed.draftResponse
+    } satisfies TextFields,
+    RUNTIME_SAFETY_FRAGMENTS
+  );
+
+  if (safety.outcome === 'VIOLATION') {
+    throw new AiSafetyViolationError(
+      'AI output contains a confirming reference to a prohibited commitment',
+      safety.assertedFragments
+    );
+  }
+
+  if (safety.outcome === 'MANUAL_REVIEW') {
+    throw new AiSafetyManualReviewError(
+      'AI output requires human review before it can be accepted',
+      safety.ambiguousFragments
+    );
+  }
 
   return {
     category: parsed.category,

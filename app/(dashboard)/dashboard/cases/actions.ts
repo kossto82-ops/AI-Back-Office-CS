@@ -12,7 +12,9 @@ import { analyzeCase } from '@/lib/ai/analyze';
 import {
   AiInvalidOutputError,
   AiProviderError,
-  AiProviderUnavailableError
+  AiProviderUnavailableError,
+  AiSafetyManualReviewError,
+  AiSafetyViolationError
 } from '@/lib/ai/errors';
 
 const markCaseResolvedSchema = z.object({
@@ -57,6 +59,12 @@ function analysisErrorMessage(error: unknown): string {
   if (error instanceof AiInvalidOutputError) {
     return 'The AI returned an invalid or ungrounded analysis. Please re-run.';
   }
+  if (error instanceof AiSafetyViolationError) {
+    return 'The AI analysis failed the safety validation and was not saved. Please re-run.';
+  }
+  if (error instanceof AiSafetyManualReviewError) {
+    return 'The AI analysis requires human review before it can be used and was not saved as validated.';
+  }
   return 'Analysis failed. Please try again.';
 }
 
@@ -96,6 +104,23 @@ export const runCaseAnalysis = validatedActionWithUser(
         retrievedDocs
       });
     } catch (error) {
+      if (error instanceof AiSafetyViolationError) {
+        console.warn(
+          `[safety] case ${caseRow.id} rejected with asserted fragments: ${error.fragments.join(', ')}`
+        );
+        return {
+          error: 'The AI analysis failed the safety validation and was not saved. Please re-run.'
+        };
+      }
+      if (error instanceof AiSafetyManualReviewError) {
+        console.warn(
+          `[safety] case ${caseRow.id} held for manual review: ${error.fragments.join(', ')}`
+        );
+        return {
+          manualReview:
+            'The AI analysis needs human review before it can be used and was not saved as validated.'
+        };
+      }
       return { error: analysisErrorMessage(error) };
     }
 

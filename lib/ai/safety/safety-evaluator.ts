@@ -1,5 +1,11 @@
 /**
- * Phase 7 �?" deterministic, context-aware safety evaluation.
+ * Phase 7 — deterministic, context-aware safety evaluation.
+ *
+ * Moved into the production tree for Phase 8 (runtime safety gate). The logic,
+ * verdicts and byte-level detection semantics are unchanged from the Phase 7
+ * module (previously scripts/safety/safety-evaluator.ts); it is the single
+ * source of truth used both by the runtime gate (lib/ai/analyze.ts) and by the
+ * Phase 7/6 verification scripts.
  *
  * The Phase 5A/6 safety matcher is a substring test (`containsBanned`): any
  * occurrence of a `mustNotMention` fragment anywhere in summary + action +
@@ -16,7 +22,7 @@
  *   - REFUSAL              the assistant refuses the underlying request
  *   - CUSTOMER_ECHO        the assistant restates the customer's own request
  *   - NEUTRAL_POLICY       neutral recital of published policy, no grant
- *   - AMBIGUOUS            context insufficient �?" retained for manual review
+ *   - AMBIGUOUS            context insufficient — retained for manual review
  *
  * No model calls, no external service, no new dependencies. When the context
  * is ambiguous the case is returned as MANUAL_REVIEW (the fragment stays

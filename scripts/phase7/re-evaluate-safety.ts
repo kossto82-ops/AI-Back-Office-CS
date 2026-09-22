@@ -19,7 +19,7 @@
 import { readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { assessCase, findFragments, VERDICT_KIND } from '../safety/safety-evaluator';
+import { assessCase, findFragments, VERDICT_KIND } from '../../lib/ai/safety/safety-evaluator';
 import { PHASE6_CASES } from '../phase6/dataset';
 import type { Category } from '../phase5a/dataset';
 

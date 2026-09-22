@@ -70,6 +70,7 @@ type WorkspaceCaseRow = {
 type ActionState = {
   error?: string;
   success?: string;
+  manualReview?: string;
 };
 
 const statusClass: Record<string, string> = {
@@ -258,6 +259,11 @@ export function CaseWorkspace({ caseRow }: { caseRow: WorkspaceCaseRow }) {
           {runState.error ? (
             <p className="mb-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
               {runState.error}
+            </p>
+          ) : null}
+          {runState.manualReview ? (
+            <p className="mb-4 rounded-md border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+              {runState.manualReview}
             </p>
           ) : null}
           {runState.success && !analysis ? (

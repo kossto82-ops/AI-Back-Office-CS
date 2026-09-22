@@ -5,7 +5,7 @@
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
-    "test:unit": "npx tsx scripts/tests/source-normalization.test.ts && npx tsx scripts/tests/classification-boundaries.test.ts && npx tsx scripts/tests/safety-evaluator.test.ts",
+    "test:unit": "npx tsx scripts/tests/source-normalization.test.ts && npx tsx scripts/tests/classification-boundaries.test.ts && npx tsx scripts/tests/safety-evaluator.test.ts && npx tsx scripts/tests/runtime-safety.test.ts",
     "db:phase7-audit": "npx tsx scripts/phase7/re-evaluate-safety.ts",
     "db:setup": "npx tsx lib/db/setup.ts",
     "db:seed": "npx tsx lib/db/seed.ts",

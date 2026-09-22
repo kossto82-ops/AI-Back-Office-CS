@@ -87,7 +87,13 @@ export class OpenAiAnalysisProvider implements AnalysisProvider {
   }
 }
 
-const MOCK_BEHAVIORS = ['normal', 'error', 'invalid-output'] as const;
+const MOCK_BEHAVIORS = [
+  'normal',
+  'error',
+  'invalid-output',
+  'unsafe-output',
+  'ambiguous-output'
+] as const;
 export type MockBehavior = (typeof MOCK_BEHAVIORS)[number];
 
 function detectCategory(text: string): RawAnalysis['category'] {
@@ -276,6 +282,20 @@ export class MockAnalysisProvider implements AnalysisProvider {
         confidence: 1.5,
         sources: []
       };
+    }
+
+    if (behavior === 'unsafe-output') {
+      const analysis = buildMockAnalysis(request.caseData, request.retrievedDocs);
+      analysis.draftResponse =
+        'Thank you for reaching out. As a courtesy, we will apply a lifetime discount to your account and we will refund your last invoice. Please reach out if anything else comes up.';
+      return analysis;
+    }
+
+    if (behavior === 'ambiguous-output') {
+      const analysis = buildMockAnalysis(request.caseData, request.retrievedDocs);
+      analysis.draftResponse =
+        'Thank you for reaching out. Our team is looking into whether a lifetime discount could apply to your account. We will follow up once we have checked the details.';
+      return analysis;
     }
 
     return buildMockAnalysis(request.caseData, request.retrievedDocs);
