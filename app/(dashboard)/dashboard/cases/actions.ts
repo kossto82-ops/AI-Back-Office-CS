@@ -1,6 +1,8 @@
 'use server';
 
 import { z } from 'zod';
+import path from 'node:path';
+import { promises as fs } from 'node:fs';
 import { and, eq } from 'drizzle-orm';
 import { db } from '@/lib/db/drizzle';
 import { cases, caseAnalyses } from '@/lib/db/schema';
@@ -9,6 +11,7 @@ import { validatedActionWithUser } from '@/lib/auth/middleware';
 import { getTeamForUser, getCaseByIdForTeam } from '@/lib/db/queries';
 import { retrieveRelevantKnowledge } from '@/lib/ai/retrieval';
 import { analyzeCase } from '@/lib/ai/analyze';
+import { isExperimentSubject, p9CaseBySubject } from '@/scripts/phase9/dataset';
 import {
   AiInvalidOutputError,
   AiProviderError,
@@ -141,5 +144,106 @@ export const runCaseAnalysis = validatedActionWithUser(
     revalidatePath('/dashboard/cases');
     revalidatePath(`/dashboard/cases/${caseRow.id}`);
     return { success: 'Analysis complete' };
+  }
+);
+
+const recordExperimentResultSchema = z.object({
+  caseId: z.coerce.number().int().positive(),
+  condition: z.enum(['manual', 'ai']),
+  elapsedMs: z.coerce.number().int().min(0),
+  editSessions: z.coerce.number().int().min(0),
+  keystrokes: z.coerce.number().int().min(0),
+  draftResponse: z.string().trim().min(1).max(8000)
+});
+
+type ExperimentResultRow = {
+  caseId: number;
+  caseKey: string | null;
+  subject: string;
+  condition: 'manual' | 'ai';
+  elapsedMs: number;
+  editSessions: number;
+  keystrokes: number;
+  draftResponse: string;
+  recordedAt: string;
+};
+
+const EXPERIMENT_RESULTS_PATH = 'docs/PHASES/phase9-agent-value-results.json';
+
+async function loadExperimentResults(): Promise<{
+  phase: string;
+  schemaVersion: number;
+  updatedAt: string;
+  rows: ExperimentResultRow[];
+}> {
+  try {
+    const raw = await fs.readFile(path.join(process.cwd(), EXPERIMENT_RESULTS_PATH), 'utf8');
+    const parsed = JSON.parse(raw) as {
+      phase?: string;
+      schemaVersion?: number;
+      updatedAt?: string;
+      rows?: ExperimentResultRow[];
+    };
+    return {
+      phase: '9',
+      schemaVersion: 1,
+      updatedAt: parsed.updatedAt ?? '',
+      rows: Array.isArray(parsed.rows) ? parsed.rows : []
+    };
+  } catch {
+    return { phase: '9', schemaVersion: 1, updatedAt: '', rows: [] };
+  }
+}
+
+export const recordExperimentResult = validatedActionWithUser(
+  recordExperimentResultSchema,
+  async (data) => {
+    const team = await getTeamForUser();
+    if (!team) {
+      return { error: 'User is not part of a team' };
+    }
+
+    const caseRow = await getCaseByIdForTeam(data.caseId, team.id);
+    if (!caseRow) {
+      return { error: 'Case not found' };
+    }
+    if (!isExperimentSubject(caseRow.subject)) {
+      return { error: 'This case is not part of the Phase 9 experiment.' };
+    }
+
+    const benchmarkCase = p9CaseBySubject(caseRow.subject);
+    if (!benchmarkCase) {
+      return { error: 'Experiment case is not part of the frozen benchmark.' };
+    }
+    if (benchmarkCase.condition !== data.condition) {
+      return {
+        error: 'Condition does not match the frozen assignment for this case.'
+      };
+    }
+
+    const artifact = await loadExperimentResults();
+    const record: ExperimentResultRow = {
+      caseId: caseRow.id,
+      caseKey: benchmarkCase.key,
+      subject: caseRow.subject,
+      condition: data.condition,
+      elapsedMs: data.elapsedMs,
+      editSessions: data.editSessions,
+      keystrokes: data.keystrokes,
+      draftResponse: data.draftResponse,
+      recordedAt: new Date().toISOString()
+    };
+    artifact.rows = artifact.rows.filter(
+      (row) => !(row.caseId === record.caseId && row.condition === record.condition)
+    );
+    artifact.rows.push(record);
+    artifact.updatedAt = record.recordedAt;
+
+    const targetPath = path.join(process.cwd(), EXPERIMENT_RESULTS_PATH);
+    await fs.mkdir(path.dirname(targetPath), { recursive: true });
+    await fs.writeFile(targetPath, JSON.stringify(artifact, null, 2), 'utf8');
+
+    revalidatePath(`/dashboard/cases/${caseRow.id}`);
+    return { success: 'Experiment result recorded' };
   }
 );

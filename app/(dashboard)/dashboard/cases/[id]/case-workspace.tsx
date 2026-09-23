@@ -1,13 +1,14 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState, useActionState } from 'react';
+import { useEffect, useRef, useState, useActionState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   ArrowLeft,
   Bot,
   Check,
   ClipboardCopy,
+  FlaskConical,
   Lightbulb,
   PencilLine,
   RotateCw,
@@ -29,8 +30,9 @@ import {
   caseStatusLabel,
   documentTypeLabel
 } from '@/lib/db/case-categories';
-import { markCaseResolved, runCaseAnalysis } from '../actions';
+import { markCaseResolved, recordExperimentResult, runCaseAnalysis } from '../actions';
 import type { ConversationTurn } from '@/lib/db/schema';
+import type { P9Condition } from '@/scripts/phase9/dataset';
 
 export type WorkspaceSource = {
   documentId: number | null;
@@ -122,12 +124,21 @@ function formatUrgency(urgency: string | null): string {
   return urgency.charAt(0).toUpperCase() + urgency.slice(1);
 }
 
-export function CaseWorkspace({ caseRow }: { caseRow: WorkspaceCaseRow }) {
+export function CaseWorkspace({
+  caseRow,
+  experiment = null
+}: {
+  caseRow: WorkspaceCaseRow;
+  experiment?: { condition: P9Condition } | null;
+}) {
   const router = useRouter();
   const analysis = caseRow.latestAnalysis;
+  const isExperiment = experiment !== null && experiment !== undefined;
+  const experimentCondition = isExperiment ? experiment.condition : null;
+  const manualMode = experimentCondition === 'manual';
   const initialDraft = analysis?.draftResponse ?? '';
-  const [draft, setDraft] = useState(initialDraft);
-  const [isEditing, setIsEditing] = useState(false);
+  const [draft, setDraft] = useState(manualMode ? '' : initialDraft);
+  const [isEditing, setIsEditing] = useState(manualMode);
   const [copied, setCopied] = useState(false);
   const [resolveState, resolveAction, isResolvePending] = useActionState<
     ActionState,
@@ -137,6 +148,19 @@ export function CaseWorkspace({ caseRow }: { caseRow: WorkspaceCaseRow }) {
     runCaseAnalysis,
     {}
   );
+  const [resultState, resultAction, isResultPending] = useActionState<
+    ActionState,
+    FormData
+  >(recordExperimentResult, {});
+
+  const openedAtRef = useRef<number>(Date.now());
+  const keystrokesRef = useRef(0);
+  const editSessionsRef = useRef(manualMode ? 1 : 0);
+  const lastDraftLenRef = useRef(manualMode ? 0 : initialDraft.length);
+  const elapsedHiddenRef = useRef<HTMLInputElement>(null);
+  const editSessionsHiddenRef = useRef<HTMLInputElement>(null);
+  const keystrokesHiddenRef = useRef<HTMLInputElement>(null);
+  const draftHiddenRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (runState.success) {
@@ -147,9 +171,41 @@ export function CaseWorkspace({ caseRow }: { caseRow: WorkspaceCaseRow }) {
   useEffect(() => {
     setIsEditing(false);
     if (analysis?.createdAt) {
-      setDraft(analysis.draftResponse ?? '');
+      const prefilled = analysis.draftResponse ?? '';
+      setDraft(prefilled);
+      lastDraftLenRef.current = prefilled.length;
     }
   }, [analysis?.createdAt]);
+
+  function handleDraftChange(value: string) {
+    const delta = Math.abs(value.length - lastDraftLenRef.current);
+    lastDraftLenRef.current = value.length;
+    keystrokesRef.current += delta;
+    setDraft(value);
+  }
+
+  function enterEditSession() {
+    if (!isEditing) {
+      editSessionsRef.current += 1;
+      setIsEditing(true);
+    }
+  }
+
+  function handleMarkUsableSubmit(e: React.FormEvent<HTMLFormElement>) {
+    const elapsedMs = Date.now() - openedAtRef.current;
+    if (elapsedHiddenRef.current) {
+      elapsedHiddenRef.current.value = String(elapsedMs);
+    }
+    if (editSessionsHiddenRef.current) {
+      editSessionsHiddenRef.current.value = String(editSessionsRef.current);
+    }
+    if (keystrokesHiddenRef.current) {
+      keystrokesHiddenRef.current.value = String(keystrokesRef.current);
+    }
+    if (draftHiddenRef.current) {
+      draftHiddenRef.current.value = draft;
+    }
+  }
 
   async function handleCopy() {
     if (!draft) return;
@@ -162,7 +218,8 @@ export function CaseWorkspace({ caseRow }: { caseRow: WorkspaceCaseRow }) {
     }
   }
 
-  const canEditDraft = Boolean(analysis);
+  const canEditDraft = manualMode || Boolean(analysis);
+  const displayEditing = manualMode || isEditing;
   const analysisUnavailable = analysis === null;
   const isResolved = caseRow.status === 'resolved';
   const runButtonLabel = analysisUnavailable ? 'Run analysis' : 'Re-run analysis';
@@ -201,6 +258,37 @@ export function CaseWorkspace({ caseRow }: { caseRow: WorkspaceCaseRow }) {
           Created {formatDate(caseRow.createdAt)}
         </span>
       </div>
+
+      {isExperiment && (
+        <div
+          className={cn(
+            'mb-6 flex items-start gap-2 rounded-xl border px-4 py-3 text-sm',
+            manualMode
+              ? 'border-indigo-200 bg-indigo-50 text-indigo-800'
+              : 'border-emerald-200 bg-emerald-50 text-emerald-800'
+          )}
+        >
+          <FlaskConical className="mt-0.5 h-4 w-4 shrink-0" />
+          <div>
+            <p className="font-medium">
+              Phase 9 experiment —{' '}
+              {manualMode ? 'manual baseline' : 'AI-assisted'}
+            </p>
+            {manualMode ? (
+              <p className="mt-1 text-indigo-700">
+                The AI analysis is intentionally hidden. Ground your response in
+                the Knowledge Base, write it below, then mark it usable when it
+                is ready to send.
+              </p>
+            ) : (
+              <p className="mt-1 text-emerald-700">
+                Run the analysis, review and edit the draft, then mark it usable
+                when it is ready to send.
+              </p>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* WHAT CUSTOMER SAID */}
       <Card className="mb-6 bg-gray-50 border-gray-200">
@@ -244,6 +332,7 @@ export function CaseWorkspace({ caseRow }: { caseRow: WorkspaceCaseRow }) {
       )}
 
       {/* SYSTEM UNDERSTOOD */}
+      {!manualMode && (
       <Card className="mb-6">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-sm text-gray-700">
@@ -305,8 +394,10 @@ export function CaseWorkspace({ caseRow }: { caseRow: WorkspaceCaseRow }) {
           )}
         </CardContent>
       </Card>
+      )}
 
       {/* KNOWLEDGE */}
+      {!manualMode && (
       <Card className="mb-6">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-sm text-gray-700">
@@ -349,8 +440,10 @@ export function CaseWorkspace({ caseRow }: { caseRow: WorkspaceCaseRow }) {
           )}
         </CardContent>
       </Card>
+      )}
 
       {/* RECOMMENDS */}
+      {!manualMode && (
       <Card
         className={cn(
           'mb-6',
@@ -373,6 +466,7 @@ export function CaseWorkspace({ caseRow }: { caseRow: WorkspaceCaseRow }) {
           )}
         </CardContent>
       </Card>
+      )}
 
       {/* RESPONSE + HUMAN REVIEW */}
       <Card className="mb-6">
@@ -387,11 +481,16 @@ export function CaseWorkspace({ caseRow }: { caseRow: WorkspaceCaseRow }) {
         </CardHeader>
         <CardContent>
           {canEditDraft ? (
-            isEditing ? (
+            displayEditing ? (
               <textarea
                 value={draft}
-                onChange={(event) => setDraft(event.target.value)}
+                onChange={(event) => handleDraftChange(event.target.value)}
                 rows={8}
+                placeholder={
+                  manualMode
+                    ? 'Write the response for the customer here...'
+                    : undefined
+                }
                 className="w-full resize-y rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500"
               />
             ) : (
@@ -404,16 +503,24 @@ export function CaseWorkspace({ caseRow }: { caseRow: WorkspaceCaseRow }) {
           )}
         </CardContent>
         <CardFooter className="gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            disabled={!canEditDraft}
-            title={canEditDraft ? undefined : 'Available once an analysis exists'}
-            onClick={() => setIsEditing((value) => !value)}
-          >
-            <PencilLine className="mr-2 h-4 w-4" />
-            {isEditing ? 'Done editing' : 'Edit response'}
-          </Button>
+          {!manualMode && (
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={!canEditDraft}
+              title={canEditDraft ? undefined : 'Available once an analysis exists'}
+              onClick={() => {
+                if (isEditing) {
+                  setIsEditing(false);
+                } else {
+                  enterEditSession();
+                }
+              }}
+            >
+              <PencilLine className="mr-2 h-4 w-4" />
+              {isEditing ? 'Done editing' : 'Edit response'}
+            </Button>
+          )}
           <Button
             variant="outline"
             size="sm"
@@ -431,6 +538,7 @@ export function CaseWorkspace({ caseRow }: { caseRow: WorkspaceCaseRow }) {
         </CardFooter>
       </Card>
 
+      {!manualMode && (
       <div className="mb-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
         <Card>
           <CardHeader>
@@ -488,24 +596,78 @@ export function CaseWorkspace({ caseRow }: { caseRow: WorkspaceCaseRow }) {
           </CardContent>
         </Card>
       </div>
+      )}
+
+      {isExperiment && (
+        <Card className="mb-6 border-indigo-200">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-sm text-gray-700">
+              <FlaskConical className="h-4 w-4 text-indigo-500" />
+              Mark response as usable
+            </CardTitle>
+            <CardDescription>
+              Records the time, edits, keystrokes, and final text for this
+              experiment case.
+            </CardDescription>
+          </CardHeader>
+          <CardFooter className="gap-2">
+            <form
+              action={resultAction}
+              onSubmit={handleMarkUsableSubmit}
+              className="flex items-center gap-3"
+            >
+              <input type="hidden" name="caseId" value={caseRow.id} />
+              <input
+                type="hidden"
+                name="condition"
+                value={experimentCondition ?? ''}
+              />
+              <input type="hidden" name="elapsedMs" ref={elapsedHiddenRef} defaultValue="0" />
+              <input type="hidden" name="editSessions" ref={editSessionsHiddenRef} defaultValue="0" />
+              <input type="hidden" name="keystrokes" ref={keystrokesHiddenRef} defaultValue="0" />
+              <input type="hidden" name="draftResponse" ref={draftHiddenRef} defaultValue="" />
+              <Button
+                type="submit"
+                variant="default"
+                size="sm"
+                disabled={isResultPending || !draft.trim()}
+                title={draft.trim() ? undefined : 'Write a response first'}
+                className="bg-indigo-600 hover:bg-indigo-700 text-white"
+              >
+                {isResultPending ? 'Recording...' : 'Mark response as usable'}
+              </Button>
+              {resultState?.error && (
+                <span className="text-sm text-red-600">{resultState.error}</span>
+              )}
+              {resultState?.success && (
+                <span className="text-sm text-indigo-700">
+                  {resultState.success}
+                </span>
+              )}
+            </form>
+          </CardFooter>
+        </Card>
+      )}
 
       <Card>
         <CardFooter className="flex flex-wrap items-center justify-between gap-3 pt-6">
           <div className="flex items-center gap-3">
-            <form action={runAction}>
-              <input type="hidden" name="caseId" value={caseRow.id} />
-              <Button
-                type="submit"
-                variant="ghost"
-                size="sm"
-                disabled={isRunPending || isResolved}
-                title={isResolved ? 'Resolved cases cannot be re-analyzed' : undefined}
-              >
-                <RotateCw className="mr-2 h-4 w-4" />
-                {isRunPending ? 'Analyzing...' : runButtonLabel}
-              </Button>
-            </form>
-            {runState.success && analysis && (
+            {!manualMode && (
+              <form action={runAction}>
+                <input type="hidden" name="caseId" value={caseRow.id} />
+                <Button
+                  type="submit"
+                  variant="ghost"
+                  size="sm"
+                  disabled={isRunPending || isResolved}
+                  title={isResolved ? 'Resolved cases cannot be re-analyzed' : undefined}
+                >
+                  <RotateCw className="mr-2 h-4 w-4" />
+                  {isRunPending ? 'Analyzing...' : runButtonLabel}
+                </Button>
+              </form>
+            )}
+            {!manualMode && runState.success && analysis && (
               <span className="text-xs text-emerald-600">
                 {runState.success}
               </span>

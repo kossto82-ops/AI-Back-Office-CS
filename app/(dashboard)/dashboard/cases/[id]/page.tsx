@@ -7,6 +7,12 @@ import {
 } from '@/lib/db/queries';
 import type { AnalysisSource } from '@/lib/db/schema';
 import { CaseWorkspace, type WorkspaceSource } from './case-workspace';
+import {
+  isExperimentSubject,
+  EXPERIMENT_PARAM,
+  EXPERIMENT_CONDITIONS,
+  type P9Condition
+} from '@/scripts/phase9/dataset';
 
 export const dynamic = 'force-dynamic';
 
@@ -20,9 +26,11 @@ function isStructuredSource(value: unknown): value is AnalysisSource {
 }
 
 export default async function CasePage({
-  params
+  params,
+  searchParams
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ exp?: string; cond?: string }>;
 }) {
   const { id } = await params;
   const user = await getUser();
@@ -44,6 +52,14 @@ export default async function CasePage({
   if (!caseRow) {
     notFound();
   }
+
+  const { exp, cond } = await searchParams;
+  const experiment =
+    isExperimentSubject(caseRow.subject) &&
+    exp === EXPERIMENT_PARAM &&
+    EXPERIMENT_CONDITIONS.includes(cond as P9Condition)
+      ? { condition: cond as P9Condition }
+      : null;
 
   let latestAnalysis: {
     category: string | null;
@@ -118,6 +134,7 @@ export default async function CasePage({
         createdAt: caseRow.createdAt.toISOString(),
         latestAnalysis
       }}
+      experiment={experiment}
     />
   );
 }

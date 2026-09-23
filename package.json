@@ -5,7 +5,7 @@
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
-    "test:unit": "npx tsx scripts/tests/source-normalization.test.ts && npx tsx scripts/tests/classification-boundaries.test.ts && npx tsx scripts/tests/safety-evaluator.test.ts && npx tsx scripts/tests/runtime-safety.test.ts",
+    "test:unit": "npx tsx scripts/tests/source-normalization.test.ts && npx tsx scripts/tests/classification-boundaries.test.ts && npx tsx scripts/tests/safety-evaluator.test.ts && npx tsx scripts/tests/runtime-safety.test.ts && npx tsx scripts/tests/phase9-dataset.test.ts",
     "db:phase7-audit": "npx tsx scripts/phase7/re-evaluate-safety.ts",
     "db:setup": "npx tsx lib/db/setup.ts",
     "db:seed": "npx tsx lib/db/seed.ts",
@@ -15,6 +15,8 @@
     "db:phase6-dry": "npx tsx scripts/phase6/eval-real-provider.ts --mode dry",
     "db:phase6-real": "npx tsx scripts/phase6/eval-real-provider.ts --mode real",
     "db:phase6-classify": "npx tsx scripts/phase6/classification-eval.ts",
+    "db:phase9-seed": "npx tsx scripts/phase9/seed-experiment.ts",
+    "db:phase9-analyze": "npx tsx scripts/phase9/analyze.ts",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "npx tsx scripts/migrate.ts",
     "db:studio": "drizzle-kit studio"
@@ -54,6 +56,7 @@
     "zod": "^4.6.5"
   },
   "devDependencies": {
-    "@playwright/test": "^1.63.0"
+    "@playwright/test": "^1.63.0",
+    "tsx": "^4.23.15"
   }
 }
