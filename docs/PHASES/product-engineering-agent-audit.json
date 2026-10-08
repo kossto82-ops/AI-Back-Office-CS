@@ -359,11 +359,11 @@
       "area": "operations",
       "severity": "high",
       "problem": "No lead/manager view: blocked-analysis reasons, copy-unedited rate and handling time are only available via a script.",
-      "evidence": "No insights page; pnpm db:pilot-metrics prints from case_events.",
+      "evidence": "No insights page; pnpm db:pilot-metrics prints from case_events. Follow-up 2026-10-08: /dashboard/insights over case_events with shared definitions in lib/insights/metrics.ts; unit and E2E tests.",
       "recommendation": "Read-only insights page over case_events.",
       "effort": "M",
       "impact": "high",
-      "status": "open"
+      "status": "fixed"
     },
     {
       "id": "UX-06",

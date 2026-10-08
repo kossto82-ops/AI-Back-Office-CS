@@ -1,4 +1,4 @@
-import { desc, and, eq, isNull, inArray, or, ilike, ne, sql } from 'drizzle-orm';
+import { desc, and, eq, isNull, inArray, or, ilike, ne, sql, gte } from 'drizzle-orm';
 import { db } from './drizzle';
 import {
   activityLogs,
@@ -9,6 +9,7 @@ import {
   caseAnalyses,
   documents,
   documentVersions,
+  caseEvents,
   Case,
   CaseAnalysis,
   Document,
@@ -361,4 +362,22 @@ export async function getDocumentVersionsForTeam(
       )
     )
     .orderBy(desc(documentVersions.version));
+}
+
+/** Content-free usage events for one team, optionally since a date. */
+export async function getCaseEventsForTeam(teamId: number, since?: Date) {
+  return db
+    .select({
+      caseId: caseEvents.caseId,
+      type: caseEvents.type,
+      meta: caseEvents.meta,
+      createdAt: caseEvents.createdAt
+    })
+    .from(caseEvents)
+    .where(
+      since
+        ? and(eq(caseEvents.teamId, teamId), gte(caseEvents.createdAt, since))
+        : eq(caseEvents.teamId, teamId)
+    )
+    .orderBy(caseEvents.createdAt);
 }

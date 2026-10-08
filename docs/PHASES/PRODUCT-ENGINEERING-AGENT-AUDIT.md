@@ -588,6 +588,21 @@ Appended after the audit above; the audit text is not rewritten.
   has not been measured with a real user.
 - Verification: typecheck, 9 unit suites, build, E2E import 4/4, knowledge 4/4, Phase 3 12/12, audit 9/9. Migration `0005` also applied to `pilot`.
 
+### NOW #5 — manager insights (done, 2026-10-08)
+- `/dashboard/insights` (nav "Insights"; periods 7 days / 30 days / all): read-only, team-scoped, built only on content-free `case_events`.
+  Sections: cases created/opened/resolved; time to resolve (median, split with/without an AI analysis, with n); AI reliability (attempts,
+  not-normal rate with reasons such as held for review / rejected by the safety check / no matching knowledge / provider error, median
+  analysis speed); how drafts are used (copies, copied-unedited rate, re-run rate, held drafts later used). Every rate shows its denominator and
+  the page states that the figures are descriptive and do not prove time savings.
+- Definitions live once in `lib/insights/metrics.ts` and are shared by the page and `pnpm db:pilot-metrics` (the script is now a thin
+  printer), so the two cannot disagree. `insights.test.ts` (8 checks: empty input, denominators, medians, handling-time rules incl. never-opened
+  and double-resolved cases, held analyses). E2E `insights.spec.ts` (4): navigation and sections, period filter and invalid-value fallback,
+  another team sees none of this team's activity, anonymous users are redirected.
+- Caveat for anyone reading the numbers in `dev`: they include automated mock-provider test events, so they demonstrate mechanics only. The
+  `pilot` branch starts empty.
+- Not done: per-agent breakdowns, charts, export, case-level drill-down, alerts. Whether leads can answer their questions from this page
+  without help has not been tested with a real lead.
+
 ## IMPLEMENTED DURING AUDIT
 
 Everything below was verified (tests/E2E/browser) — see TEST RESULTS. No model/provider/prompt change, no
