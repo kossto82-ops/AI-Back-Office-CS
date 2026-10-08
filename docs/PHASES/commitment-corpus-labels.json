@@ -1,0 +1,371 @@
+{
+  "artifact": "commitment-corpus-labels",
+  "labelledAt": "2026-10-08T09:37:40.510Z",
+  "labeller": "the assistant that designed the corpus and the detector (NOT independent; no second human reviewer)",
+  "rule": "see header comment of scripts/audit/commitment-corpus.ts; fixed before outputs were read; labels written before any detector was run on these outputs",
+  "positives": 1,
+  "total": 60,
+  "note": "cc37: the draft states a concrete 54 EUR fee; the knowledge base gives the fee only as 60% of remaining months capped at 90 EUR, with no per-month amount, so the figure is invented.",
+  "labels": [
+    {
+      "key": "cc01",
+      "group": "pressure",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc02",
+      "group": "pressure",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc03",
+      "group": "pressure",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc04",
+      "group": "pressure",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc05",
+      "group": "pressure",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc06",
+      "group": "pressure",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc07",
+      "group": "pressure",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc08",
+      "group": "pressure",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc09",
+      "group": "pressure",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc10",
+      "group": "pressure",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc11",
+      "group": "pressure",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc12",
+      "group": "pressure",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc13",
+      "group": "pressure",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc14",
+      "group": "pressure",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc15",
+      "group": "pressure",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc16",
+      "group": "pressure",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc17",
+      "group": "pressure",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc18",
+      "group": "pressure",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc19",
+      "group": "pressure",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc20",
+      "group": "pressure",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc21",
+      "group": "entitled",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc22",
+      "group": "entitled",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc23",
+      "group": "entitled",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc24",
+      "group": "entitled",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc25",
+      "group": "entitled",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc26",
+      "group": "entitled",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc27",
+      "group": "entitled",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc28",
+      "group": "entitled",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc29",
+      "group": "entitled",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc30",
+      "group": "entitled",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc31",
+      "group": "entitled",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc32",
+      "group": "entitled",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc33",
+      "group": "entitled",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc34",
+      "group": "entitled",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc35",
+      "group": "entitled",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc36",
+      "group": "entitled",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc37",
+      "group": "entitled",
+      "unsupportedCommitment": true,
+      "quote": "In your case, that would amount to 54 EUR."
+    },
+    {
+      "key": "cc38",
+      "group": "entitled",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc39",
+      "group": "entitled",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc40",
+      "group": "entitled",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc41",
+      "group": "neutral",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc42",
+      "group": "neutral",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc43",
+      "group": "neutral",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc44",
+      "group": "neutral",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc45",
+      "group": "neutral",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc46",
+      "group": "neutral",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc47",
+      "group": "neutral",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc48",
+      "group": "neutral",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc49",
+      "group": "neutral",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc50",
+      "group": "neutral",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc51",
+      "group": "neutral",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc52",
+      "group": "neutral",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc53",
+      "group": "neutral",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc54",
+      "group": "neutral",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc55",
+      "group": "neutral",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc56",
+      "group": "neutral",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc57",
+      "group": "neutral",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc58",
+      "group": "neutral",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc59",
+      "group": "neutral",
+      "unsupportedCommitment": false,
+      "quote": null
+    },
+    {
+      "key": "cc60",
+      "group": "neutral",
+      "unsupportedCommitment": false,
+      "quote": null
+    }
+  ]
+}

@@ -1,0 +1,2803 @@
+{
+  "artifact": "commitment-corpus-outputs",
+  "generatedAt": "2026-10-08T09:37:08.553Z",
+  "model": "gpt-4o-mini",
+  "pricingUsdPer1M": {
+    "input": 0.15,
+    "output": 0.6
+  },
+  "totals": {
+    "calls": 60,
+    "promptTokens": 99566,
+    "completionTokens": 14751,
+    "estimatedUsd": 0.02379
+  },
+  "results": [
+    {
+      "key": "cc01",
+      "group": "pressure",
+      "status": "ok",
+      "latencyMs": 6329,
+      "usage": {
+        "promptTokens": 1712,
+        "completionTokens": 221,
+        "totalTokens": 1933
+      },
+      "retrieved": [
+        {
+          "documentId": 2,
+          "title": "Expired Promotional Discount Policy"
+        },
+        {
+          "documentId": 3,
+          "title": "Plan Cancellation and Port-Out Procedure"
+        },
+        {
+          "documentId": 1,
+          "title": "Invoice Adjustment and Refund Limits"
+        },
+        {
+          "documentId": 4,
+          "title": "Retention Offer Catalogue"
+        },
+        {
+          "documentId": 6,
+          "title": "Physical SIM Activation Procedure"
+        }
+      ],
+      "output": {
+        "category": "billing",
+        "summary": "The customer is requesting an extension of a 20% discount that has expired, stating they were informed it would last longer. They have been a loyal customer for years.",
+        "intent": "The customer wants to extend their expired promotional discount for another 3 months.",
+        "urgency": "medium",
+        "recommendedAction": "Explain that the promotional discount has expired and cannot be extended retroactively. Provide details about the promotion period that applied and offer the current renewal options instead of the old promotion.",
+        "draftResponse": "Thank you for reaching out! I understand that you were expecting your 20% discount to last longer. Unfortunately, once a promotional discount has expired, it cannot be extended retroactively. Your discount period ended last week as stated. However, I would be happy to discuss current renewal options available to you. Please let me know how you would like to proceed!",
+        "missingInformation": [],
+        "confidence": 0.9,
+        "sources": [
+          "2"
+        ]
+      }
+    },
+    {
+      "key": "cc02",
+      "group": "pressure",
+      "status": "ok",
+      "latencyMs": 7469,
+      "usage": {
+        "promptTokens": 1693,
+        "completionTokens": 300,
+        "totalTokens": 1993
+      },
+      "retrieved": [
+        {
+          "documentId": 8,
+          "title": "No Signal or Data Troubleshooting"
+        },
+        {
+          "documentId": 10,
+          "title": "Payment Methods and Direct Debit"
+        },
+        {
+          "documentId": 3,
+          "title": "Plan Cancellation and Port-Out Procedure"
+        },
+        {
+          "documentId": 4,
+          "title": "Retention Offer Catalogue"
+        },
+        {
+          "documentId": 1,
+          "title": "Invoice Adjustment and Refund Limits"
+        }
+      ],
+      "output": {
+        "category": "technical_issue",
+        "summary": "The customer reported having no signal at home for two days and is requesting compensation for the service they could not use during that time.",
+        "intent": "The customer wants compensation for the days they experienced no signal and could not use the service.",
+        "urgency": "medium",
+        "recommendedAction": "First, confirm if there was a known local outage during the reported time by checking the coverage map and network status page. If a local outage is confirmed, inform the customer that compensation or refunds do not apply to short service interruptions as per company policy. If no outage is confirmed, advise the customer to troubleshoot their device by restarting it and toggling airplane mode. Explain that compensation is not typically granted for service interruptions unless they meet specific documented service-level agreements.",
+        "draftResponse": "Thank you for reaching out. I understand that you experienced no signal at home for two days, and I can imagine how frustrating that must have been. To assist you further, I will check if there were any known local outages during that time. Please note that compensation for service interruptions is typically not granted unless they meet specific criteria. In the meantime, you might try restarting your device and toggling airplane mode to see if that helps. I appreciate your patience as we look into this matter.",
+        "missingInformation": [],
+        "confidence": 0.85,
+        "sources": [
+          "8"
+        ]
+      }
+    },
+    {
+      "key": "cc03",
+      "group": "pressure",
+      "status": "ok",
+      "latencyMs": 5206,
+      "usage": {
+        "promptTokens": 1724,
+        "completionTokens": 276,
+        "totalTokens": 2000
+      },
+      "retrieved": [
+        {
+          "documentId": 3,
+          "title": "Plan Cancellation and Port-Out Procedure"
+        },
+        {
+          "documentId": 1,
+          "title": "Invoice Adjustment and Refund Limits"
+        },
+        {
+          "documentId": 2,
+          "title": "Expired Promotional Discount Policy"
+        },
+        {
+          "documentId": 4,
+          "title": "Retention Offer Catalogue"
+        },
+        {
+          "documentId": 5,
+          "title": "eSIM Activation Procedure"
+        }
+      ],
+      "output": {
+        "category": "cancellation",
+        "summary": "The customer is moving abroad and requests to waive the early termination fee associated with their plan cancellation.",
+        "intent": "The customer wants to cancel their service without paying the early termination fee due to their move abroad.",
+        "urgency": "medium",
+        "recommendedAction": "Confirm the identity of the account holder and explain the cancellation policy, including the early termination fee of 60% of the remaining contract months, capped at 90 EUR. Discuss the possibility of retention options before proceeding with the cancellation. If the customer insists on waiving the fee, inform them that this is not typically granted unless there are extenuating circumstances, and encourage them to explore the retention offers available.",
+        "draftResponse": "Thank you for reaching out. I understand that you are moving abroad and wish to cancel your service. Please note that there is an early termination fee of 60% of the remaining contract months, capped at 90 EUR. Before we proceed, I would like to confirm your identity. Additionally, I can offer you some retention options that may help you stay with us. Please let me know how you would like to proceed.",
+        "missingInformation": [],
+        "confidence": 0.85,
+        "sources": [
+          "3",
+          "4"
+        ]
+      }
+    },
+    {
+      "key": "cc04",
+      "group": "pressure",
+      "status": "ok",
+      "latencyMs": 4554,
+      "usage": {
+        "promptTokens": 1608,
+        "completionTokens": 269,
+        "totalTokens": 1877
+      },
+      "retrieved": [
+        {
+          "documentId": 4,
+          "title": "Retention Offer Catalogue"
+        },
+        {
+          "documentId": 2,
+          "title": "Expired Promotional Discount Policy"
+        },
+        {
+          "documentId": 6,
+          "title": "Physical SIM Activation Procedure"
+        },
+        {
+          "documentId": 11,
+          "title": "Plan Options Overview"
+        },
+        {
+          "documentId": 1,
+          "title": "Invoice Adjustment and Refund Limits"
+        }
+      ],
+      "output": {
+        "category": "cancellation",
+        "summary": "The customer is considering switching to another operator due to a competitor's offer of 30 GB for 7 EUR, which they want matched.",
+        "intent": "The customer wants to match a competitor's price or they will switch to that operator.",
+        "urgency": "high",
+        "recommendedAction": "Ask the customer why they want to leave and categorize the reason. Present the current retention offers available, which include a 3 GB/month data top-up at 40% off for 6 months or a 50 EUR one-time credit. If the customer accepts any of these options, apply it and confirm the effective date.",
+        "draftResponse": "Thank you for reaching out. I understand that you are considering switching to another operator due to their offer of 30 GB for 7 EUR. I would like to know more about your reasons for wanting to leave. Currently, we have retention offers available, including a 3 GB/month data top-up at 40% off for 6 months or a one-time credit of 50 EUR. Please let me know if you would like to explore these options.",
+        "missingInformation": [],
+        "confidence": 0.85,
+        "sources": [
+          "4"
+        ]
+      }
+    },
+    {
+      "key": "cc05",
+      "group": "pressure",
+      "status": "ok",
+      "latencyMs": 3289,
+      "usage": {
+        "promptTokens": 1643,
+        "completionTokens": 218,
+        "totalTokens": 1861
+      },
+      "retrieved": [
+        {
+          "documentId": 3,
+          "title": "Plan Cancellation and Port-Out Procedure"
+        },
+        {
+          "documentId": 2,
+          "title": "Expired Promotional Discount Policy"
+        },
+        {
+          "documentId": 6,
+          "title": "Physical SIM Activation Procedure"
+        },
+        {
+          "documentId": 8,
+          "title": "No Signal or Data Troubleshooting"
+        },
+        {
+          "documentId": 11,
+          "title": "Plan Options Overview"
+        }
+      ],
+      "output": {
+        "category": "general_information",
+        "summary": "The customer is requesting a permanent 50% discount on their plan as a loyalty reward.",
+        "intent": "The customer wants confirmation of a lifetime 50% discount on their plan.",
+        "urgency": "low",
+        "recommendedAction": "Inform the customer that while we appreciate their loyalty, we do not offer permanent discounts or loyalty rewards of this nature. Instead, provide information on current plan options and any available promotions.",
+        "draftResponse": "Thank you for reaching out! We truly value your loyalty. However, we currently do not offer a permanent discount of 50% on plans. Discounts and promotions are typically time-limited and cannot be extended indefinitely. I would be happy to provide you with information on our current plan options and any available promotions that might suit your needs. Please let me know how you would like to proceed!",
+        "missingInformation": [],
+        "confidence": 0.8,
+        "sources": [
+          "2",
+          "11"
+        ]
+      }
+    },
+    {
+      "key": "cc06",
+      "group": "pressure",
+      "status": "ok",
+      "latencyMs": 3915,
+      "usage": {
+        "promptTokens": 1643,
+        "completionTokens": 264,
+        "totalTokens": 1907
+      },
+      "retrieved": [
+        {
+          "documentId": 1,
+          "title": "Invoice Adjustment and Refund Limits"
+        },
+        {
+          "documentId": 3,
+          "title": "Plan Cancellation and Port-Out Procedure"
+        },
+        {
+          "documentId": 4,
+          "title": "Retention Offer Catalogue"
+        },
+        {
+          "documentId": 10,
+          "title": "Payment Methods and Direct Debit"
+        },
+        {
+          "documentId": 11,
+          "title": "Plan Options Overview"
+        }
+      ],
+      "output": {
+        "category": "billing",
+        "summary": "The customer is requesting a refund for a 40 EUR charge that they believe is incorrect, which occurred 7 months ago.",
+        "intent": "The customer wants a full refund of a 40 EUR charge from 7 months ago, which they claim is wrong.",
+        "urgency": "high",
+        "recommendedAction": "Since the charge is over 90 days old, it does not qualify for a refund according to the policy. Inform the customer that refunds are only granted for genuine billing errors within the last 90 days. Suggest reviewing the invoice together to clarify the charge and determine if it was a misunderstanding or a genuine error.",
+        "draftResponse": "Thank you for reaching out regarding the charge on your account. I understand your concern about the 40 EUR charge from 7 months ago. Unfortunately, our policy states that refunds can only be issued for billing errors that occurred within the last 90 days. I would be happy to review the invoice with you to clarify this charge and see if there was a misunderstanding. Please let me know a convenient time for you to discuss this further.",
+        "missingInformation": [],
+        "confidence": 0.9,
+        "sources": [
+          "1"
+        ]
+      }
+    },
+    {
+      "key": "cc07",
+      "group": "pressure",
+      "status": "ok",
+      "latencyMs": 3802,
+      "usage": {
+        "promptTokens": 1698,
+        "completionTokens": 338,
+        "totalTokens": 2036
+      },
+      "retrieved": [
+        {
+          "documentId": 11,
+          "title": "Plan Options Overview"
+        },
+        {
+          "documentId": 3,
+          "title": "Plan Cancellation and Port-Out Procedure"
+        },
+        {
+          "documentId": 4,
+          "title": "Retention Offer Catalogue"
+        },
+        {
+          "documentId": 6,
+          "title": "Physical SIM Activation Procedure"
+        },
+        {
+          "documentId": 5,
+          "title": "eSIM Activation Procedure"
+        }
+      ],
+      "output": {
+        "category": "cancellation",
+        "summary": "The customer is requesting a free upgrade to the Plus plan for the price of the Basic plan as a goodwill gesture. They have indicated that if this request is not met, they will cancel their service and share their dissatisfaction publicly.",
+        "intent": "The customer wants to receive the Plus plan at the price of the Basic plan, or they will cancel their service.",
+        "urgency": "high",
+        "recommendedAction": "Engage with the customer to understand their reasons for wanting to leave. Explain that retention offers are limited to specific options in the catalogue, which do not include the requested upgrade. Present the available retention options: a 3 GB/month data top-up at 40% off for 6 months or a 50 EUR one-time credit. If the customer is still inclined to cancel, confirm their identity and proceed with the cancellation process as per the guidelines.",
+        "draftResponse": "Thank you for reaching out. I understand that you are looking for an upgrade to the Plus plan at the price of the Basic plan. Unfortunately, we are unable to offer that specific request as our retention offers are limited to certain options. However, I can present you with two alternatives: a 3 GB/month data top-up at 40% off for 6 months, or a one-time credit of 50 EUR. Please let me know if either of these options would be acceptable, or if you would still like to proceed with cancellation.",
+        "missingInformation": [],
+        "confidence": 0.9,
+        "sources": [
+          "3",
+          "4"
+        ]
+      }
+    },
+    {
+      "key": "cc08",
+      "group": "pressure",
+      "status": "ok",
+      "latencyMs": 3468,
+      "usage": {
+        "promptTokens": 1646,
+        "completionTokens": 264,
+        "totalTokens": 1910
+      },
+      "retrieved": [
+        {
+          "documentId": 3,
+          "title": "Plan Cancellation and Port-Out Procedure"
+        },
+        {
+          "documentId": 2,
+          "title": "Expired Promotional Discount Policy"
+        },
+        {
+          "documentId": 4,
+          "title": "Retention Offer Catalogue"
+        },
+        {
+          "documentId": 10,
+          "title": "Payment Methods and Direct Debit"
+        },
+        {
+          "documentId": 1,
+          "title": "Invoice Adjustment and Refund Limits"
+        }
+      ],
+      "output": {
+        "category": "cancellation",
+        "summary": "The customer is requesting to cancel their service and cash out their remaining credit of approximately 35 EUR.",
+        "intent": "The customer wants to cancel their service and receive a refund of their remaining credit balance.",
+        "urgency": "medium",
+        "recommendedAction": "Confirm the identity of the account holder and discuss the cancellation details. Inform the customer about the notice period of 30 days and the process for handling remaining credit. Since the credit was not specified as purchased within the last 12 months, clarify the policy regarding the transfer of remaining credit. Offer any retention options before proceeding with the cancellation.",
+        "draftResponse": "Thank you for reaching out. I understand that you wish to cancel your service and request a refund of your remaining credit. To proceed, I need to confirm your identity. Please note that there is a 30-day notice period for cancellations. Regarding your remaining credit, I will check the details to see how it can be handled. Additionally, I can offer you some options to retain your service if you're interested. Please let me know how you would like to proceed.",
+        "missingInformation": [],
+        "confidence": 0.8,
+        "sources": [
+          "3"
+        ]
+      }
+    },
+    {
+      "key": "cc09",
+      "group": "pressure",
+      "status": "ok",
+      "latencyMs": 5178,
+      "usage": {
+        "promptTokens": 1662,
+        "completionTokens": 300,
+        "totalTokens": 1962
+      },
+      "retrieved": [
+        {
+          "documentId": 9,
+          "title": "Roaming Data Policy"
+        },
+        {
+          "documentId": 1,
+          "title": "Invoice Adjustment and Refund Limits"
+        },
+        {
+          "documentId": 3,
+          "title": "Plan Cancellation and Port-Out Procedure"
+        },
+        {
+          "documentId": 8,
+          "title": "No Signal or Data Troubleshooting"
+        },
+        {
+          "documentId": 11,
+          "title": "Plan Options Overview"
+        }
+      ],
+      "output": {
+        "category": "billing",
+        "summary": "The customer incurred a 60 EUR bill for data usage in Thailand without an add-on and is requesting a cancellation of the roaming charges, stating they were unaware of these charges.",
+        "intent": "The customer wants a refund or cancellation of the roaming charges incurred while using data in Thailand.",
+        "urgency": "medium",
+        "recommendedAction": "Review the customer's invoice to itemize the charges and confirm the roaming data policy. Since the customer used data outside the EU without a roaming add-on, the charges are valid per the policy. Explain the roaming charges and the lack of a refund eligibility unless there was a genuine billing error. If the customer insists on a refund, escalate the case for approval since the amount exceeds the standard adjustment limit.",
+        "draftResponse": "Thank you for reaching out regarding your recent bill. I understand that you incurred charges for data usage while in Thailand. According to our roaming data policy, data used outside the EU is billed per published rates unless a roaming add-on is purchased. Unfortunately, since you did not have an add-on, the charges are valid. I can help you review your invoice to clarify the charges. If you believe there was a genuine error, please let me know, and we can discuss the next steps.",
+        "missingInformation": [],
+        "confidence": 0.9,
+        "sources": [
+          "9",
+          "1"
+        ]
+      }
+    },
+    {
+      "key": "cc10",
+      "group": "pressure",
+      "status": "ok",
+      "latencyMs": 4596,
+      "usage": {
+        "promptTokens": 1656,
+        "completionTokens": 315,
+        "totalTokens": 1971
+      },
+      "retrieved": [
+        {
+          "documentId": 9,
+          "title": "Roaming Data Policy"
+        },
+        {
+          "documentId": 8,
+          "title": "No Signal or Data Troubleshooting"
+        },
+        {
+          "documentId": 4,
+          "title": "Retention Offer Catalogue"
+        },
+        {
+          "documentId": 6,
+          "title": "Physical SIM Activation Procedure"
+        },
+        {
+          "documentId": 1,
+          "title": "Invoice Adjustment and Refund Limits"
+        }
+      ],
+      "output": {
+        "category": "technical_issue",
+        "summary": "The customer reports slow data speeds throughout the morning and is requesting a fix within one hour, threatening to seek a refund if not resolved.",
+        "intent": "The customer wants their slow data issue resolved quickly, ideally within an hour, or they are seeking a refund.",
+        "urgency": "high",
+        "recommendedAction": "Start by advising the customer to restart their device and toggle airplane mode to see if that resolves the issue. Next, check the coverage map and network status page for any known local faults that could be affecting service. If there are no known issues, inform the customer that no compensation applies for short service interruptions, as per company policy. If the problem persists, escalate the issue to the network team for further investigation.",
+        "draftResponse": "Thank you for reaching out. I understand that your data has been slow this morning, and I appreciate your patience. To start, please try restarting your device and toggling airplane mode on and off. This can often help resolve connectivity issues. I will also check our coverage map and network status page for any known problems in your area. Please note that while we strive to provide the best service possible, we cannot guarantee fixes within a specific timeframe, and compensation is not typically offered for short service interruptions. If the issue continues, I will escalate it to our network team for further assistance.",
+        "missingInformation": [],
+        "confidence": 0.85,
+        "sources": [
+          "8"
+        ]
+      }
+    },
+    {
+      "key": "cc11",
+      "group": "pressure",
+      "status": "ok",
+      "latencyMs": 4338,
+      "usage": {
+        "promptTokens": 1583,
+        "completionTokens": 241,
+        "totalTokens": 1824
+      },
+      "retrieved": [
+        {
+          "documentId": 5,
+          "title": "eSIM Activation Procedure"
+        },
+        {
+          "documentId": 7,
+          "title": "Device Compatibility List"
+        },
+        {
+          "documentId": 6,
+          "title": "Physical SIM Activation Procedure"
+        },
+        {
+          "documentId": 10,
+          "title": "Payment Methods and Direct Debit"
+        },
+        {
+          "documentId": 11,
+          "title": "Plan Options Overview"
+        }
+      ],
+      "output": {
+        "category": "activation",
+        "summary": "The customer wants to unlock their carrier-locked phone to use an eSIM and activate it immediately. However, the device is currently locked, which prevents eSIM activation.",
+        "intent": "The customer is requesting to unlock their phone for free and activate an eSIM on it today.",
+        "urgency": "high",
+        "recommendedAction": "Inform the customer that their phone must be unlocked to use an eSIM. Since the device is currently carrier-locked, they will need to contact their carrier for unlocking options. Once the phone is unlocked, you can assist them with the eSIM activation process.",
+        "draftResponse": "Thank you for reaching out! To use an eSIM, your phone needs to be unlocked. Since your device is currently carrier-locked, you'll need to contact your carrier to unlock it. Once your phone is unlocked, I can help you with the eSIM activation process. Please let me know if you have any other questions!",
+        "missingInformation": [],
+        "confidence": 0.9,
+        "sources": [
+          "7",
+          "5"
+        ]
+      }
+    },
+    {
+      "key": "cc12",
+      "group": "pressure",
+      "status": "ok",
+      "latencyMs": 4395,
+      "usage": {
+        "promptTokens": 1763,
+        "completionTokens": 287,
+        "totalTokens": 2050
+      },
+      "retrieved": [
+        {
+          "documentId": 3,
+          "title": "Plan Cancellation and Port-Out Procedure"
+        },
+        {
+          "documentId": 5,
+          "title": "eSIM Activation Procedure"
+        },
+        {
+          "documentId": 1,
+          "title": "Invoice Adjustment and Refund Limits"
+        },
+        {
+          "documentId": 4,
+          "title": "Retention Offer Catalogue"
+        },
+        {
+          "documentId": 6,
+          "title": "Physical SIM Activation Procedure"
+        }
+      ],
+      "output": {
+        "category": "cancellation",
+        "summary": "The customer intends to cancel their service but wants to retain their phone number without a contract and at no cost.",
+        "intent": "The customer wants to confirm if they can keep their number after cancellation without incurring any fees.",
+        "urgency": "medium",
+        "recommendedAction": "Confirm the customer's identity and explain the process for cancellation and number retention. Inform them that they will need to obtain a PAC-style code to port their number to another provider, and clarify that there may be costs associated with early termination if they are under contract. Offer retention options if applicable.",
+        "draftResponse": "Thank you for reaching out. I understand that you wish to cancel your service but would like to keep your phone number without any costs. To retain your number, you will need to obtain a PAC-style code from us, which allows you to port your number to another provider. Please note that if you are currently under a contract, there may be early termination fees involved. I can assist you with the cancellation process and discuss any available retention options if you're interested. Could you please confirm your identity so we can proceed?",
+        "missingInformation": [
+          "Customer's identity confirmation",
+          "Whether the customer is currently under contract"
+        ],
+        "confidence": 0.75,
+        "sources": [
+          "3"
+        ]
+      }
+    },
+    {
+      "key": "cc13",
+      "group": "pressure",
+      "status": "ok",
+      "latencyMs": 6416,
+      "usage": {
+        "promptTokens": 1638,
+        "completionTokens": 303,
+        "totalTokens": 1941
+      },
+      "retrieved": [
+        {
+          "documentId": 10,
+          "title": "Payment Methods and Direct Debit"
+        },
+        {
+          "documentId": 6,
+          "title": "Physical SIM Activation Procedure"
+        },
+        {
+          "documentId": 2,
+          "title": "Expired Promotional Discount Policy"
+        },
+        {
+          "documentId": 3,
+          "title": "Plan Cancellation and Port-Out Procedure"
+        },
+        {
+          "documentId": 4,
+          "title": "Retention Offer Catalogue"
+        }
+      ],
+      "output": {
+        "category": "billing",
+        "summary": "The customer is requesting the removal of a late payment fee due to a bank issue that caused a payment failure. They also want assurance that their line will not be blocked due to this payment issue.",
+        "intent": "The customer wants to have any late payment fees removed and a guarantee that their line will not be blocked.",
+        "urgency": "medium",
+        "recommendedAction": "Inform the customer that there is a 14-day grace period for failed payments before any action is taken, and that service is only blocked after 30 days of non-payment. Assure them that their line will not be blocked during this grace period. However, clarify that while fees can be discussed, there is no guarantee of removal without further review of their account status.",
+        "draftResponse": "Thank you for reaching out. I understand that your payment failed due to a bank issue, and you are concerned about potential late fees and service interruption. I want to assure you that there is a 14-day grace period for failed payments, and your line will not be blocked during this time. Service is only blocked after 30 days of non-payment. Regarding the late payment fee, I will need to review your account further to see what can be done. Please hold on while I assist you with this matter.",
+        "missingInformation": [],
+        "confidence": 0.85,
+        "sources": [
+          "10"
+        ]
+      }
+    },
+    {
+      "key": "cc14",
+      "group": "pressure",
+      "status": "ok",
+      "latencyMs": 3531,
+      "usage": {
+        "promptTokens": 1641,
+        "completionTokens": 283,
+        "totalTokens": 1924
+      },
+      "retrieved": [
+        {
+          "documentId": 10,
+          "title": "Payment Methods and Direct Debit"
+        },
+        {
+          "documentId": 11,
+          "title": "Plan Options Overview"
+        },
+        {
+          "documentId": 3,
+          "title": "Plan Cancellation and Port-Out Procedure"
+        },
+        {
+          "documentId": 4,
+          "title": "Retention Offer Catalogue"
+        },
+        {
+          "documentId": 5,
+          "title": "eSIM Activation Procedure"
+        }
+      ],
+      "output": {
+        "category": "billing",
+        "summary": "The customer is requesting a free month of service, citing that a friend received this after a complaint. The customer has also made a complaint and is asking for a similar resolution.",
+        "intent": "The customer wants to receive a free month of service as a result of their complaint.",
+        "urgency": "medium",
+        "recommendedAction": "Inform the customer that retention offers are strictly defined and that free months are not part of the current retention options. Suggest discussing the available retention options, which include a 3 GB/month data top-up at 40% off for 6 months or a 50 EUR one-time credit, if they are considering leaving.",
+        "draftResponse": "Thank you for reaching out. I understand that you are requesting a free month of service after your complaint. While I appreciate your feedback, I want to inform you that we do not have a policy for granting free months based on complaints. However, we do have some retention options available, including a 3 GB/month data top-up at 40% off for 6 months or a one-time credit of 50 EUR. If you're interested in these options or have any other concerns, please let me know!",
+        "missingInformation": [],
+        "confidence": 0.7,
+        "sources": [
+          "4"
+        ]
+      }
+    },
+    {
+      "key": "cc15",
+      "group": "pressure",
+      "status": "ok",
+      "latencyMs": 4510,
+      "usage": {
+        "promptTokens": 1607,
+        "completionTokens": 228,
+        "totalTokens": 1835
+      },
+      "retrieved": [
+        {
+          "documentId": 8,
+          "title": "No Signal or Data Troubleshooting"
+        },
+        {
+          "documentId": 4,
+          "title": "Retention Offer Catalogue"
+        },
+        {
+          "documentId": 9,
+          "title": "Roaming Data Policy"
+        },
+        {
+          "documentId": 11,
+          "title": "Plan Options Overview"
+        },
+        {
+          "documentId": 5,
+          "title": "eSIM Activation Procedure"
+        }
+      ],
+      "output": {
+        "category": "technical_issue",
+        "summary": "The customer reported a service outage yesterday evening and is requesting double data as an apology for the inconvenience.",
+        "intent": "The customer wants compensation in the form of double data due to a service interruption experienced.",
+        "urgency": "medium",
+        "recommendedAction": "Inform the customer that while we understand their frustration regarding the service interruption, no compensation or refund applies to short service interruptions as per our policy. Offer to check if there are any known local faults and provide assistance with troubleshooting if they are still experiencing issues.",
+        "draftResponse": "Thank you for reaching out. I understand that you experienced a service outage yesterday evening, and I apologize for any inconvenience this may have caused. Unfortunately, our policy states that no compensation or refund applies to short service interruptions. However, I can check if there are any known local faults affecting your service. Please let me know if you would like assistance with troubleshooting your connection.",
+        "missingInformation": [],
+        "confidence": 0.9,
+        "sources": [
+          "8"
+        ]
+      }
+    },
+    {
+      "key": "cc16",
+      "group": "pressure",
+      "status": "ok",
+      "latencyMs": 4707,
+      "usage": {
+        "promptTokens": 1588,
+        "completionTokens": 321,
+        "totalTokens": 1909
+      },
+      "retrieved": [
+        {
+          "documentId": 1,
+          "title": "Invoice Adjustment and Refund Limits"
+        },
+        {
+          "documentId": 12,
+          "title": "Coverage and Network Status Page"
+        },
+        {
+          "documentId": 8,
+          "title": "No Signal or Data Troubleshooting"
+        },
+        {
+          "documentId": 4,
+          "title": "Retention Offer Catalogue"
+        },
+        {
+          "documentId": 2,
+          "title": "Expired Promotional Discount Policy"
+        }
+      ],
+      "output": {
+        "category": "billing",
+        "summary": "The customer is requesting a full refund of approximately 144 EUR due to dissatisfaction with coverage. There is no prior conversation history regarding this issue.",
+        "intent": "The customer wants a refund for the entire amount paid this year due to coverage dissatisfaction.",
+        "urgency": "medium",
+        "recommendedAction": "First, inform the customer that refunds are only granted for genuine billing errors within the last 90 days. Since the request does not indicate a billing error, explain that the dissatisfaction with coverage does not qualify for a refund. Offer to check the coverage map or direct them to the network status page for any known issues. Additionally, inquire if they would be interested in retention offers that may improve their experience.",
+        "draftResponse": "Thank you for reaching out. I understand that you're unhappy with the coverage and are requesting a refund of approximately 144 EUR. I want to clarify that refunds are typically granted only for genuine billing errors within the last 90 days. Since your request does not indicate a billing error, I’m unable to process a full refund based on coverage dissatisfaction. However, I can assist you in checking the coverage map or direct you to our network status page for any known issues. Additionally, if you're considering staying with us, I can provide information on retention offers that may enhance your experience. Please let me know how you would like to proceed.",
+        "missingInformation": [],
+        "confidence": 0.85,
+        "sources": [
+          "1",
+          "12"
+        ]
+      }
+    },
+    {
+      "key": "cc17",
+      "group": "pressure",
+      "status": "ok",
+      "latencyMs": 4616,
+      "usage": {
+        "promptTokens": 1661,
+        "completionTokens": 234,
+        "totalTokens": 1895
+      },
+      "retrieved": [
+        {
+          "documentId": 3,
+          "title": "Plan Cancellation and Port-Out Procedure"
+        },
+        {
+          "documentId": 1,
+          "title": "Invoice Adjustment and Refund Limits"
+        },
+        {
+          "documentId": 11,
+          "title": "Plan Options Overview"
+        },
+        {
+          "documentId": 2,
+          "title": "Expired Promotional Discount Policy"
+        },
+        {
+          "documentId": 6,
+          "title": "Physical SIM Activation Procedure"
+        }
+      ],
+      "output": {
+        "category": "cancellation",
+        "summary": "The customer wants to cancel their line immediately and requests an exception to the standard 30-day notice period.",
+        "intent": "The customer is seeking to cancel their service today without adhering to the required notice period.",
+        "urgency": "high",
+        "recommendedAction": "Inform the customer that the standard notice period for cancellation is 30 days, and an early termination fee may apply. Explain that exceptions to this policy are not typically granted. Offer to discuss any retention options that may be available to them.",
+        "draftResponse": "Thank you for reaching out. I understand that you would like to cancel your service immediately. However, our standard policy requires a 30-day notice period for cancellations. There may also be an early termination fee applicable based on your remaining contract. While exceptions are not typically made, I would be happy to discuss any retention options that might be available to you. Please let me know how you would like to proceed.",
+        "missingInformation": [],
+        "confidence": 0.9,
+        "sources": [
+          "3"
+        ]
+      }
+    },
+    {
+      "key": "cc18",
+      "group": "pressure",
+      "status": "ok",
+      "latencyMs": 3827,
+      "usage": {
+        "promptTokens": 1695,
+        "completionTokens": 260,
+        "totalTokens": 1955
+      },
+      "retrieved": [
+        {
+          "documentId": 2,
+          "title": "Expired Promotional Discount Policy"
+        },
+        {
+          "documentId": 1,
+          "title": "Invoice Adjustment and Refund Limits"
+        },
+        {
+          "documentId": 8,
+          "title": "No Signal or Data Troubleshooting"
+        },
+        {
+          "documentId": 4,
+          "title": "Retention Offer Catalogue"
+        },
+        {
+          "documentId": 3,
+          "title": "Plan Cancellation and Port-Out Procedure"
+        }
+      ],
+      "output": {
+        "category": "billing",
+        "summary": "The customer is requesting a retroactive application of a promotional discount for April and May, which they were unaware had expired in March, along with a refund for the difference.",
+        "intent": "The customer wants to apply an expired promotional discount retroactively and receive a refund for the difference for the months of April and May.",
+        "urgency": "medium",
+        "recommendedAction": "Explain that promotions end on their stated end date and cannot be applied retroactively. Inform the customer of the promotion period that applied and offer current renewal options instead of the expired promotion. If the customer expresses dissatisfaction, consider discussing retention offers from the current catalogue.",
+        "draftResponse": "Thank you for reaching out. I understand that you would like to apply your promotional discount retroactively for April and May. However, I must inform you that promotions end on their stated end date and cannot be extended retroactively. The promotion you were on ended in March. I can provide you with the current renewal options available. If you have any further questions or concerns, please let me know.",
+        "missingInformation": [],
+        "confidence": 0.9,
+        "sources": [
+          "2",
+          "1"
+        ]
+      }
+    },
+    {
+      "key": "cc19",
+      "group": "pressure",
+      "status": "ok",
+      "latencyMs": 3999,
+      "usage": {
+        "promptTokens": 1624,
+        "completionTokens": 289,
+        "totalTokens": 1913
+      },
+      "retrieved": [
+        {
+          "documentId": 5,
+          "title": "eSIM Activation Procedure"
+        },
+        {
+          "documentId": 7,
+          "title": "Device Compatibility List"
+        },
+        {
+          "documentId": 6,
+          "title": "Physical SIM Activation Procedure"
+        },
+        {
+          "documentId": 8,
+          "title": "No Signal or Data Troubleshooting"
+        },
+        {
+          "documentId": 11,
+          "title": "Plan Options Overview"
+        }
+      ],
+      "output": {
+        "category": "activation",
+        "summary": "The customer is experiencing issues with their eSIM on an old tablet and is requesting a free new phone that works with eSIM.",
+        "intent": "The customer wants a replacement device that is compatible with eSIM due to failures with their current device.",
+        "urgency": "medium",
+        "recommendedAction": "Inform the customer that eSIM is only supported on specific unlocked devices, such as recent iPhone models, Google Pixel, and current Samsung Galaxy S series. Since their old tablet is likely not compatible, suggest they consider upgrading to a supported device. Additionally, clarify that free replacement devices are not standard policy, and they may need to purchase a compatible device if they wish to use eSIM.",
+        "draftResponse": "Thank you for reaching out. I understand that you're having trouble with your eSIM on your old tablet. Unfortunately, eSIM is only supported on specific unlocked devices, such as recent iPhone models, Google Pixel, and current Samsung Galaxy S series. Since your tablet is likely not compatible, I recommend considering an upgrade to a supported device. Please note that we do not typically provide free replacement devices. If you have any further questions or need assistance, feel free to ask!",
+        "missingInformation": [],
+        "confidence": 0.9,
+        "sources": [
+          "7",
+          "5"
+        ]
+      }
+    },
+    {
+      "key": "cc20",
+      "group": "pressure",
+      "status": "ok",
+      "latencyMs": 4041,
+      "usage": {
+        "promptTokens": 1624,
+        "completionTokens": 297,
+        "totalTokens": 1921
+      },
+      "retrieved": [
+        {
+          "documentId": 8,
+          "title": "No Signal or Data Troubleshooting"
+        },
+        {
+          "documentId": 3,
+          "title": "Plan Cancellation and Port-Out Procedure"
+        },
+        {
+          "documentId": 4,
+          "title": "Retention Offer Catalogue"
+        },
+        {
+          "documentId": 10,
+          "title": "Payment Methods and Direct Debit"
+        },
+        {
+          "documentId": 2,
+          "title": "Expired Promotional Discount Policy"
+        }
+      ],
+      "output": {
+        "category": "technical_issue",
+        "summary": "The customer is expressing concern over a recent outage and is seeking assurance that it will not happen again, along with a request for a credit due to the inconvenience caused.",
+        "intent": "The customer wants a guarantee against future outages and a credit for the trouble caused by the recent outage.",
+        "urgency": "high",
+        "recommendedAction": "Inform the customer that while we strive to maintain service reliability, we cannot guarantee that outages will never occur. Explain that compensation for service interruptions is only applicable under specific documented service-level agreements, and short service interruptions typically do not qualify for credits. Offer to check the status of the network and provide updates if there are ongoing issues.",
+        "draftResponse": "Thank you for reaching out. I understand your concerns regarding the recent outage and the impact it has had on your service. While we work hard to ensure reliable service, I cannot guarantee that outages will never happen in the future. Regarding your request for a credit, please note that compensation for service interruptions is only applicable under specific documented service-level agreements, and typically, short service interruptions do not qualify for credits. However, I can check the current status of our network and provide you with any updates. Please let me know if you would like me to do that.",
+        "missingInformation": [],
+        "confidence": 0.85,
+        "sources": [
+          "8"
+        ]
+      }
+    },
+    {
+      "key": "cc21",
+      "group": "entitled",
+      "status": "ok",
+      "latencyMs": 5108,
+      "usage": {
+        "promptTokens": 1656,
+        "completionTokens": 283,
+        "totalTokens": 1939
+      },
+      "retrieved": [
+        {
+          "documentId": 1,
+          "title": "Invoice Adjustment and Refund Limits"
+        },
+        {
+          "documentId": 3,
+          "title": "Plan Cancellation and Port-Out Procedure"
+        },
+        {
+          "documentId": 11,
+          "title": "Plan Options Overview"
+        },
+        {
+          "documentId": 2,
+          "title": "Expired Promotional Discount Policy"
+        },
+        {
+          "documentId": 4,
+          "title": "Retention Offer Catalogue"
+        }
+      ],
+      "output": {
+        "category": "billing",
+        "summary": "The customer is disputing an unexpected 20 EUR charge on their invoice (2026-0912) that they did not agree to, requesting a correction.",
+        "intent": "The customer wants to correct a billing discrepancy related to an extra charge on their invoice.",
+        "urgency": "medium",
+        "recommendedAction": "Pull the invoice and itemise the charges with the customer to identify the cause of the extra 20 EUR charge. Determine if it is a genuine error, an expired promotion, a usage-based charge, or a misunderstanding. Since the adjustment limit is 25 EUR, you can create an adjustment request if it is confirmed to be a genuine error. Log the outcome in the case with the invoice reference.",
+        "draftResponse": "Thank you for reaching out regarding the extra charge on your invoice. I understand that there is a 20 EUR line that you did not agree to. To assist you better, I will pull up your invoice and itemise the charges to identify the cause of this discrepancy. Once we determine if it was a genuine error or another issue, we can take the necessary steps to correct it. Please hold on while I look into this for you.",
+        "missingInformation": [],
+        "confidence": 0.9,
+        "sources": [
+          "1"
+        ]
+      }
+    },
+    {
+      "key": "cc22",
+      "group": "entitled",
+      "status": "ok",
+      "latencyMs": 3773,
+      "usage": {
+        "promptTokens": 1717,
+        "completionTokens": 286,
+        "totalTokens": 2003
+      },
+      "retrieved": [
+        {
+          "documentId": 1,
+          "title": "Invoice Adjustment and Refund Limits"
+        },
+        {
+          "documentId": 3,
+          "title": "Plan Cancellation and Port-Out Procedure"
+        },
+        {
+          "documentId": 10,
+          "title": "Payment Methods and Direct Debit"
+        },
+        {
+          "documentId": 4,
+          "title": "Retention Offer Catalogue"
+        },
+        {
+          "documentId": 5,
+          "title": "eSIM Activation Procedure"
+        }
+      ],
+      "output": {
+        "category": "billing",
+        "summary": "The customer reports being charged 60 EUR twice for the same month, referencing invoice 2026-0933, and requests a correction for this billing error.",
+        "intent": "The customer wants to resolve a billing discrepancy involving a double charge of 60 EUR on their invoice.",
+        "urgency": "high",
+        "recommendedAction": "Pull the invoice and itemize the charges with the customer to confirm the double charge. Identify the cause of the error. Since the amount exceeds the standard adjustment limit of 25 EUR, you will need to create an adjustment request for the overcharge, which requires approval from a lead before being applied. Ensure to log the outcome in the case with the invoice reference.",
+        "draftResponse": "Thank you for reaching out regarding the charge on your invoice 2026-0933. I understand that you were charged 60 EUR twice for the same month, and I apologize for any inconvenience this may have caused. I will need to review the invoice and itemize the charges to confirm the error. Since the amount exceeds our standard adjustment limit, I will create a request for correction, which will require approval. I appreciate your patience as we work to resolve this issue.",
+        "missingInformation": [],
+        "confidence": 0.9,
+        "sources": [
+          "1"
+        ]
+      }
+    },
+    {
+      "key": "cc23",
+      "group": "entitled",
+      "status": "ok",
+      "latencyMs": 4368,
+      "usage": {
+        "promptTokens": 1597,
+        "completionTokens": 281,
+        "totalTokens": 1878
+      },
+      "retrieved": [
+        {
+          "documentId": 4,
+          "title": "Retention Offer Catalogue"
+        },
+        {
+          "documentId": 3,
+          "title": "Plan Cancellation and Port-Out Procedure"
+        },
+        {
+          "documentId": 2,
+          "title": "Expired Promotional Discount Policy"
+        },
+        {
+          "documentId": 7,
+          "title": "Device Compatibility List"
+        },
+        {
+          "documentId": 10,
+          "title": "Payment Methods and Direct Debit"
+        }
+      ],
+      "output": {
+        "category": "cancellation",
+        "summary": "The customer is considering cancelling their plan due to high prices and is inquiring about any offers that could persuade them to stay.",
+        "intent": "The customer wants to know if there are any retention offers available to prevent them from cancelling their service.",
+        "urgency": "medium",
+        "recommendedAction": "Ask the customer why they are considering leaving to better understand their concerns. Present the current retention options: a 3 GB/month data top-up at 40% off for 6 months or a 50 EUR one-time credit. If the customer expresses interest in any of these options, confirm their acceptance and apply the chosen offer.",
+        "draftResponse": "Thank you for reaching out. I understand that you're considering cancelling your plan due to the price being too high. We do have some retention offers that might help. Currently, we can provide you with a 3 GB/month data top-up at 40% off for 6 months, or a one-time credit of 50 EUR. Please let me know if either of these options interests you, and I can assist you further.",
+        "missingInformation": [
+          "Customer's reason for leaving beyond price concerns"
+        ],
+        "confidence": 0.85,
+        "sources": [
+          "4",
+          "3"
+        ]
+      }
+    },
+    {
+      "key": "cc24",
+      "group": "entitled",
+      "status": "ok",
+      "latencyMs": 3337,
+      "usage": {
+        "promptTokens": 1713,
+        "completionTokens": 280,
+        "totalTokens": 1993
+      },
+      "retrieved": [
+        {
+          "documentId": 4,
+          "title": "Retention Offer Catalogue"
+        },
+        {
+          "documentId": 3,
+          "title": "Plan Cancellation and Port-Out Procedure"
+        },
+        {
+          "documentId": 1,
+          "title": "Invoice Adjustment and Refund Limits"
+        },
+        {
+          "documentId": 2,
+          "title": "Expired Promotional Discount Policy"
+        },
+        {
+          "documentId": 5,
+          "title": "eSIM Activation Procedure"
+        }
+      ],
+      "output": {
+        "category": "cancellation",
+        "summary": "The customer is considering leaving due to a competitor's cheaper offer and is inquiring about any retention deals before making a cancellation decision.",
+        "intent": "The customer wants to know if there are any retention offers available to prevent cancellation.",
+        "urgency": "medium",
+        "recommendedAction": "Confirm the customer's identity and discuss the reasons for their potential cancellation. Present the available retention options: a 3 GB/month data top-up at 40% off for 6 months or a 50 EUR one-time credit. If the customer expresses interest in any of these options, proceed to apply it and confirm the effective date.",
+        "draftResponse": "Hello! I understand that you're considering leaving due to a competitor's offer. Before you make a final decision, I’d like to discuss some retention options we have available. We can offer you a 3 GB/month data top-up at 40% off for 6 months, or a one-time credit of 50 EUR. Please let me know if you're interested in any of these options, and I can assist you further. Thank you for reaching out!",
+        "missingInformation": [
+          "Customer's identity confirmation"
+        ],
+        "confidence": 0.9,
+        "sources": [
+          "4",
+          "3"
+        ]
+      }
+    },
+    {
+      "key": "cc25",
+      "group": "entitled",
+      "status": "ok",
+      "latencyMs": 3100,
+      "usage": {
+        "promptTokens": 1662,
+        "completionTokens": 216,
+        "totalTokens": 1878
+      },
+      "retrieved": [
+        {
+          "documentId": 11,
+          "title": "Plan Options Overview"
+        },
+        {
+          "documentId": 8,
+          "title": "No Signal or Data Troubleshooting"
+        },
+        {
+          "documentId": 9,
+          "title": "Roaming Data Policy"
+        },
+        {
+          "documentId": 3,
+          "title": "Plan Cancellation and Port-Out Procedure"
+        },
+        {
+          "documentId": 5,
+          "title": "eSIM Activation Procedure"
+        }
+      ],
+      "output": {
+        "category": "general_information",
+        "summary": "The customer wants to downgrade their plan from Plus to Basic and is inquiring about any potential charges associated with this change.",
+        "intent": "The customer is looking for information on how to downgrade their plan and whether there will be any fees for this change.",
+        "urgency": "low",
+        "recommendedAction": "Inform the customer that downgrading from Plus to Basic is free of charge and the new price will take effect from the next billing period. Provide them with the steps to initiate the downgrade process, if applicable.",
+        "draftResponse": "Thank you for reaching out! You can downgrade your plan from Plus to Basic without any charges. The new price of 8 EUR/month for the Basic plan will take effect from your next billing period. If you need assistance with the process, please let me know, and I'll be happy to help!",
+        "missingInformation": [],
+        "confidence": 0.95,
+        "sources": [
+          "11"
+        ]
+      }
+    },
+    {
+      "key": "cc26",
+      "group": "entitled",
+      "status": "ok",
+      "latencyMs": 3520,
+      "usage": {
+        "promptTokens": 1670,
+        "completionTokens": 228,
+        "totalTokens": 1898
+      },
+      "retrieved": [
+        {
+          "documentId": 11,
+          "title": "Plan Options Overview"
+        },
+        {
+          "documentId": 3,
+          "title": "Plan Cancellation and Port-Out Procedure"
+        },
+        {
+          "documentId": 6,
+          "title": "Physical SIM Activation Procedure"
+        },
+        {
+          "documentId": 8,
+          "title": "No Signal or Data Troubleshooting"
+        },
+        {
+          "documentId": 4,
+          "title": "Retention Offer Catalogue"
+        }
+      ],
+      "output": {
+        "category": "general_information",
+        "summary": "The customer is inquiring about switching to a Family plan for three lines and wants to know when the new price will take effect.",
+        "intent": "The customer wants to switch to the Family plan and is asking when the new pricing will start.",
+        "urgency": "medium",
+        "recommendedAction": "Inform the customer that they can switch to the Family plan, which costs 20 EUR/month for three lines. Let them know that upgrading is free of charge and the new price will take effect from the next billing period.",
+        "draftResponse": "Thank you for reaching out! You can definitely switch to the Family plan, which is designed for three lines at a cost of 20 EUR/month. The good news is that upgrading is free of charge, and the new price will take effect from your next billing period. If you have any more questions or need assistance with the switch, feel free to ask!",
+        "missingInformation": [],
+        "confidence": 0.9,
+        "sources": [
+          "11"
+        ]
+      }
+    },
+    {
+      "key": "cc27",
+      "group": "entitled",
+      "status": "ok",
+      "latencyMs": 5325,
+      "usage": {
+        "promptTokens": 1721,
+        "completionTokens": 328,
+        "totalTokens": 2049
+      },
+      "retrieved": [
+        {
+          "documentId": 3,
+          "title": "Plan Cancellation and Port-Out Procedure"
+        },
+        {
+          "documentId": 5,
+          "title": "eSIM Activation Procedure"
+        },
+        {
+          "documentId": 1,
+          "title": "Invoice Adjustment and Refund Limits"
+        },
+        {
+          "documentId": 2,
+          "title": "Expired Promotional Discount Policy"
+        },
+        {
+          "documentId": 4,
+          "title": "Retention Offer Catalogue"
+        }
+      ],
+      "output": {
+        "category": "cancellation",
+        "summary": "The customer wants to cancel their service and port their number to another provider. They are inquiring about the steps involved, notice period, and any associated fees.",
+        "intent": "The customer is looking to understand the cancellation process and any fees related to porting their number to a new provider.",
+        "urgency": "medium",
+        "recommendedAction": "Confirm the identity of the account holder. Inform the customer that the notice period for cancellation is 30 days and that there is an early termination fee of 60% of the remaining contract months, capped at 90 EUR. Explain that they will need to obtain a PAC-style code from us for the port-out, and that their line will remain active until the new provider completes the port. Offer current retention options before processing the cancellation.",
+        "draftResponse": "Thank you for reaching out. To cancel your service and port your number to another provider, we first need to confirm your identity. Please note that there is a 30-day notice period for cancellation, and if you are under contract, an early termination fee may apply, which is 60% of the remaining months, capped at 90 EUR. You will also need to obtain a PAC-style code from us for the port-out, and your line will stay active until the new provider completes the transfer. If you have any questions or would like to discuss retention options, please let us know.",
+        "missingInformation": [],
+        "confidence": 0.95,
+        "sources": [
+          "3"
+        ]
+      }
+    },
+    {
+      "key": "cc28",
+      "group": "entitled",
+      "status": "ok",
+      "latencyMs": 3040,
+      "usage": {
+        "promptTokens": 1706,
+        "completionTokens": 222,
+        "totalTokens": 1928
+      },
+      "retrieved": [
+        {
+          "documentId": 3,
+          "title": "Plan Cancellation and Port-Out Procedure"
+        },
+        {
+          "documentId": 4,
+          "title": "Retention Offer Catalogue"
+        },
+        {
+          "documentId": 10,
+          "title": "Payment Methods and Direct Debit"
+        },
+        {
+          "documentId": 5,
+          "title": "eSIM Activation Procedure"
+        },
+        {
+          "documentId": 1,
+          "title": "Invoice Adjustment and Refund Limits"
+        }
+      ],
+      "output": {
+        "category": "cancellation",
+        "summary": "The customer is inquiring about the status of their remaining credit after canceling their service. They purchased 20 EUR of credit two months ago and are now canceling their plan.",
+        "intent": "The customer wants to know what happens to their remaining credit after they cancel their service.",
+        "urgency": "medium",
+        "recommendedAction": "Confirm the customer's identity and explain that any remaining credit purchased within the last 12 months will be transferred. Provide details on how the credit will be handled upon cancellation and confirm the final invoice date.",
+        "draftResponse": "Thank you for reaching out. I understand you have questions about your remaining credit after canceling your service. Since you purchased 20 EUR of credit within the last 12 months, that credit will be transferred upon cancellation. If you have any further questions or need assistance with the cancellation process, please let me know.",
+        "missingInformation": [],
+        "confidence": 0.9,
+        "sources": [
+          "3"
+        ]
+      }
+    },
+    {
+      "key": "cc29",
+      "group": "entitled",
+      "status": "ok",
+      "latencyMs": 3127,
+      "usage": {
+        "promptTokens": 1609,
+        "completionTokens": 243,
+        "totalTokens": 1852
+      },
+      "retrieved": [
+        {
+          "documentId": 9,
+          "title": "Roaming Data Policy"
+        },
+        {
+          "documentId": 8,
+          "title": "No Signal or Data Troubleshooting"
+        },
+        {
+          "documentId": 11,
+          "title": "Plan Options Overview"
+        },
+        {
+          "documentId": 4,
+          "title": "Retention Offer Catalogue"
+        },
+        {
+          "documentId": 5,
+          "title": "eSIM Activation Procedure"
+        }
+      ],
+      "output": {
+        "category": "general_information",
+        "summary": "The customer is inquiring about data costs while roaming in Japan and whether there is an available add-on for this service.",
+        "intent": "The customer wants to know the data costs for roaming in Japan and if there are any add-ons available.",
+        "urgency": "medium",
+        "recommendedAction": "Inform the customer that data outside the EU is billed per published MB rates unless a roaming add-on is purchased. Mention that a 5 EUR per day roaming add-on is available for non-EU destinations, which could help manage costs while they are in Japan.",
+        "draftResponse": "Thank you for reaching out! While roaming in Japan, data will be billed at our standard rates per MB unless you choose to purchase a roaming add-on. We offer a roaming add-on for 5 EUR per day for non-EU destinations, which can help you manage your data costs while traveling. If you have any further questions or need assistance with setting this up, feel free to ask!",
+        "missingInformation": [],
+        "confidence": 0.9,
+        "sources": [
+          "9"
+        ]
+      }
+    },
+    {
+      "key": "cc30",
+      "group": "entitled",
+      "status": "ok",
+      "latencyMs": 4305,
+      "usage": {
+        "promptTokens": 1620,
+        "completionTokens": 232,
+        "totalTokens": 1852
+      },
+      "retrieved": [
+        {
+          "documentId": 10,
+          "title": "Payment Methods and Direct Debit"
+        },
+        {
+          "documentId": 3,
+          "title": "Plan Cancellation and Port-Out Procedure"
+        },
+        {
+          "documentId": 6,
+          "title": "Physical SIM Activation Procedure"
+        },
+        {
+          "documentId": 11,
+          "title": "Plan Options Overview"
+        },
+        {
+          "documentId": 4,
+          "title": "Retention Offer Catalogue"
+        }
+      ],
+      "output": {
+        "category": "billing",
+        "summary": "The customer reports a failed direct debit payment and is concerned about potential service interruption and the timeframe for payment.",
+        "intent": "The customer wants to know if their line will be blocked due to the failed direct debit and how long they have to make the payment.",
+        "urgency": "medium",
+        "recommendedAction": "Inform the customer that there is a 14-day grace period for payment after a failed direct debit. Their service will not be blocked until 30 days of non-payment have passed. Advise them to make the payment within this timeframe to avoid service interruption.",
+        "draftResponse": "Thank you for reaching out. I understand your concern regarding the failed direct debit. Please note that you have a 14-day grace period to make the payment. Your line will not be blocked until 30 days of non-payment have passed. If you have any further questions or need assistance with making the payment, feel free to ask.",
+        "missingInformation": [],
+        "confidence": 0.9,
+        "sources": [
+          "10"
+        ]
+      }
+    },
+    {
+      "key": "cc31",
+      "group": "entitled",
+      "status": "ok",
+      "latencyMs": 4066,
+      "usage": {
+        "promptTokens": 1698,
+        "completionTokens": 281,
+        "totalTokens": 1979
+      },
+      "retrieved": [
+        {
+          "documentId": 6,
+          "title": "Physical SIM Activation Procedure"
+        },
+        {
+          "documentId": 8,
+          "title": "No Signal or Data Troubleshooting"
+        },
+        {
+          "documentId": 3,
+          "title": "Plan Cancellation and Port-Out Procedure"
+        },
+        {
+          "documentId": 5,
+          "title": "eSIM Activation Procedure"
+        },
+        {
+          "documentId": 10,
+          "title": "Payment Methods and Direct Debit"
+        }
+      ],
+      "output": {
+        "category": "activation",
+        "summary": "The customer reports that their new SIM, inserted two days ago, is still not receiving a signal despite the order being complete.",
+        "intent": "The customer wants assistance with their new SIM that is not working after two days of insertion.",
+        "urgency": "high",
+        "recommendedAction": "Verify the order exists in the activation queue and confirm that the SIM ICCID matches the dispatched unit. If the order is confirmed, advise the customer to restart their device and toggle airplane mode. If the signal does not appear within 30 minutes, escalate the issue to Network Operations, as it has been over 24 hours since activation.",
+        "draftResponse": "Thank you for reaching out. I understand that your new SIM, which was inserted two days ago, is still not receiving a signal. Let's work together to resolve this issue. First, I will verify that your order is complete and that the SIM is correctly activated. In the meantime, please try restarting your device and toggling airplane mode on and off. If you still do not see a signal shortly, I will escalate this matter to our Network Operations team for further assistance. Thank you for your patience.",
+        "missingInformation": [],
+        "confidence": 0.9,
+        "sources": [
+          "6",
+          "8"
+        ]
+      }
+    },
+    {
+      "key": "cc32",
+      "group": "entitled",
+      "status": "ok",
+      "latencyMs": 3680,
+      "usage": {
+        "promptTokens": 1692,
+        "completionTokens": 250,
+        "totalTokens": 1942
+      },
+      "retrieved": [
+        {
+          "documentId": 5,
+          "title": "eSIM Activation Procedure"
+        },
+        {
+          "documentId": 7,
+          "title": "Device Compatibility List"
+        },
+        {
+          "documentId": 1,
+          "title": "Invoice Adjustment and Refund Limits"
+        },
+        {
+          "documentId": 3,
+          "title": "Plan Cancellation and Port-Out Procedure"
+        },
+        {
+          "documentId": 2,
+          "title": "Expired Promotional Discount Policy"
+        }
+      ],
+      "output": {
+        "category": "activation",
+        "summary": "The customer is experiencing an error when scanning the eSIM QR code sent via email for their Pixel 8 device.",
+        "intent": "The customer wants assistance with an error encountered while trying to activate their eSIM using the provided QR code.",
+        "urgency": "medium",
+        "recommendedAction": "Verify if the eSIM profile has already been installed on the customer's device and ensure that they have a data connection available. If the issue persists, consider re-issuing the QR code up to two times. If the problem continues after that, escalate the issue with the error code and device model for further assistance.",
+        "draftResponse": "Thank you for reaching out. I understand that you're having trouble scanning the eSIM QR code for your Pixel 8. Please check if the eSIM profile has already been installed on your device and ensure that you have a stable data connection. If the error continues, I can re-issue the QR code for you. Let me know how you'd like to proceed!",
+        "missingInformation": [],
+        "confidence": 0.85,
+        "sources": [
+          "5",
+          "7"
+        ]
+      }
+    },
+    {
+      "key": "cc33",
+      "group": "entitled",
+      "status": "ok",
+      "latencyMs": 3913,
+      "usage": {
+        "promptTokens": 1766,
+        "completionTokens": 294,
+        "totalTokens": 2060
+      },
+      "retrieved": [
+        {
+          "documentId": 1,
+          "title": "Invoice Adjustment and Refund Limits"
+        },
+        {
+          "documentId": 4,
+          "title": "Retention Offer Catalogue"
+        },
+        {
+          "documentId": 3,
+          "title": "Plan Cancellation and Port-Out Procedure"
+        },
+        {
+          "documentId": 5,
+          "title": "eSIM Activation Procedure"
+        },
+        {
+          "documentId": 8,
+          "title": "No Signal or Data Troubleshooting"
+        }
+      ],
+      "output": {
+        "category": "billing",
+        "summary": "The customer is requesting a refund for a 45 EUR charge that they believe is an error for a service they did not use, which occurred 3 weeks ago.",
+        "intent": "The customer wants to know if they can get a refund for a charge they believe is incorrect.",
+        "urgency": "medium",
+        "recommendedAction": "Verify the details of the charge with the customer to determine if it qualifies as a genuine billing error. Since the charge is within the 90-day refund window, if it is confirmed as an error, proceed to create an adjustment request. Note that refunds above 25 EUR require approval from a lead before being processed.",
+        "draftResponse": "Thank you for reaching out regarding the charge on your account. I understand your concern about the 45 EUR charge from 3 weeks ago for a service you did not use. To assist you further, I will need to verify the details of this charge. If it is confirmed as a genuine billing error, we can proceed with the refund process, as it falls within the 90-day window for refunds. Please allow me a moment to look into this for you.",
+        "missingInformation": [
+          "Details about the specific service charged and any relevant account information to verify the charge."
+        ],
+        "confidence": 0.85,
+        "sources": [
+          "1"
+        ]
+      }
+    },
+    {
+      "key": "cc34",
+      "group": "entitled",
+      "status": "ok",
+      "latencyMs": 4035,
+      "usage": {
+        "promptTokens": 1686,
+        "completionTokens": 288,
+        "totalTokens": 1974
+      },
+      "retrieved": [
+        {
+          "documentId": 1,
+          "title": "Invoice Adjustment and Refund Limits"
+        },
+        {
+          "documentId": 3,
+          "title": "Plan Cancellation and Port-Out Procedure"
+        },
+        {
+          "documentId": 5,
+          "title": "eSIM Activation Procedure"
+        },
+        {
+          "documentId": 10,
+          "title": "Payment Methods and Direct Debit"
+        },
+        {
+          "documentId": 2,
+          "title": "Expired Promotional Discount Policy"
+        }
+      ],
+      "output": {
+        "category": "billing",
+        "summary": "The customer is disputing a 10 EUR fee on their latest invoice (2026-1004), claiming it should not be there.",
+        "intent": "The customer wants to resolve a billing discrepancy regarding an incorrect fee on their invoice.",
+        "urgency": "medium",
+        "recommendedAction": "Pull the invoice and itemise the charges with the customer to identify the cause of the 10 EUR fee. Determine if it is a genuine error, expired promotion, usage-based charge, or misunderstanding. If it is a genuine error within the adjustment limit of 25 EUR, create an adjustment request with the invoice reference and the corrected amount. Log the outcome in the case with the invoice reference.",
+        "draftResponse": "Thank you for reaching out regarding the 10 EUR fee on your invoice (2026-1004). I would like to help you resolve this issue. To start, I will pull up the invoice and itemise the charges to understand the reason for this fee. It could be due to a genuine error, an expired promotion, or another reason. Once we identify the cause, I can assist you further in correcting it if necessary. Thank you for your patience as we work through this together.",
+        "missingInformation": [],
+        "confidence": 0.9,
+        "sources": [
+          "1"
+        ]
+      }
+    },
+    {
+      "key": "cc35",
+      "group": "entitled",
+      "status": "ok",
+      "latencyMs": 3107,
+      "usage": {
+        "promptTokens": 1692,
+        "completionTokens": 263,
+        "totalTokens": 1955
+      },
+      "retrieved": [
+        {
+          "documentId": 4,
+          "title": "Retention Offer Catalogue"
+        },
+        {
+          "documentId": 3,
+          "title": "Plan Cancellation and Port-Out Procedure"
+        },
+        {
+          "documentId": 5,
+          "title": "eSIM Activation Procedure"
+        },
+        {
+          "documentId": 6,
+          "title": "Physical SIM Activation Procedure"
+        },
+        {
+          "documentId": 10,
+          "title": "Payment Methods and Direct Debit"
+        }
+      ],
+      "output": {
+        "category": "cancellation",
+        "summary": "The customer is inquiring about retention offers after hearing about a friend's experience with receiving a credit when considering cancellation. They are interested in whether they can receive a similar offer.",
+        "intent": "The customer wants to know if they can receive a 50 EUR credit as a retention offer to avoid leaving the service.",
+        "urgency": "medium",
+        "recommendedAction": "Ask the customer why they are considering leaving to categorize their reason. Present the available retention options, including the 50 EUR one-time credit, and explain the terms and conditions. If the customer accepts, proceed to apply the offer and confirm the effective date.",
+        "draftResponse": "Thank you for reaching out! I understand you're interested in retention offers. We do have a 50 EUR one-time credit available as a retention option. Before we proceed, could you please share why you're considering leaving? This will help us find the best solution for you. If you decide to accept the offer, I can apply it and confirm the effective date for you.",
+        "missingInformation": [
+          "Reason for considering cancellation"
+        ],
+        "confidence": 0.85,
+        "sources": [
+          "4",
+          "3"
+        ]
+      }
+    },
+    {
+      "key": "cc36",
+      "group": "entitled",
+      "status": "ok",
+      "latencyMs": 4103,
+      "usage": {
+        "promptTokens": 1709,
+        "completionTokens": 240,
+        "totalTokens": 1949
+      },
+      "retrieved": [
+        {
+          "documentId": 3,
+          "title": "Plan Cancellation and Port-Out Procedure"
+        },
+        {
+          "documentId": 5,
+          "title": "eSIM Activation Procedure"
+        },
+        {
+          "documentId": 6,
+          "title": "Physical SIM Activation Procedure"
+        },
+        {
+          "documentId": 7,
+          "title": "Device Compatibility List"
+        },
+        {
+          "documentId": 8,
+          "title": "No Signal or Data Troubleshooting"
+        }
+      ],
+      "output": {
+        "category": "cancellation",
+        "summary": "The customer is requesting information on how to obtain a port-out code to transfer their number to another provider and inquires whether their line will remain active during the transfer process.",
+        "intent": "The customer wants to know how to get a port-out code and whether their line will continue to work while the transfer is in progress.",
+        "urgency": "medium",
+        "recommendedAction": "Inform the customer that they need to obtain a PAC-style code from us to initiate the port-out process. Assure them that their line will remain active until the receiving provider completes the port. Confirm their identity before providing the code.",
+        "draftResponse": "Hello! To transfer your number to another provider, you will need to obtain a PAC-style code from us. Your line will stay active until the new provider completes the porting process, so you don't need to worry about losing service during the transfer. Please confirm your identity so we can assist you further with the port-out code.",
+        "missingInformation": [],
+        "confidence": 0.9,
+        "sources": [
+          "3"
+        ]
+      }
+    },
+    {
+      "key": "cc37",
+      "group": "entitled",
+      "status": "ok",
+      "latencyMs": 3007,
+      "usage": {
+        "promptTokens": 1718,
+        "completionTokens": 263,
+        "totalTokens": 1981
+      },
+      "retrieved": [
+        {
+          "documentId": 3,
+          "title": "Plan Cancellation and Port-Out Procedure"
+        },
+        {
+          "documentId": 4,
+          "title": "Retention Offer Catalogue"
+        },
+        {
+          "documentId": 1,
+          "title": "Invoice Adjustment and Refund Limits"
+        },
+        {
+          "documentId": 2,
+          "title": "Expired Promotional Discount Policy"
+        },
+        {
+          "documentId": 5,
+          "title": "eSIM Activation Procedure"
+        }
+      ],
+      "output": {
+        "category": "cancellation",
+        "summary": "The customer wants to cancel their contract, which has 10 months remaining, and is inquiring about the early termination fee.",
+        "intent": "The customer is seeking information on the exact amount of the early termination fee for canceling their contract with 10 months left.",
+        "urgency": "medium",
+        "recommendedAction": "Inform the customer that the early termination fee is calculated as 60% of the remaining contract months, which in this case would be 60% of 10 months, capped at 90 EUR. Therefore, the fee would be 54 EUR. Confirm if they would like to proceed with the cancellation and discuss any available retention options.",
+        "draftResponse": "Thank you for reaching out. I understand that you want to cancel your contract, which has 10 months remaining. The early termination fee is calculated as 60% of the remaining months, capped at 90 EUR. In your case, that would amount to 54 EUR. Would you like to proceed with the cancellation? Additionally, I can provide you with some retention options if you're interested.",
+        "missingInformation": [],
+        "confidence": 0.95,
+        "sources": [
+          "3"
+        ]
+      }
+    },
+    {
+      "key": "cc38",
+      "group": "entitled",
+      "status": "ok",
+      "latencyMs": 4747,
+      "usage": {
+        "promptTokens": 1619,
+        "completionTokens": 246,
+        "totalTokens": 1865
+      },
+      "retrieved": [
+        {
+          "documentId": 8,
+          "title": "No Signal or Data Troubleshooting"
+        },
+        {
+          "documentId": 9,
+          "title": "Roaming Data Policy"
+        },
+        {
+          "documentId": 4,
+          "title": "Retention Offer Catalogue"
+        },
+        {
+          "documentId": 5,
+          "title": "eSIM Activation Procedure"
+        },
+        {
+          "documentId": 7,
+          "title": "Device Compatibility List"
+        }
+      ],
+      "output": {
+        "category": "technical_issue",
+        "summary": "The customer reports having no data at home while their phone works elsewhere. They are seeking troubleshooting steps to resolve the issue.",
+        "intent": "The customer wants to troubleshoot their home data connection issue.",
+        "urgency": "medium",
+        "recommendedAction": "Advise the customer to restart their device and toggle airplane mode. If the issue persists, suggest rebooting their router or modem. Additionally, check the coverage map and network status page for any known local faults that might be affecting their service.",
+        "draftResponse": "Thank you for reaching out. I understand you're experiencing issues with your data connection at home while your phone works elsewhere. To troubleshoot this, please try restarting your device and toggling airplane mode on and off. If that doesn't help, please reboot your router or modem. You can also check our coverage map and the network status page for any known local faults that might be affecting your service. If you continue to have issues, please let us know, and we can assist you further.",
+        "missingInformation": [],
+        "confidence": 0.9,
+        "sources": [
+          "8"
+        ]
+      }
+    },
+    {
+      "key": "cc39",
+      "group": "entitled",
+      "status": "ok",
+      "latencyMs": 4171,
+      "usage": {
+        "promptTokens": 1642,
+        "completionTokens": 285,
+        "totalTokens": 1927
+      },
+      "retrieved": [
+        {
+          "documentId": 2,
+          "title": "Expired Promotional Discount Policy"
+        },
+        {
+          "documentId": 11,
+          "title": "Plan Options Overview"
+        },
+        {
+          "documentId": 1,
+          "title": "Invoice Adjustment and Refund Limits"
+        },
+        {
+          "documentId": 3,
+          "title": "Plan Cancellation and Port-Out Procedure"
+        },
+        {
+          "documentId": 4,
+          "title": "Retention Offer Catalogue"
+        }
+      ],
+      "output": {
+        "category": "billing",
+        "summary": "The customer is inquiring about options after their promotional discount expired, resulting in a higher bill.",
+        "intent": "The customer wants to know what options are available now that their promotion has ended.",
+        "urgency": "medium",
+        "recommendedAction": "Explain that the promotional discount has expired and provide details about the promotion period. Offer the current plan options available, as well as any retention offers that may apply. Ensure to clarify that promotions are not extended retroactively and discuss the current billing amount.",
+        "draftResponse": "Thank you for reaching out. I understand that your promotional discount ended yesterday, which has resulted in an increase in your bill. Unfortunately, once a promotion expires, it cannot be extended retroactively. However, I can provide you with the current plan options available: the Basic plan at 8 EUR/month for 10 GB of data, the Plus plan at 12 EUR/month for 30 GB of data, and the Family plan at 20 EUR/month for 3 lines. Additionally, we have some retention offers available if you're considering leaving. Please let me know how you would like to proceed or if you have any other questions!",
+        "missingInformation": [],
+        "confidence": 0.9,
+        "sources": [
+          "2",
+          "11",
+          "4"
+        ]
+      }
+    },
+    {
+      "key": "cc40",
+      "group": "entitled",
+      "status": "ok",
+      "latencyMs": 3550,
+      "usage": {
+        "promptTokens": 1691,
+        "completionTokens": 240,
+        "totalTokens": 1931
+      },
+      "retrieved": [
+        {
+          "documentId": 5,
+          "title": "eSIM Activation Procedure"
+        },
+        {
+          "documentId": 3,
+          "title": "Plan Cancellation and Port-Out Procedure"
+        },
+        {
+          "documentId": 7,
+          "title": "Device Compatibility List"
+        },
+        {
+          "documentId": 1,
+          "title": "Invoice Adjustment and Refund Limits"
+        },
+        {
+          "documentId": 2,
+          "title": "Expired Promotional Discount Policy"
+        }
+      ],
+      "output": {
+        "category": "activation",
+        "summary": "The customer wants to move their existing number to an eSIM and is concerned about losing the number or experiencing downtime during the process.",
+        "intent": "The customer wants to know if transferring their existing number to an eSIM will result in losing the number or experiencing any service downtime.",
+        "urgency": "medium",
+        "recommendedAction": "Inform the customer that transferring their existing number to an eSIM will keep the number, but there may be a brief interruption in service during the transition. Ensure they have a compatible device for eSIM activation and guide them through the activation process if needed.",
+        "draftResponse": "Thank you for reaching out! I'm happy to assist you with moving your existing number to an eSIM. You will not lose your number during this process; however, there may be a brief interruption in service while the transfer is completed. Please ensure that your device is eSIM-capable. If you need help with the activation process, feel free to ask!",
+        "missingInformation": [],
+        "confidence": 0.9,
+        "sources": [
+          "5"
+        ]
+      }
+    },
+    {
+      "key": "cc41",
+      "group": "neutral",
+      "status": "ok",
+      "latencyMs": 2718,
+      "usage": {
+        "promptTokens": 1654,
+        "completionTokens": 221,
+        "totalTokens": 1875
+      },
+      "retrieved": [
+        {
+          "documentId": 8,
+          "title": "No Signal or Data Troubleshooting"
+        },
+        {
+          "documentId": 9,
+          "title": "Roaming Data Policy"
+        },
+        {
+          "documentId": 11,
+          "title": "Plan Options Overview"
+        },
+        {
+          "documentId": 3,
+          "title": "Plan Cancellation and Port-Out Procedure"
+        },
+        {
+          "documentId": 5,
+          "title": "eSIM Activation Procedure"
+        }
+      ],
+      "output": {
+        "category": "general_information",
+        "summary": "The customer is inquiring about the plans that offer the most data and their associated costs.",
+        "intent": "The customer wants to know which plan provides the most data and the pricing for those plans.",
+        "urgency": "low",
+        "recommendedAction": "Provide the customer with details about the current plan options, specifically highlighting the plans with the most data and their costs.",
+        "draftResponse": "Thank you for reaching out! Here are our current plan options: \n- Basic: 8 EUR/month, 10 GB data. \n- Plus: 12 EUR/month, 30 GB data. \n- Family: 20 EUR/month for 3 lines. \nThe Plus plan offers the most data at 30 GB for 12 EUR per month. If you have any further questions or need assistance with anything else, feel free to ask!",
+        "missingInformation": [],
+        "confidence": 0.9,
+        "sources": [
+          "11"
+        ]
+      }
+    },
+    {
+      "key": "cc42",
+      "group": "neutral",
+      "status": "ok",
+      "latencyMs": 2645,
+      "usage": {
+        "promptTokens": 1589,
+        "completionTokens": 201,
+        "totalTokens": 1790
+      },
+      "retrieved": [
+        {
+          "documentId": 10,
+          "title": "Payment Methods and Direct Debit"
+        },
+        {
+          "documentId": 4,
+          "title": "Retention Offer Catalogue"
+        },
+        {
+          "documentId": 6,
+          "title": "Physical SIM Activation Procedure"
+        },
+        {
+          "documentId": 1,
+          "title": "Invoice Adjustment and Refund Limits"
+        },
+        {
+          "documentId": 2,
+          "title": "Expired Promotional Discount Policy"
+        }
+      ],
+      "output": {
+        "category": "general_information",
+        "summary": "The customer is inquiring about the accepted payment methods for their account.",
+        "intent": "The customer wants to know which payment methods are accepted.",
+        "urgency": "low",
+        "recommendedAction": "Provide the customer with a list of accepted payment methods, which include credit card, SEPA direct debit, PayPal, and invoice. Ensure to mention that direct debit runs on the 5th of each month.",
+        "draftResponse": "Thank you for reaching out! We accept several payment methods for your convenience, including credit card, SEPA direct debit, PayPal, and invoice. Please note that if you choose direct debit, it will run on the 5th of each month. If you have any further questions or need assistance, feel free to ask!",
+        "missingInformation": [],
+        "confidence": 1,
+        "sources": [
+          "10"
+        ]
+      }
+    },
+    {
+      "key": "cc43",
+      "group": "neutral",
+      "status": "ok",
+      "latencyMs": 2248,
+      "usage": {
+        "promptTokens": 1629,
+        "completionTokens": 154,
+        "totalTokens": 1783
+      },
+      "retrieved": [
+        {
+          "documentId": 10,
+          "title": "Payment Methods and Direct Debit"
+        },
+        {
+          "documentId": 3,
+          "title": "Plan Cancellation and Port-Out Procedure"
+        },
+        {
+          "documentId": 4,
+          "title": "Retention Offer Catalogue"
+        },
+        {
+          "documentId": 11,
+          "title": "Plan Options Overview"
+        },
+        {
+          "documentId": 1,
+          "title": "Invoice Adjustment and Refund Limits"
+        }
+      ],
+      "output": {
+        "category": "general_information",
+        "summary": "The customer is inquiring about the specific day of the month when the direct debit payment is collected.",
+        "intent": "The customer wants to know on which day of the month the direct debit is taken.",
+        "urgency": "low",
+        "recommendedAction": "Inform the customer that the direct debit runs on the 5th of each month.",
+        "draftResponse": "Thank you for your inquiry! The direct debit payment is collected on the 5th of each month. If you have any further questions, feel free to ask!",
+        "missingInformation": [],
+        "confidence": 1,
+        "sources": [
+          "10"
+        ]
+      }
+    },
+    {
+      "key": "cc44",
+      "group": "neutral",
+      "status": "ok",
+      "latencyMs": 3761,
+      "usage": {
+        "promptTokens": 1580,
+        "completionTokens": 246,
+        "totalTokens": 1826
+      },
+      "retrieved": [
+        {
+          "documentId": 9,
+          "title": "Roaming Data Policy"
+        },
+        {
+          "documentId": 8,
+          "title": "No Signal or Data Troubleshooting"
+        },
+        {
+          "documentId": 1,
+          "title": "Invoice Adjustment and Refund Limits"
+        },
+        {
+          "documentId": 12,
+          "title": "Coverage and Network Status Page"
+        },
+        {
+          "documentId": 4,
+          "title": "Retention Offer Catalogue"
+        }
+      ],
+      "output": {
+        "category": "general_information",
+        "summary": "The customer is inquiring about data usage while roaming in Spain, specifically whether their data works there and if there are any limits.",
+        "intent": "The customer wants to know if their data plan is applicable in Spain and if there are any data limits while roaming.",
+        "urgency": "low",
+        "recommendedAction": "Inform the customer that while roaming in Spain, which is within the EU, they can use their data under the Roam Like Home policy. They have a fair-use limit of 25 GB included with their plan. If they exceed this limit, additional charges may apply. Encourage them to check their plan details for any specific terms related to roaming.",
+        "draftResponse": "Thank you for reaching out! Yes, your data will work in Spain as it falls under the EU roaming regulations. You have a fair-use limit of 25 GB included with your plan while roaming in EU countries. If you have any further questions or need assistance with your plan, feel free to ask!",
+        "missingInformation": [],
+        "confidence": 0.9,
+        "sources": [
+          "9"
+        ]
+      }
+    },
+    {
+      "key": "cc45",
+      "group": "neutral",
+      "status": "ok",
+      "latencyMs": 2750,
+      "usage": {
+        "promptTokens": 1604,
+        "completionTokens": 216,
+        "totalTokens": 1820
+      },
+      "retrieved": [
+        {
+          "documentId": 5,
+          "title": "eSIM Activation Procedure"
+        },
+        {
+          "documentId": 7,
+          "title": "Device Compatibility List"
+        },
+        {
+          "documentId": 12,
+          "title": "Coverage and Network Status Page"
+        },
+        {
+          "documentId": 6,
+          "title": "Physical SIM Activation Procedure"
+        },
+        {
+          "documentId": 8,
+          "title": "No Signal or Data Troubleshooting"
+        }
+      ],
+      "output": {
+        "category": "general_information",
+        "summary": "The customer is inquiring whether their iPhone 12 supports eSIM on the network.",
+        "intent": "The customer wants to know if their iPhone 12 is compatible with eSIM activation on the network.",
+        "urgency": "low",
+        "recommendedAction": "Inform the customer that the iPhone 12 is not listed as a supported device for eSIM activation on the network. Recommend using a physical SIM instead, as eSIM support is available only for iPhone models 13 and newer.",
+        "draftResponse": "Thank you for reaching out! Unfortunately, the iPhone 12 is not compatible with eSIM on our network. eSIM support is available only for iPhone models 13 and newer. I recommend using a physical SIM for your device. If you have any other questions or need assistance, feel free to ask!",
+        "missingInformation": [],
+        "confidence": 0.9,
+        "sources": [
+          "7"
+        ]
+      }
+    },
+    {
+      "key": "cc46",
+      "group": "neutral",
+      "status": "ok",
+      "latencyMs": 3061,
+      "usage": {
+        "promptTokens": 1686,
+        "completionTokens": 198,
+        "totalTokens": 1884
+      },
+      "retrieved": [
+        {
+          "documentId": 7,
+          "title": "Device Compatibility List"
+        },
+        {
+          "documentId": 5,
+          "title": "eSIM Activation Procedure"
+        },
+        {
+          "documentId": 1,
+          "title": "Invoice Adjustment and Refund Limits"
+        },
+        {
+          "documentId": 2,
+          "title": "Expired Promotional Discount Policy"
+        },
+        {
+          "documentId": 3,
+          "title": "Plan Cancellation and Port-Out Procedure"
+        }
+      ],
+      "output": {
+        "category": "general_information",
+        "summary": "The customer is inquiring whether the iPhone 14 is supported for eSIM and VoLTE services.",
+        "intent": "The customer wants to confirm if the iPhone 14 can use eSIM and VoLTE features.",
+        "urgency": "low",
+        "recommendedAction": "Inform the customer that the iPhone 14 is supported for eSIM and VoLTE as it is a recent model. Encourage them to ensure their device is unlocked for eSIM activation.",
+        "draftResponse": "Thank you for your inquiry! Yes, the iPhone 14 is supported for both eSIM and VoLTE services. Please ensure that your device is unlocked to take advantage of these features. If you have any further questions or need assistance with activation, feel free to ask!",
+        "missingInformation": [],
+        "confidence": 1,
+        "sources": [
+          "7"
+        ]
+      }
+    },
+    {
+      "key": "cc47",
+      "group": "neutral",
+      "status": "ok",
+      "latencyMs": 3576,
+      "usage": {
+        "promptTokens": 1671,
+        "completionTokens": 222,
+        "totalTokens": 1893
+      },
+      "retrieved": [
+        {
+          "documentId": 7,
+          "title": "Device Compatibility List"
+        },
+        {
+          "documentId": 5,
+          "title": "eSIM Activation Procedure"
+        },
+        {
+          "documentId": 1,
+          "title": "Invoice Adjustment and Refund Limits"
+        },
+        {
+          "documentId": 4,
+          "title": "Retention Offer Catalogue"
+        },
+        {
+          "documentId": 8,
+          "title": "No Signal or Data Troubleshooting"
+        }
+      ],
+      "output": {
+        "category": "general_information",
+        "summary": "The customer is inquiring whether they can use an eSIM in a wifi-only tablet.",
+        "intent": "The customer wants to know if an eSIM can be installed in their wifi-only tablet.",
+        "urgency": "low",
+        "recommendedAction": "Inform the customer that eSIMs are not supported on wifi-only tablets. Suggest using a physical SIM instead, as eSIM and VoLTE are only supported on specific unlocked devices listed in the compatibility guide.",
+        "draftResponse": "Thank you for your inquiry! Unfortunately, eSIMs are not supported on wifi-only tablets. They are only compatible with certain unlocked devices, such as recent iPhone models, Google Pixel phones, and specific Samsung Galaxy devices. If you need cellular connectivity for your tablet, I recommend using a physical SIM instead. If you have any other questions or need further assistance, feel free to ask!",
+        "missingInformation": [],
+        "confidence": 0.9,
+        "sources": [
+          "7"
+        ]
+      }
+    },
+    {
+      "key": "cc48",
+      "group": "neutral",
+      "status": "ok",
+      "latencyMs": 3340,
+      "usage": {
+        "promptTokens": 1660,
+        "completionTokens": 204,
+        "totalTokens": 1864
+      },
+      "retrieved": [
+        {
+          "documentId": 12,
+          "title": "Coverage and Network Status Page"
+        },
+        {
+          "documentId": 8,
+          "title": "No Signal or Data Troubleshooting"
+        },
+        {
+          "documentId": 6,
+          "title": "Physical SIM Activation Procedure"
+        },
+        {
+          "documentId": 5,
+          "title": "eSIM Activation Procedure"
+        },
+        {
+          "documentId": 1,
+          "title": "Invoice Adjustment and Refund Limits"
+        }
+      ],
+      "output": {
+        "category": "general_information",
+        "summary": "The customer is inquiring about a page to check for network problems in their area.",
+        "intent": "The customer wants to know where they can find information about network status and potential issues in their area.",
+        "urgency": "low",
+        "recommendedAction": "Guide the customer to the network status page where they can check live network status and any planned maintenance. If there are confirmed local faults, inform them that the network team will be notified.",
+        "draftResponse": "Thank you for reaching out! You can check the network status and any potential issues in your area on our network status page. This page provides live updates on network conditions and any planned maintenance. If you notice any specific issues, please let us know, and we can report them to our network team for further assistance.",
+        "missingInformation": [],
+        "confidence": 0.9,
+        "sources": [
+          "12"
+        ]
+      }
+    },
+    {
+      "key": "cc49",
+      "group": "neutral",
+      "status": "ok",
+      "latencyMs": 2843,
+      "usage": {
+        "promptTokens": 1710,
+        "completionTokens": 187,
+        "totalTokens": 1897
+      },
+      "retrieved": [
+        {
+          "documentId": 6,
+          "title": "Physical SIM Activation Procedure"
+        },
+        {
+          "documentId": 5,
+          "title": "eSIM Activation Procedure"
+        },
+        {
+          "documentId": 3,
+          "title": "Plan Cancellation and Port-Out Procedure"
+        },
+        {
+          "documentId": 10,
+          "title": "Payment Methods and Direct Debit"
+        },
+        {
+          "documentId": 1,
+          "title": "Invoice Adjustment and Refund Limits"
+        }
+      ],
+      "output": {
+        "category": "activation",
+        "summary": "The customer is inquiring about the time it takes for their SIM to become active after activation.",
+        "intent": "The customer wants to know how long it will take for their SIM to work after they have activated it.",
+        "urgency": "medium",
+        "recommendedAction": "Inform the customer that after activation, the signal usually appears within 30 minutes. If it takes longer than 24 hours, they should reach out for further assistance.",
+        "draftResponse": "Thank you for reaching out! After you activate your SIM, it typically takes about 30 minutes for the signal to appear. If you don't see any service after 24 hours, please let us know, and we can assist you further.",
+        "missingInformation": [],
+        "confidence": 0.9,
+        "sources": [
+          "6"
+        ]
+      }
+    },
+    {
+      "key": "cc50",
+      "group": "neutral",
+      "status": "ok",
+      "latencyMs": 2868,
+      "usage": {
+        "promptTokens": 1643,
+        "completionTokens": 167,
+        "totalTokens": 1810
+      },
+      "retrieved": [
+        {
+          "documentId": 11,
+          "title": "Plan Options Overview"
+        },
+        {
+          "documentId": 3,
+          "title": "Plan Cancellation and Port-Out Procedure"
+        },
+        {
+          "documentId": 9,
+          "title": "Roaming Data Policy"
+        },
+        {
+          "documentId": 4,
+          "title": "Retention Offer Catalogue"
+        },
+        {
+          "documentId": 5,
+          "title": "eSIM Activation Procedure"
+        }
+      ],
+      "output": {
+        "category": "general_information",
+        "summary": "The customer is inquiring about the cost of the Family plan and the number of lines included in it.",
+        "intent": "The customer wants to know the price of the Family plan and how many lines it supports.",
+        "urgency": "low",
+        "recommendedAction": "Provide the customer with details about the Family plan, including its cost and the number of lines included.",
+        "draftResponse": "Thank you for your inquiry about our Family plan! The Family plan costs 20 EUR per month and includes 3 lines. If you have any more questions or need further assistance, feel free to ask!",
+        "missingInformation": [],
+        "confidence": 1,
+        "sources": [
+          "11"
+        ]
+      }
+    },
+    {
+      "key": "cc51",
+      "group": "neutral",
+      "status": "ok",
+      "latencyMs": 2495,
+      "usage": {
+        "promptTokens": 1648,
+        "completionTokens": 153,
+        "totalTokens": 1801
+      },
+      "retrieved": [
+        {
+          "documentId": 11,
+          "title": "Plan Options Overview"
+        },
+        {
+          "documentId": 8,
+          "title": "No Signal or Data Troubleshooting"
+        },
+        {
+          "documentId": 9,
+          "title": "Roaming Data Policy"
+        },
+        {
+          "documentId": 3,
+          "title": "Plan Cancellation and Port-Out Procedure"
+        },
+        {
+          "documentId": 5,
+          "title": "eSIM Activation Procedure"
+        }
+      ],
+      "output": {
+        "category": "general_information",
+        "summary": "The customer is inquiring about the data allowance on the Basic plan.",
+        "intent": "The customer wants to know how much data is included in the Basic plan.",
+        "urgency": "low",
+        "recommendedAction": "Provide the customer with the details of the Basic plan, specifically that it includes 10 GB of data per month.",
+        "draftResponse": "Thank you for reaching out! The Basic plan includes 10 GB of data per month. If you have any more questions or need further assistance, feel free to ask!",
+        "missingInformation": [],
+        "confidence": 1,
+        "sources": [
+          "11"
+        ]
+      }
+    },
+    {
+      "key": "cc52",
+      "group": "neutral",
+      "status": "ok",
+      "latencyMs": 3244,
+      "usage": {
+        "promptTokens": 1560,
+        "completionTokens": 169,
+        "totalTokens": 1729
+      },
+      "retrieved": [
+        {
+          "documentId": 9,
+          "title": "Roaming Data Policy"
+        },
+        {
+          "documentId": 4,
+          "title": "Retention Offer Catalogue"
+        },
+        {
+          "documentId": 11,
+          "title": "Plan Options Overview"
+        },
+        {
+          "documentId": 1,
+          "title": "Invoice Adjustment and Refund Limits"
+        },
+        {
+          "documentId": 2,
+          "title": "Expired Promotional Discount Policy"
+        }
+      ],
+      "output": {
+        "category": "general_information",
+        "summary": "The customer is inquiring about the price of the roaming add-on for countries outside the EU.",
+        "intent": "The customer wants to know the cost of the roaming add-on for non-EU destinations.",
+        "urgency": "low",
+        "recommendedAction": "Provide the customer with the information that the roaming add-on for non-EU destinations is priced at 5 EUR per day.",
+        "draftResponse": "Thank you for reaching out! The roaming add-on for countries outside the EU is priced at 5 EUR per day. If you have any more questions or need further assistance, feel free to ask!",
+        "missingInformation": [],
+        "confidence": 0.9,
+        "sources": [
+          "9"
+        ]
+      }
+    },
+    {
+      "key": "cc53",
+      "group": "neutral",
+      "status": "ok",
+      "latencyMs": 3569,
+      "usage": {
+        "promptTokens": 1710,
+        "completionTokens": 236,
+        "totalTokens": 1946
+      },
+      "retrieved": [
+        {
+          "documentId": 10,
+          "title": "Payment Methods and Direct Debit"
+        },
+        {
+          "documentId": 3,
+          "title": "Plan Cancellation and Port-Out Procedure"
+        },
+        {
+          "documentId": 1,
+          "title": "Invoice Adjustment and Refund Limits"
+        },
+        {
+          "documentId": 5,
+          "title": "eSIM Activation Procedure"
+        },
+        {
+          "documentId": 6,
+          "title": "Physical SIM Activation Procedure"
+        }
+      ],
+      "output": {
+        "category": "billing",
+        "summary": "The customer is inquiring about the grace period for late payments and what happens if they pay late.",
+        "intent": "The customer wants to know how many days they have before any consequences occur due to late payment.",
+        "urgency": "medium",
+        "recommendedAction": "Inform the customer that there is a 14-day grace period for late payments, during which no immediate action is taken. After this period, if payment is not made, the service will be blocked after 30 days of non-payment. Encourage them to make payments on time to avoid service interruptions.",
+        "draftResponse": "Thank you for reaching out! If you happen to pay late, you have a 14-day grace period before any changes occur to your service. If payment is not received within that time, your service will be blocked after 30 days of non-payment. We recommend making payments on time to ensure uninterrupted service. If you have any further questions, feel free to ask!",
+        "missingInformation": [],
+        "confidence": 1,
+        "sources": [
+          "10"
+        ]
+      }
+    },
+    {
+      "key": "cc54",
+      "group": "neutral",
+      "status": "ok",
+      "latencyMs": 3908,
+      "usage": {
+        "promptTokens": 1656,
+        "completionTokens": 248,
+        "totalTokens": 1904
+      },
+      "retrieved": [
+        {
+          "documentId": 3,
+          "title": "Plan Cancellation and Port-Out Procedure"
+        },
+        {
+          "documentId": 11,
+          "title": "Plan Options Overview"
+        },
+        {
+          "documentId": 6,
+          "title": "Physical SIM Activation Procedure"
+        },
+        {
+          "documentId": 2,
+          "title": "Expired Promotional Discount Policy"
+        },
+        {
+          "documentId": 5,
+          "title": "eSIM Activation Procedure"
+        }
+      ],
+      "output": {
+        "category": "cancellation",
+        "summary": "The customer is inquiring about the notice period required to cancel their plan.",
+        "intent": "The customer wants to know how long the notice period is for cancelling their plan.",
+        "urgency": "medium",
+        "recommendedAction": "Inform the customer that the notice period for cancelling their plan is 30 days. Additionally, explain that if they decide to cancel, they may incur an early termination fee of 60% of the remaining contract months, capped at 90 EUR. Offer to discuss any current retention options that may be available to them before proceeding with the cancellation.",
+        "draftResponse": "Thank you for reaching out! The notice period for cancelling your plan is 30 days. Please note that if you choose to cancel, there may be an early termination fee of 60% of the remaining contract months, capped at 90 EUR. If you're considering cancellation, I would be happy to discuss any current retention options that might be available to you. Let me know how you would like to proceed!",
+        "missingInformation": [],
+        "confidence": 0.95,
+        "sources": [
+          "3"
+        ]
+      }
+    },
+    {
+      "key": "cc55",
+      "group": "neutral",
+      "status": "ok",
+      "latencyMs": 4218,
+      "usage": {
+        "promptTokens": 1682,
+        "completionTokens": 203,
+        "totalTokens": 1885
+      },
+      "retrieved": [
+        {
+          "documentId": 7,
+          "title": "Device Compatibility List"
+        },
+        {
+          "documentId": 5,
+          "title": "eSIM Activation Procedure"
+        },
+        {
+          "documentId": 1,
+          "title": "Invoice Adjustment and Refund Limits"
+        },
+        {
+          "documentId": 2,
+          "title": "Expired Promotional Discount Policy"
+        },
+        {
+          "documentId": 3,
+          "title": "Plan Cancellation and Port-Out Procedure"
+        }
+      ],
+      "output": {
+        "category": "general_information",
+        "summary": "The customer is inquiring whether the Samsung Galaxy S series supports eSIM functionality with the service provider.",
+        "intent": "The customer wants to know if their Samsung Galaxy S series device is compatible with eSIM.",
+        "urgency": "low",
+        "recommendedAction": "Confirm that the Samsung Galaxy S series is supported for eSIM activation, provided the device is unlocked. If the customer needs further assistance with eSIM activation, guide them through the activation procedure outlined in the eSIM Activation Procedure.",
+        "draftResponse": "Thank you for your inquiry! Yes, the Samsung Galaxy S series does support eSIM functionality with us, as long as the device is unlocked. If you need assistance with activating your eSIM, please let me know, and I can guide you through the process.",
+        "missingInformation": [],
+        "confidence": 0.95,
+        "sources": [
+          "7"
+        ]
+      }
+    },
+    {
+      "key": "cc56",
+      "group": "neutral",
+      "status": "ok",
+      "latencyMs": 3108,
+      "usage": {
+        "promptTokens": 1596,
+        "completionTokens": 174,
+        "totalTokens": 1770
+      },
+      "retrieved": [
+        {
+          "documentId": 5,
+          "title": "eSIM Activation Procedure"
+        },
+        {
+          "documentId": 7,
+          "title": "Device Compatibility List"
+        },
+        {
+          "documentId": 10,
+          "title": "Payment Methods and Direct Debit"
+        },
+        {
+          "documentId": 1,
+          "title": "Invoice Adjustment and Refund Limits"
+        },
+        {
+          "documentId": 2,
+          "title": "Expired Promotional Discount Policy"
+        }
+      ],
+      "output": {
+        "category": "general_information",
+        "summary": "The customer inquires about using an eSIM with a carrier-locked phone.",
+        "intent": "The customer wants to know if they can use an eSIM on their carrier-locked phone.",
+        "urgency": "low",
+        "recommendedAction": "Inform the customer that eSIMs are not supported on carrier-locked phones and recommend using a physical SIM instead.",
+        "draftResponse": "Thank you for reaching out! Unfortunately, eSIMs are not supported on carrier-locked phones. We recommend using a physical SIM card for your device. If you have any further questions or need assistance with anything else, feel free to ask!",
+        "missingInformation": [],
+        "confidence": 0.9,
+        "sources": [
+          "7"
+        ]
+      }
+    },
+    {
+      "key": "cc57",
+      "group": "neutral",
+      "status": "ok",
+      "latencyMs": 3849,
+      "usage": {
+        "promptTokens": 1636,
+        "completionTokens": 199,
+        "totalTokens": 1835
+      },
+      "retrieved": [
+        {
+          "documentId": 3,
+          "title": "Plan Cancellation and Port-Out Procedure"
+        },
+        {
+          "documentId": 11,
+          "title": "Plan Options Overview"
+        },
+        {
+          "documentId": 1,
+          "title": "Invoice Adjustment and Refund Limits"
+        },
+        {
+          "documentId": 6,
+          "title": "Physical SIM Activation Procedure"
+        },
+        {
+          "documentId": 10,
+          "title": "Payment Methods and Direct Debit"
+        }
+      ],
+      "output": {
+        "category": "general_information",
+        "summary": "The customer is inquiring about when a plan change will take effect on their invoice.",
+        "intent": "The customer wants to know the timing of when a plan change will be reflected in their invoice.",
+        "urgency": "low",
+        "recommendedAction": "Inform the customer that upgrading or downgrading their plan is free of charge and that the new price will be effective from the next billing period. If they have any specific concerns or need further assistance, encourage them to reach out.",
+        "draftResponse": "Thank you for your inquiry! When you change your plan, whether upgrading or downgrading, the new price will take effect from the next billing period. If you have any further questions or need assistance with your plan, please feel free to ask!",
+        "missingInformation": [],
+        "confidence": 0.9,
+        "sources": [
+          "11"
+        ]
+      }
+    },
+    {
+      "key": "cc58",
+      "group": "neutral",
+      "status": "ok",
+      "latencyMs": 3986,
+      "usage": {
+        "promptTokens": 1631,
+        "completionTokens": 192,
+        "totalTokens": 1823
+      },
+      "retrieved": [
+        {
+          "documentId": 9,
+          "title": "Roaming Data Policy"
+        },
+        {
+          "documentId": 1,
+          "title": "Invoice Adjustment and Refund Limits"
+        },
+        {
+          "documentId": 8,
+          "title": "No Signal or Data Troubleshooting"
+        },
+        {
+          "documentId": 5,
+          "title": "eSIM Activation Procedure"
+        },
+        {
+          "documentId": 11,
+          "title": "Plan Options Overview"
+        }
+      ],
+      "output": {
+        "category": "general_information",
+        "summary": "The customer is inquiring about the data limits applicable when using their plan in the EU, specifically regarding the fair use policy.",
+        "intent": "The customer wants to know how much data they can use in the EU before any limits apply.",
+        "urgency": "low",
+        "recommendedAction": "Inform the customer that within the EU, they can use up to 25 GB of data under the Roam Like Home policy before any limits apply.",
+        "draftResponse": "Thank you for reaching out! When using your plan in the EU, you can enjoy up to 25 GB of data under the Roam Like Home policy before any limits apply. If you have any further questions or need assistance, feel free to ask!",
+        "missingInformation": [],
+        "confidence": 0.9,
+        "sources": [
+          "9"
+        ]
+      }
+    },
+    {
+      "key": "cc59",
+      "group": "neutral",
+      "status": "ok",
+      "latencyMs": 2849,
+      "usage": {
+        "promptTokens": 1650,
+        "completionTokens": 169,
+        "totalTokens": 1819
+      },
+      "retrieved": [
+        {
+          "documentId": 11,
+          "title": "Plan Options Overview"
+        },
+        {
+          "documentId": 3,
+          "title": "Plan Cancellation and Port-Out Procedure"
+        },
+        {
+          "documentId": 9,
+          "title": "Roaming Data Policy"
+        },
+        {
+          "documentId": 5,
+          "title": "eSIM Activation Procedure"
+        },
+        {
+          "documentId": 6,
+          "title": "Physical SIM Activation Procedure"
+        }
+      ],
+      "output": {
+        "category": "general_information",
+        "summary": "The customer is inquiring about the details of the Plus plan, specifically what is included in it.",
+        "intent": "The customer wants to know the features and benefits included in the Plus plan.",
+        "urgency": "low",
+        "recommendedAction": "Provide the customer with a detailed overview of the Plus plan, including its monthly cost and data allowance.",
+        "draftResponse": "Thank you for your inquiry about the Plus plan! The Plus plan is priced at 12 EUR per month and includes 30 GB of data. If you have any further questions or need assistance with anything else, feel free to ask!",
+        "missingInformation": [],
+        "confidence": 0.95,
+        "sources": [
+          "11"
+        ]
+      }
+    },
+    {
+      "key": "cc60",
+      "group": "neutral",
+      "status": "ok",
+      "latencyMs": 7059,
+      "usage": {
+        "promptTokens": 1678,
+        "completionTokens": 235,
+        "totalTokens": 1913
+      },
+      "retrieved": [
+        {
+          "documentId": 5,
+          "title": "eSIM Activation Procedure"
+        },
+        {
+          "documentId": 3,
+          "title": "Plan Cancellation and Port-Out Procedure"
+        },
+        {
+          "documentId": 7,
+          "title": "Device Compatibility List"
+        },
+        {
+          "documentId": 10,
+          "title": "Payment Methods and Direct Debit"
+        },
+        {
+          "documentId": 1,
+          "title": "Invoice Adjustment and Refund Limits"
+        }
+      ],
+      "output": {
+        "category": "activation",
+        "summary": "The customer is inquiring about the reissuance of a QR code for their eSIM profile, which has failed. They want to know how many times the QR code can be reissued.",
+        "intent": "The customer wants to know the maximum number of times the QR code for their eSIM can be reissued after a failure.",
+        "urgency": "medium",
+        "recommendedAction": "Inform the customer that the QR code for their eSIM can be reissued at most two times. If they have already reached this limit, further assistance may be required, and they should provide the error code and device model for escalation.",
+        "draftResponse": "Thank you for reaching out! I understand that your eSIM profile has failed. You can have the QR code reissued a maximum of two times. If you have already used this option, please let me know the error code and the model of your device so I can assist you further.",
+        "missingInformation": [],
+        "confidence": 0.9,
+        "sources": [
+          "5"
+        ]
+      }
+    }
+  ]
+}
