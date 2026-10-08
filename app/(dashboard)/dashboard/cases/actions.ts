@@ -142,6 +142,8 @@ export const runCaseAnalysis = validatedActionWithUser(
           reason: blockedReason(error),
           latencyMs: Date.now() - startedAt,
           retrievedCount: retrievedDocs.length,
+          persistedForReview:
+            error instanceof AiSafetyManualReviewError && Boolean(error.analysis),
           fragments:
             error instanceof AiSafetyViolationError ||
             error instanceof AiSafetyManualReviewError
@@ -161,9 +163,30 @@ export const runCaseAnalysis = validatedActionWithUser(
         console.warn(
           `[safety] case ${caseRow.id} held for manual review: ${error.fragments.join(', ')}`
         );
+        // The held analysis is schema-valid and grounded: keep it so the human
+        // can see it, but flagged, and never as a validated result.
+        if (error.analysis) {
+          const held = error.analysis;
+          await db.insert(caseAnalyses).values({
+            caseId: caseRow.id,
+            category: held.category,
+            summary: held.summary,
+            intent: held.intent,
+            urgency: held.urgency,
+            recommendedAction: held.recommendedAction,
+            draftResponse: held.draftResponse,
+            missingInformation: held.missingInformation,
+            sources: held.sources,
+            confidence: held.confidence,
+            model: held.model,
+            safetyStatus: 'manual_review',
+            safetyFragments: error.fragments
+          });
+          revalidatePath(`/dashboard/cases/${caseRow.id}`);
+        }
         return {
           manualReview:
-            'The AI analysis needs human review before it can be used and was not saved as validated.'
+            'The AI analysis was held for human review. It is shown below with the flagged wording; it has not passed the safety check.'
         };
       }
       return { error: analysisErrorMessage(error) };

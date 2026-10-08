@@ -101,7 +101,7 @@ test.describe.serial('Phase 8 E2E - ambiguous mention review state', () => {
     page = await context.newPage();
   });
 
-  test('ambiguous mention surfaces a review banner and is never persisted as validated', async () => {
+  test('ambiguous mention is saved as held, shown flagged, and needs acknowledgement before copy', async () => {
     await signIn(page);
     await page.goto(`/dashboard/cases/${SAFETY_CASE}`);
     await expect(
@@ -110,14 +110,26 @@ test.describe.serial('Phase 8 E2E - ambiguous mention review state', () => {
     const before = await countAnalyses(SAFETY_CASE);
     await page.getByRole('button', { name: 'Run analysis' }).click();
     await expect(
-      page.getByText(
-        'The AI analysis needs human review before it can be used and was not saved as validated.'
-      )
+      page.getByText(/held for human review. It is shown below/)
     ).toBeVisible({ timeout: 45_000 });
     await expect(page.getByText('Analysis complete')).toHaveCount(0);
+
+    // Amended Phase 8 contract: the held analysis IS stored, but only ever as
+    // 'manual_review' — never as a validated ('safe') analysis.
     await expect
       .poll(async () => countAnalyses(SAFETY_CASE), { timeout: 5_000 })
-      .toBe(before);
+      .toBe(before + 1);
+    const rows = await sql`select safety_status, safety_fragments from case_analyses where case_id=${SAFETY_CASE}`;
+    expect(rows.map((r) => r.safety_status)).toEqual(['manual_review']);
+    expect(rows[0].safety_fragments).toContain('lifetime discount');
+
+    await expect(page.getByText('has not passed the safety check').first()).toBeVisible();
+    await expect(page.locator('mark', { hasText: 'lifetime discount' })).toBeVisible();
+
+    const copy = page.getByRole('button', { name: 'Copy response' });
+    await expect(copy).toBeDisabled();
+    await page.getByLabel('I reviewed the flagged wording').check();
+    await expect(copy).toBeEnabled();
     await page.screenshot({
       path: 'e2e/screenshots/phase8-manual-review.png',
       fullPage: true

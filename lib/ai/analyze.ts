@@ -67,6 +67,22 @@ export async function analyzeCase(
     draftResponse: parsed.draftResponse
   } satisfies TextFields;
 
+  const result: ValidatedAnalysis = {
+    category: parsed.category,
+    summary: parsed.summary,
+    intent: parsed.intent,
+    urgency: parsed.urgency,
+    recommendedAction: parsed.recommendedAction,
+    draftResponse: parsed.draftResponse,
+    missingInformation: parsed.missingInformation,
+    confidence: parsed.confidence,
+    sources,
+    model: provider.model,
+    providerId: provider.id,
+    usage: provider.lastUsage,
+    retrievedDocumentCount: input.retrievedDocs.length
+  };
+
   const safety = assessCase(textFields, RUNTIME_SAFETY_FRAGMENTS);
 
   if (safety.outcome === 'VIOLATION') {
@@ -88,23 +104,10 @@ export async function analyzeCase(
   if (safety.outcome === 'MANUAL_REVIEW' || reviewFragments.length > 0) {
     throw new AiSafetyManualReviewError(
       'AI output requires human review before it can be accepted',
-      [...new Set(reviewFragments)]
+      [...new Set(reviewFragments)],
+      result
     );
   }
 
-  return {
-    category: parsed.category,
-    summary: parsed.summary,
-    intent: parsed.intent,
-    urgency: parsed.urgency,
-    recommendedAction: parsed.recommendedAction,
-    draftResponse: parsed.draftResponse,
-    missingInformation: parsed.missingInformation,
-    confidence: parsed.confidence,
-    sources,
-    model: provider.model,
-    providerId: provider.id,
-    usage: provider.lastUsage,
-    retrievedDocumentCount: input.retrievedDocs.length
-  };
+  return result;
 }

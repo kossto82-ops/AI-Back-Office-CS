@@ -350,6 +350,10 @@ const caseContent = {
             'expected AiSafetyManualReviewError'
           );
           assert.ok(error.fragments.includes('lifetime discount'));
+          // The held analysis travels with the error so the UI can show it
+          // flagged; it is never returned as a validated result.
+          assert.ok(error.analysis, 'held analysis must be attached');
+          assert.ok(error.analysis.draftResponse.includes('lifetime discount'));
           return true;
         }
       );

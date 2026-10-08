@@ -64,6 +64,8 @@ type WorkspaceAnalysis = {
   sources: WorkspaceSource[];
   confidence: number | null;
   model: string | null;
+  safetyStatus: string;
+  safetyFragments: string[];
   createdAt: string | null;
 } | null;
 
@@ -173,10 +175,17 @@ export function CaseWorkspace({
   const draftHiddenRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (runState.success) {
+    if (runState.success || runState.manualReview) {
       router.refresh();
     }
-  }, [runState.success]);
+  }, [runState.success, runState.manualReview]);
+
+  // A held analysis must be acknowledged before its draft can be copied.
+  const [reviewAcknowledged, setReviewAcknowledged] = useState(false);
+  const isHeld = analysis?.safetyStatus === 'manual_review';
+  useEffect(() => {
+    setReviewAcknowledged(false);
+  }, [analysis?.createdAt]);
 
   // Content-free usage signal (no text): the workspace was opened.
   const openedRecordedRef = useRef(false);
@@ -241,7 +250,7 @@ export function CaseWorkspace({
   }
 
   async function handleCopy() {
-    if (!draft) return;
+    if (!draft || (isHeld && !reviewAcknowledged)) return;
     try {
       await navigator.clipboard.writeText(draft);
       const data = new FormData();
@@ -546,6 +555,35 @@ export function CaseWorkspace({
           </CardDescription>
         </CardHeader>
         <CardContent>
+          {isHeld && analysis ? (
+            <div
+              role="alert"
+              className="mb-4 rounded-md border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900"
+            >
+              <p className="font-medium">
+                Held for human review — this draft has not passed the safety check.
+              </p>
+              <p className="mt-1">
+                It may promise something the knowledge base does not support.
+                Flagged wording:{' '}
+                {analysis.safetyFragments.map((fragment, index) => (
+                  <span key={fragment}>
+                    {index > 0 ? ', ' : ''}
+                    <mark className="rounded bg-amber-200 px-1">{fragment}</mark>
+                  </span>
+                ))}
+                . Edit or remove it before sending.
+              </p>
+              <label className="mt-2 flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={reviewAcknowledged}
+                  onChange={(event) => setReviewAcknowledged(event.target.checked)}
+                />
+                I reviewed the flagged wording
+              </label>
+            </div>
+          ) : null}
           {canEditDraft ? (
             displayEditing ? (
               <textarea
@@ -590,8 +628,14 @@ export function CaseWorkspace({
           <Button
             variant="outline"
             size="sm"
-            disabled={!draft}
-            title={draft ? undefined : 'No draft response available yet'}
+            disabled={!draft || (isHeld && !reviewAcknowledged)}
+            title={
+              !draft
+                ? 'No draft response available yet'
+                : isHeld && !reviewAcknowledged
+                ? 'Confirm you reviewed the flagged wording first'
+                : undefined
+            }
             onClick={handleCopy}
           >
             {copied ? (

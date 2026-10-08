@@ -71,6 +71,8 @@ export default async function CasePage({
     missingInformation: string[];
     confidence: number | null;
     model: string | null;
+    safetyStatus: string;
+    safetyFragments: string[];
     createdAt: string;
     sources: WorkspaceSource[];
   } | null = null;
@@ -118,6 +120,8 @@ export default async function CasePage({
       missingInformation: analysis.missingInformation,
       confidence: analysis.confidence,
       model: analysis.model,
+      safetyStatus: analysis.safetyStatus,
+      safetyFragments: analysis.safetyFragments,
       createdAt: analysis.createdAt.toISOString(),
       sources
     };

@@ -216,6 +216,11 @@ export default async function CasesPage({
                     </td>
                     <td className="px-6 py-4 text-gray-600">
                       {formatConfidence(caseRow.latestAnalysis?.confidence ?? null)}
+                      {caseRow.latestAnalysis?.safetyStatus === 'manual_review' ? (
+                        <span className="ml-2 inline-flex rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800">
+                          Held
+                        </span>
+                      ) : null}
                     </td>
                     <td className="px-6 py-4 text-gray-600">
                       {formatDate(caseRow.createdAt)}

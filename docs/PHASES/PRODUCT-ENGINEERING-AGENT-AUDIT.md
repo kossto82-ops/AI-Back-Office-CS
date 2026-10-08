@@ -521,6 +521,24 @@ Pricing readiness: none; do not price before the pilot yields time-to-usable num
 
 ---
 
+## FOLLOW-UP LOG (post-audit execution of the NOW roadmap)
+
+Appended after the audit above; the audit text is not rewritten.
+
+### NOW #2 — held analyses are shown, not discarded (done, 2026-10-08; owner approved the Phase 8 contract amendment)
+- Contract change: `MANUAL_REVIEW` no longer discards. The schema-valid, grounded analysis is stored with
+  `safety_status='manual_review'` and the flagged fragments (migration `0003`; existing rows default to `'safe'`).
+  `VIOLATION` is unchanged: rejected, nothing stored. A held analysis is never returned by `analyzeCase` as a
+  validated result; it travels on `AiSafetyManualReviewError.analysis` and only the server action may persist it, flagged.
+- UI: amber banner with the flagged wording highlighted; **Copy is disabled until the agent ticks "I reviewed the
+  flagged wording"**; cases list shows a "Held" badge. Held analyses do not set the case category.
+- Tests: unit (`runtime-safety` C asserts the analysis is attached), E2E Phase 8 ambiguous mode rewritten for the new
+  contract (row stored only as `manual_review`, banner, `<mark>`, copy gated), Phase 8 violation mode unchanged and passing.
+- Regression found and fixed while doing this: the audit's `case_events` FK made the Phase 9 seed script fail when it
+  deleted `[P9]` cases that had events. Migration `0004` makes `case_events.case_id` `ON DELETE CASCADE`.
+- Migrations `0003` and `0004` applied to the shared dev database (additive / constraint change only).
+- Result: AI-02 → fixed. The "discarded analysis" remaining risk is closed; the hold *rate* on real outputs is still unmeasured.
+
 ## IMPLEMENTED DURING AUDIT
 
 Everything below was verified (tests/E2E/browser) — see TEST RESULTS. No model/provider/prompt change, no

@@ -1,0 +1,2 @@
+ALTER TABLE "case_analyses" ADD COLUMN "safety_status" varchar(20) DEFAULT 'safe' NOT NULL;--> statement-breakpoint
+ALTER TABLE "case_analyses" ADD COLUMN "safety_fragments" jsonb DEFAULT '[]'::jsonb NOT NULL;

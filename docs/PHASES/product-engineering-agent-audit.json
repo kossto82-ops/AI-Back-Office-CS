@@ -29,11 +29,11 @@
       "area": "ai-safety",
       "severity": "high",
       "problem": "A MANUAL_REVIEW or VIOLATION outcome discards the analysis; the agent gets an error and nothing to review.",
-      "evidence": "runCaseAnalysis returns an error/manualReview message and persists nothing.",
+      "evidence": "runCaseAnalysis returns an error/manualReview message and persists nothing. Follow-up 2026-10-08: held analyses are now stored with safety_status=manual_review, shown flagged, copy gated by acknowledgement (migration 0003); VIOLATION still rejected.",
       "recommendation": "Persist held analyses with safety_status and fragments, show with a banner, require acknowledgement before copy; keep VIOLATION rejected. Amends the Phase 8 contract and needs owner sign-off.",
       "effort": "M",
       "impact": "high",
-      "status": "open"
+      "status": "fixed"
     },
     {
       "id": "AI-03",

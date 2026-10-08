@@ -127,6 +127,9 @@ export const caseAnalyses = pgTable(
   sources: jsonb('sources').$type<AnalysisSource[]>().notNull().default([]),
   confidence: real('confidence'),
   model: varchar('model', { length: 100 }),
+  /** 'safe' = passed the runtime gate; 'manual_review' = held, shown with a warning. */
+  safetyStatus: varchar('safety_status', { length: 20 }).notNull().default('safe'),
+  safetyFragments: jsonb('safety_fragments').$type<string[]>().notNull().default([]),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   },
   (t) => [index('case_analyses_case_created_idx').on(t.caseId, t.createdAt)]
@@ -157,7 +160,7 @@ export const caseEvents = pgTable(
       .references(() => teams.id),
     caseId: integer('case_id')
       .notNull()
-      .references(() => cases.id),
+      .references(() => cases.id, { onDelete: 'cascade' }),
     userId: integer('user_id').references(() => users.id),
     type: varchar('type', { length: 40 }).notNull(),
     meta: jsonb('meta').$type<Record<string, unknown>>().notNull().default({}),
