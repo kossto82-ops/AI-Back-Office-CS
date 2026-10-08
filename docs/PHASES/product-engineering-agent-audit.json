@@ -216,7 +216,7 @@
       "area": "security",
       "severity": "high",
       "problem": "One shared Neon database (.neon branch 'production') serves development, E2E, evaluation teams and would serve a pilot; E2E writes to it.",
-      "evidence": ".neon, DevRunbook.md section 1, e2e specs using POSTGRES_URL directly; DB query showed 15 active duplicate E2E documents in Test Team and E2E case_events. Follow-up 2026-10-08: Neon branches dev/pilot created, .env points to dev, docs/DATABASE-ENVIRONMENTS.md; pilot branch still holds copied test data (purge pending owner approval).",
+      "evidence": ".neon, DevRunbook.md section 1, e2e specs using POSTGRES_URL directly; DB query showed 15 active duplicate E2E documents in Test Team and E2E case_events. Follow-up 2026-10-08: Neon branches dev/pilot created, .env points to dev, docs/DATABASE-ENVIRONMENTS.md; pilot branch emptied with owner approval (0 users/teams/cases/documents).",
       "recommendation": "Dedicated pilot database/branch and team; run E2E on a throwaway branch; CI.",
       "effort": "S",
       "impact": "high",

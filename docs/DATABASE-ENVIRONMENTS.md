@@ -37,10 +37,10 @@ are applied with `pnpm db:migrate` against whichever branch `.env` points to.
 
 ## Pilot branch status
 
-`pilot` was created as a copy of `production` and therefore **still contains the old test data**.
-It must be emptied before any real user signs up (truncate the application tables; keep the `drizzle`
-migrations table). That step was not executed by the assistant: the session's permission system blocked
-a bulk truncate and it was left for the owner to approve or run.
+`pilot` was created as a copy of `production` and **emptied on 2026-10-08 with the owner's explicit approval**
+(all application tables truncated; the `drizzle` migrations table, 5 migrations, kept). Verified: 0 users, 0 teams,
+0 cases, 0 documents. The first person to sign up in the app against this branch creates the pilot team.
+Switch with `pnpm db:use pilot`; never run automated tests against it.
 
 ## CI
 

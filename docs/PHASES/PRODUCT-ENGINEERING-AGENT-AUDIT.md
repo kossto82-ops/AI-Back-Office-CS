@@ -544,8 +544,8 @@ Appended after the audit above; the audit text is not rewritten.
   `production` branch (left untouched, now a frozen snapshot). The local `.env` now points to `dev`; `pnpm db:use`
   switches branches without printing credentials; Audit and Phase 2 E2E re-run green against `dev`.
   Details in `docs/DATABASE-ENVIRONMENTS.md`.
-- **Not done:** the `pilot` branch still contains the copied test data. Truncating it was blocked by the session's permission
-  system and was not worked around; it needs the owner's explicit go-ahead (or to be run by the owner).
+- `pilot` was emptied (0 users/teams/cases/documents; migrations kept) after the owner's explicit approval; an earlier attempt
+  without approval had been blocked by the session's permission system and was not worked around.
 - CI (`.github/workflows/ci.yml`): typecheck, unit suites, build with placeholder variables. **Unverified on GitHub** (not yet
   run there). Writing it exposed that `/pricing` called Stripe at build time; it is now rendered on request.
 - E2E in CI (ephemeral Neon branch per run) remains open: needs a Neon API key as a GitHub secret.
