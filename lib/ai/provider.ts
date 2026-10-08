@@ -33,6 +33,16 @@ export interface AnalysisProvider {
 
 export const OPENAI_DEFAULT_MODEL = 'gpt-4o-mini';
 
+// Real-provider p95 latency was 5.2s (max 7.1s) over 41 cases in Phase 6; 30s
+// leaves wide margin while guaranteeing a hung request surfaces as a normal
+// AiProviderError instead of an indefinitely pending action.
+const DEFAULT_TIMEOUT_MS = 30_000;
+
+function providerTimeoutMs(): number {
+  const parsed = Number(process.env.AI_TIMEOUT_MS);
+  return Number.isFinite(parsed) && parsed >= 1000 ? parsed : DEFAULT_TIMEOUT_MS;
+}
+
 export class OpenAiAnalysisProvider implements AnalysisProvider {
   readonly id = 'openai';
 
@@ -64,7 +74,8 @@ export class OpenAiAnalysisProvider implements AnalysisProvider {
         schema: zodSchema(rawAnalysisSchema),
         system: request.system,
         prompt: request.prompt,
-        temperature: 0.2
+        temperature: 0.2,
+        abortSignal: AbortSignal.timeout(providerTimeoutMs())
       });
       this.latestUsage = result.usage
         ? {

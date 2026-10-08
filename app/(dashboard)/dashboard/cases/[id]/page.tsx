@@ -100,9 +100,11 @@ export default async function CasePage({
         documentId: source.documentId,
         relevance: source.relevance,
         legacy: null,
-        title: doc?.title,
+        title: doc?.title ?? source.title,
         type: doc?.type,
-        version: doc?.version
+        version: doc?.version,
+        usedVersion: source.version,
+        missing: !doc
       };
     });
 

@@ -89,7 +89,7 @@ const REFUSAL_MODALS =
 const REFUSAL_VERBS =
   'accommodate|provide|give|grant|offer|share|approve|apply|waive|refund|credit|' +
   'issue|send|process|fulfill|fulfil|honor|honour|support|arrange|extend|entitle|' +
-  'allow|permit|confirm|grant a|release';
+  'allow|permit|confirm|grant a|release|guarantee|promise|commit to';
 
 const REFUSAL_PARTICIPLES =
   'accommodated|supported|offered|granted|provided|honored|honoured|possible|' +
@@ -149,7 +149,15 @@ const ASSERTION_RE = new RegExp(
 );
 
 export function normalizeText(text: string): string {
-  return text.toLowerCase().replace(/\s+/g, ' ').trim();
+  // Typographic apostrophes and first-person contractions are canonicalized so
+  // that "We’ll refund" is the same text as "we will refund" for both the
+  // fragment match and the refusal/assertion patterns.
+  return text
+    .toLowerCase()
+    .replace(/[‘’ʼ]/g, "'")
+    .replace(/\b(we|i|you|they|it)'ll\b/g, '$1 will')
+    .replace(/\s+/g, ' ')
+    .trim();
 }
 
 export function containsFragment(text: string, fragment: string): boolean {

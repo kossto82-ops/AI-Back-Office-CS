@@ -1,0 +1,852 @@
+{
+  "audit": "product-engineering-agent-audit",
+  "date": "2026-10-08",
+  "baseCommit": "fa1e346",
+  "workingTree": "uncommitted",
+  "report": "docs/PHASES/PRODUCT-ENGINEERING-AGENT-AUDIT.md",
+  "verdict": "PILOT READY WITH FIXES",
+  "evidenceNotes": "Findings cite repository evidence or deterministic probes. No human pilot data, customer feedback or market research exists; none is asserted. Model calls during audit: 0 ($0.00).",
+  "severityScale": [
+    "blocker",
+    "high",
+    "medium",
+    "low"
+  ],
+  "findings": [
+    {
+      "id": "AI-01",
+      "area": "ai-safety",
+      "severity": "high",
+      "problem": "Runtime safety fragments are exact phrases from 42 eval cases; paraphrased unsupported commitments pass as SAFE while legitimate grounded sentences are held.",
+      "evidence": "Probe on pre-audit code: 0/7 paraphrases ('We'll refund', 'I will refund', 'We will credit', 'We can waive', 'We guarantee', curly apostrophe) detected; 3/5 legitimate sentences ('24 months', 'from today', 'by post') returned MANUAL_REVIEW.",
+      "recommendation": "Generic commitment tier (done, hold-only) plus a grounded-commitment check against retrieved documents and a 100+ real-output labelled corpus.",
+      "effort": "M",
+      "impact": "high",
+      "status": "partially-fixed"
+    },
+    {
+      "id": "AI-02",
+      "area": "ai-safety",
+      "severity": "high",
+      "problem": "A MANUAL_REVIEW or VIOLATION outcome discards the analysis; the agent gets an error and nothing to review.",
+      "evidence": "runCaseAnalysis returns an error/manualReview message and persists nothing.",
+      "recommendation": "Persist held analyses with safety_status and fragments, show with a banner, require acknowledgement before copy; keep VIOLATION rejected. Amends the Phase 8 contract and needs owner sign-off.",
+      "effort": "M",
+      "impact": "high",
+      "status": "open"
+    },
+    {
+      "id": "AI-03",
+      "area": "retrieval",
+      "severity": "medium",
+      "problem": "ASCII-only tokenizer split accented words and produced no keywords for non-Latin text; retrieval quality is unmeasured above 33 documents.",
+      "evidence": "tokenize('cancelación') -> ['cancelaci','n']; Thai input -> []. Phase 6 retrieval 41/41 on a 33-document KB.",
+      "recommendation": "Unicode-aware tokenizer (done); recall@5 benchmark on a larger KB; Postgres full-text before any agent; word segmentation for Thai/CJK only if the market needs it.",
+      "effort": "S",
+      "impact": "medium",
+      "status": "partially-fixed"
+    },
+    {
+      "id": "AI-04",
+      "area": "product-workflow",
+      "severity": "medium",
+      "problem": "Empty retrieval returns an error before any triage; out-of-KB cases get no help.",
+      "evidence": "runCaseAnalysis: retrievedDocs.length === 0 returns an error. The prompt already instructs behaviour for empty knowledge.",
+      "recommendation": "Coverage 'none' produces a deterministic escalation result without invention.",
+      "effort": "S",
+      "impact": "medium",
+      "status": "open"
+    },
+    {
+      "id": "AI-05",
+      "area": "ai-quality",
+      "severity": "medium",
+      "problem": "Confidence is shown as a prominent bar although it is not calibrated.",
+      "evidence": "Phase 7: 4 wrong answers at confidence 0.9; threshold not usable as a gate.",
+      "recommendation": "Caption added ('self-reported, not a measure of correctness'); consider de-emphasizing the bar after pilot data.",
+      "effort": "S",
+      "impact": "medium",
+      "status": "partially-fixed"
+    },
+    {
+      "id": "AI-06",
+      "area": "ai-quality",
+      "severity": "medium",
+      "problem": "A stored draft uses live-chat register ('Please hold on for a moment while I check this') in an asynchronous reply.",
+      "evidence": "docs/PHASES/phase6-results.json perCase ev001; n=1 anecdote. Human review sample: 7 accept, 5 accept-with-edit, 0 reject (n=12).",
+      "recommendation": "Measure edit patterns in the pilot before changing the prompt; consider a draft-refinement step only if patterns are consistent.",
+      "effort": "S",
+      "impact": "medium",
+      "status": "open"
+    },
+    {
+      "id": "AI-07",
+      "area": "traceability",
+      "severity": "medium",
+      "problem": "Sources stored only documentId and relevance; the UI showed the current document title/version, so edited knowledge silently changed what an old analysis appeared to cite.",
+      "evidence": "AnalysisSource type and case page source mapping at HEAD.",
+      "recommendation": "Snapshot version and title at analysis time; flag drift and missing documents (done).",
+      "effort": "S",
+      "impact": "medium",
+      "status": "fixed"
+    },
+    {
+      "id": "AI-08",
+      "area": "reliability",
+      "severity": "medium",
+      "problem": "No timeout on the provider call.",
+      "evidence": "generateObject called without abortSignal. Phase 6 p95 latency 5.16 s, max 7.07 s.",
+      "recommendation": "30 s default via AI_TIMEOUT_MS (done; type-checked, not exercised against the real provider).",
+      "effort": "S",
+      "impact": "medium",
+      "status": "fixed"
+    },
+    {
+      "id": "AI-09",
+      "area": "ai-quality",
+      "severity": "low",
+      "problem": "Analyses record the model but not a prompt version, so prompt changes cannot be attributed in metrics.",
+      "evidence": "case_analyses has model column only.",
+      "recommendation": "Record a prompt version/hash on each analysis.",
+      "effort": "S",
+      "impact": "low",
+      "status": "open"
+    },
+    {
+      "id": "ARCH-01",
+      "area": "architecture",
+      "severity": "high",
+      "problem": "Phase 9 experiment code lives in the production path: app/ imports scripts/phase9/dataset.ts (540 lines), recordExperimentResult writes a JSON file under docs/PHASES at runtime, experiment branches in case-workspace.tsx.",
+      "evidence": "cases/actions.ts, cases/[id]/page.tsx, case-workspace.tsx.",
+      "recommendation": "Keep until the Phase 9 human pilot is run, then replace with case_events and delete.",
+      "effort": "M",
+      "impact": "medium",
+      "status": "deferred"
+    },
+    {
+      "id": "ARCH-02",
+      "area": "architecture",
+      "severity": "medium",
+      "problem": "Stripe/pricing/billing starter code is unused by the product.",
+      "evidence": "app/(dashboard)/pricing, lib/payments, webhook route; no plan model in the product.",
+      "recommendation": "Hide for the pilot; delete or rebuild once pricing is decided.",
+      "effort": "S",
+      "impact": "low",
+      "status": "open"
+    },
+    {
+      "id": "ARCH-03",
+      "area": "architecture",
+      "severity": "low",
+      "problem": "Unused dependencies and misplaced dev dependencies.",
+      "evidence": "Zero imports of postgres, autoprefixer, @neon/env; @types/* and drizzle-kit under dependencies.",
+      "recommendation": "Unused removed (done); move @types/* and drizzle-kit to devDependencies.",
+      "effort": "S",
+      "impact": "low",
+      "status": "partially-fixed"
+    },
+    {
+      "id": "ARCH-04",
+      "area": "architecture",
+      "severity": "low",
+      "problem": "Case statuses 'approved' and 'failed' are never set.",
+      "evidence": "grep: only 'queued' (default) and 'resolved' are written.",
+      "recommendation": "Remove or implement.",
+      "effort": "S",
+      "impact": "low",
+      "status": "open"
+    },
+    {
+      "id": "DATA-01",
+      "area": "data-hygiene",
+      "severity": "high",
+      "problem": "E2E created active documents in a team whose knowledge the AI retrieves; 15 duplicates of 'E2E Guide: Handling Refund Requests' accumulated in Test Team.",
+      "evidence": "DB query: team 1 active documents 47, of which 15 E2E duplicates; 13 more drafts in the Isolation team.",
+      "recommendation": "Phase 3 E2E now deletes the documents it creates; legacy duplicates set to draft (reversible) because older analyses may cite them.",
+      "effort": "S",
+      "impact": "medium",
+      "status": "fixed"
+    },
+    {
+      "id": "DB-01",
+      "area": "database",
+      "severity": "medium",
+      "problem": "No indexes beyond primary keys; the list query loaded every historical analysis of every case.",
+      "evidence": "schema.ts at HEAD; getCasesForTeam.",
+      "recommendation": "Add composite indexes and DISTINCT ON latest analysis (done; migration 0002 applied to the shared dev database).",
+      "effort": "S",
+      "impact": "medium",
+      "status": "fixed"
+    },
+    {
+      "id": "DOC-01",
+      "area": "documentation",
+      "severity": "low",
+      "problem": "ROADMAP.md said 'Phase 8+ not defined' although Phase 8 and 9 reports exist; DevRunbook.md said Phase 4 pending.",
+      "evidence": "docs/ROADMAP.md, DevRunbook.md at HEAD.",
+      "recommendation": "Make living docs consistent; leave historical reports untouched (done).",
+      "effort": "S",
+      "impact": "low",
+      "status": "fixed"
+    },
+    {
+      "id": "SEC-01",
+      "area": "security",
+      "severity": "high",
+      "problem": "Full users row (including passwordHash) and full teams row (Stripe ids) were serialized into every page payload and returned by /api/user and /api/team.",
+      "evidence": "app/api/user/route.ts and app/layout.tsx (SWRConfig fallback) returned getUser()/getTeamForUser() rows. After the fix: /api/user keys = id,name,email,role; page HTML has no passwordHash/Stripe field; e2e/audit.spec.ts tests 7-8.",
+      "recommendation": "Client-safe projections for everything crossing the server/client boundary.",
+      "effort": "S",
+      "impact": "high",
+      "status": "fixed"
+    },
+    {
+      "id": "SEC-02",
+      "area": "security",
+      "severity": "high",
+      "problem": "Customer PII is sent to the AI provider unredacted; no processor agreement/retention position; no way to delete a case.",
+      "evidence": "lib/ai/provider.ts sends the full case text; no delete-case action or retention setting exists. Applicable jurisdictions are an assumption requiring validation.",
+      "recommendation": "Decide data-protection position and add case deletion before using real customer data; synthetic/consenting data is unaffected.",
+      "effort": "M",
+      "impact": "high",
+      "status": "open"
+    },
+    {
+      "id": "SEC-03",
+      "area": "security",
+      "severity": "high",
+      "problem": "One shared Neon database (.neon branch 'production') serves development, E2E, evaluation teams and would serve a pilot; E2E writes to it.",
+      "evidence": ".neon, DevRunbook.md section 1, e2e specs using POSTGRES_URL directly; DB query showed 15 active duplicate E2E documents in Test Team and E2E case_events.",
+      "recommendation": "Dedicated pilot database/branch and team; run E2E on a throwaway branch; CI.",
+      "effort": "S",
+      "impact": "high",
+      "status": "open"
+    },
+    {
+      "id": "SEC-04",
+      "area": "security",
+      "severity": "medium",
+      "problem": "No rate limiting or lockout on sign-in/sign-up.",
+      "evidence": "No rate-limit logic in app/(login)/actions.ts.",
+      "recommendation": "Per-IP/account throttle on authentication actions.",
+      "effort": "S",
+      "impact": "medium",
+      "status": "open"
+    },
+    {
+      "id": "SEC-05",
+      "area": "security",
+      "severity": "medium",
+      "problem": "Authorization is team membership only; any member can edit the KB, resolve cases and re-run analyses.",
+      "evidence": "knowledge/actions.ts and cases/actions.ts check team only; only invitations check the owner role.",
+      "recommendation": "Optional owner-only KB publish/edit.",
+      "effort": "S",
+      "impact": "medium",
+      "status": "open"
+    },
+    {
+      "id": "SEC-06",
+      "area": "security",
+      "severity": "medium",
+      "problem": "AI hold/violation fragments are logged with the case id and there is no structured audit log of who edited knowledge or resolved cases.",
+      "evidence": "cases/actions.ts console.warn of fragments (AI output phrases, not customer text); activity_logs table only covers starter account events.",
+      "recommendation": "Audit-log knowledge edits and case state changes.",
+      "effort": "S",
+      "impact": "medium",
+      "status": "open"
+    },
+    {
+      "id": "SEC-07",
+      "area": "security",
+      "severity": "low",
+      "problem": ".env contains unrelated provider variable names (CMA_AI_*) from another project.",
+      "evidence": "Variable names only were inspected; values were not read. File is git-ignored.",
+      "recommendation": "Remove unrelated secrets from this project's env file.",
+      "effort": "S",
+      "impact": "low",
+      "status": "open"
+    },
+    {
+      "id": "SEC-08",
+      "area": "security",
+      "severity": "low",
+      "problem": "Next.js pinned to canary 15.6.0-canary.59; middleware convention deprecated (build warning).",
+      "evidence": "package.json; build output.",
+      "recommendation": "Move to a patched stable release and rename middleware to proxy when available.",
+      "effort": "S",
+      "impact": "low",
+      "status": "open"
+    },
+    {
+      "id": "TEST-01",
+      "area": "testing",
+      "severity": "high",
+      "problem": "Phase 2 E2E was failing at HEAD (hard-coded 21 cases; 42 present) and silently skipped 8 dependent tests.",
+      "evidence": "Playwright run: 1 failed, 8 did not run, 1 passed before changes.",
+      "recommendation": "Count the seeded set excluding experiment/audit prefixes (done).",
+      "effort": "S",
+      "impact": "medium",
+      "status": "fixed"
+    },
+    {
+      "id": "TEST-02",
+      "area": "testing",
+      "severity": "medium",
+      "problem": "E2E suite is non-hermetic: mutates a shared database, depends on server mode (Phase 4-failure/Phase 8), and Phase 2 test 6 consumes a seeded queued case each run.",
+      "evidence": "Spec headers and mode.sh runs (three server restarts for Phase 8/4-failure).",
+      "recommendation": "Throwaway database per run, per-run unique data, one command that boots the right server mode.",
+      "effort": "M",
+      "impact": "medium",
+      "status": "open"
+    },
+    {
+      "id": "TEST-03",
+      "area": "testing",
+      "severity": "medium",
+      "problem": "No CI; unit tests are bespoke tsx scripts without a runner; new event actions have no dedicated cross-tenant test.",
+      "evidence": "No CI configuration in the repository; package.json test:unit chain.",
+      "recommendation": "CI running typecheck, unit tests and build; migrate scripts to node:test; add cross-tenant tests for event actions.",
+      "effort": "S",
+      "impact": "medium",
+      "status": "open"
+    },
+    {
+      "id": "UX-01",
+      "area": "product-workflow",
+      "severity": "blocker",
+      "problem": "No way to create a case; cases existed only through seed/scripts.",
+      "evidence": "No create route or server action in app/(dashboard)/dashboard/cases at HEAD fa1e346.",
+      "recommendation": "Case intake form (paste subject, email, message) that lands in the workspace.",
+      "effort": "S",
+      "impact": "high",
+      "status": "fixed"
+    },
+    {
+      "id": "UX-02",
+      "area": "ux",
+      "severity": "high",
+      "problem": "The draft response (the core output) sat about 1,236 px down a 720 px viewport; copy and resolve beyond 1,500 px.",
+      "evidence": "Measured via DOM before the change; after: draft heading at y=525 of 900 on desktop; mobile order message, recommendation, draft; no horizontal overflow; e2e/audit.spec.ts test 3.",
+      "recommendation": "Two-column desktop layout with the answer beside the evidence (done).",
+      "effort": "S",
+      "impact": "high",
+      "status": "fixed"
+    },
+    {
+      "id": "UX-03",
+      "area": "ux",
+      "severity": "high",
+      "problem": "Cases list was an unfiltered dump (42 rows, 21 resolved experiment cases) without urgency or ordering by need.",
+      "evidence": "Browser at HEAD; getCasesForTeam.",
+      "recommendation": "Open/Resolved/All filter, open-first ordering, urgency column (done); search, assignee and pagination remain.",
+      "effort": "S",
+      "impact": "high",
+      "status": "partially-fixed"
+    },
+    {
+      "id": "UX-04",
+      "area": "ux",
+      "severity": "medium",
+      "problem": "Re-run silently replaced an edited draft; drafts are not persisted across navigation.",
+      "evidence": "useEffect on analysis.createdAt reset the draft state.",
+      "recommendation": "Confirm before replacing edits (done); autosave drafts later.",
+      "effort": "S",
+      "impact": "medium",
+      "status": "partially-fixed"
+    },
+    {
+      "id": "UX-05",
+      "area": "operations",
+      "severity": "high",
+      "problem": "No lead/manager view: blocked-analysis reasons, copy-unedited rate and handling time are only available via a script.",
+      "evidence": "No insights page; pnpm db:pilot-metrics prints from case_events.",
+      "recommendation": "Read-only insights page over case_events.",
+      "effort": "M",
+      "impact": "high",
+      "status": "open"
+    },
+    {
+      "id": "UX-06",
+      "area": "knowledge-base",
+      "severity": "medium",
+      "problem": "KB documents are created one by one through a form; only draft/active status; version is a bare counter without history.",
+      "evidence": "knowledge/actions.ts, schema documents table.",
+      "recommendation": "Bulk import (paste/markdown/CSV), archived status, version history.",
+      "effort": "M",
+      "impact": "high",
+      "status": "open"
+    },
+    {
+      "id": "UX-07",
+      "area": "accessibility",
+      "severity": "low",
+      "problem": "Sidebar renders a button inside a link; numeric 'relevance' is meaningless to agents.",
+      "evidence": "app/(dashboard)/dashboard/layout.tsx; Phase 4 E2E asserts the word 'relevance'.",
+      "recommendation": "Use link styling directly; hide the number once E2E is adjusted.",
+      "effort": "S",
+      "impact": "low",
+      "status": "open"
+    },
+    {
+      "id": "UX-08",
+      "area": "ux",
+      "severity": "low",
+      "problem": "A React hydration warning was logged on the old cases table in dev.",
+      "evidence": "Console error observed on the original markup; not reproducible after the rewrite; root cause not isolated.",
+      "recommendation": "Watch for recurrence; no action.",
+      "effort": "S",
+      "impact": "low",
+      "status": "unverified"
+    },
+    {
+      "id": "UX-09",
+      "area": "ux",
+      "severity": "low",
+      "problem": "Starter template content: landing page marketing and fake terminal, tab title 'Next.js SaaS Starter', header 'ACME'.",
+      "evidence": "app/(dashboard)/page.tsx, terminal.tsx, app/layout.tsx.",
+      "recommendation": "Replace with product copy that makes no unproven claim (done).",
+      "effort": "S",
+      "impact": "low",
+      "status": "fixed"
+    },
+    {
+      "id": "VAL-01",
+      "area": "product-value",
+      "severity": "high",
+      "problem": "No human timing data exists; no productivity, acceptance-rate or ROI claim is supportable.",
+      "evidence": "Phase 9 report: MECHANICS-VALIDATED, PILOT PENDING; phase9-agent-value-results.json does not exist.",
+      "recommendation": "Run the Phase 9 two-arm experiment with a pre-agreed decision rule; use case_events for live-use measurement.",
+      "effort": "M",
+      "impact": "high",
+      "status": "open"
+    }
+  ],
+  "agents": [
+    {
+      "role": "Analysis Agent (A1)",
+      "purpose": "Produce the validated, grounded case analysis, recommended action and draft in one call.",
+      "responsibility": "Triage + recommendation + drafting (merged). Existing component.",
+      "tools": [],
+      "permissions": {
+        "read": [
+          "this case (in prompt)",
+          "retrieved documents (in prompt)"
+        ],
+        "write": [],
+        "externalActions": false,
+        "customerData": "this case only",
+        "knowledgeBase": "retrieved documents only",
+        "billingOrAccount": false
+      },
+      "inputs": [
+        "subject",
+        "customerMessage",
+        "conversationHistory",
+        "RetrievedDocument[]",
+        "coverage"
+      ],
+      "outputs": [
+        "category",
+        "summary",
+        "intent",
+        "urgency",
+        "recommendedAction",
+        "draftResponse",
+        "missingInformation[]",
+        "confidence",
+        "sources[]"
+      ],
+      "handoffs": [
+        "D3 grounding guard",
+        "D4 safety guard",
+        "persistence"
+      ],
+      "model": "gpt-4o-mini (provider abstraction unchanged)",
+      "estimatedCost": "~$0.0004 per case (measured, Phase 6)",
+      "estimatedLatency": "3.7 s avg, 5.2 s p95 (measured, Phase 6)",
+      "evaluationMetrics": [
+        "category accuracy >= 0.90 on frozen gold",
+        "grounding 100%",
+        "copied-unedited rate (pilot)",
+        "time-to-usable (pilot)"
+      ],
+      "status": "KEEP (BUILD NOW, already built)"
+    },
+    {
+      "role": "Intake / Triage - deterministic pre-check (D1)",
+      "purpose": "Cheap structured hints before the model call: empty/short text, order-reference presence, likely PII, language hint.",
+      "responsibility": "Understand and describe the incoming case without a model.",
+      "tools": [],
+      "permissions": {
+        "read": [
+          "this case"
+        ],
+        "write": [],
+        "externalActions": false,
+        "customerData": "this case only",
+        "knowledgeBase": false,
+        "billingOrAccount": false
+      },
+      "inputs": [
+        "case text"
+      ],
+      "outputs": [
+        "language?",
+        "hasOrderRef",
+        "emptyOrTooShort",
+        "containsLikelyPii"
+      ],
+      "handoffs": [
+        "A1 (as hints)",
+        "UI missing-info"
+      ],
+      "model": "none",
+      "estimatedCost": "$0",
+      "estimatedLatency": "<5 ms [estimate]",
+      "evaluationMetrics": [
+        "hasOrderRef precision/recall on 50 labelled cases"
+      ],
+      "status": "BUILD NOW"
+    },
+    {
+      "role": "Intake / Triage - LLM agent (T1)",
+      "purpose": "Route cases across queues/teams and assess urgency with a model.",
+      "responsibility": "Primary/secondary intents, urgency, required information, routing decision; must not invent policy or take actions.",
+      "tools": [],
+      "permissions": {
+        "read": [
+          "this case"
+        ],
+        "write": [],
+        "externalActions": false,
+        "customerData": "this case only",
+        "knowledgeBase": false,
+        "billingOrAccount": false
+      },
+      "inputs": [
+        "case text"
+      ],
+      "outputs": [
+        "primaryIntent",
+        "secondaryIntents[]",
+        "urgency",
+        "requiredInformation[]",
+        "route"
+      ],
+      "handoffs": [
+        "K1/D2",
+        "A1"
+      ],
+      "model": "gpt-4o-mini",
+      "estimatedCost": "~$0.00017 per case [estimate]",
+      "estimatedLatency": "+0.8 s [estimate]",
+      "evaluationMetrics": [
+        "classification accuracy",
+        "routing accuracy",
+        "urgency accuracy",
+        "missing-information precision"
+      ],
+      "status": "DEFER (no queues or assignees to route to)"
+    },
+    {
+      "role": "Knowledge / Research Agent (K1) and deterministic retrieval + coverage (D2)",
+      "purpose": "Find the right internal knowledge, surface conflicts and gaps, distinguish authoritative documents from customer claims.",
+      "responsibility": "D2 (deterministic) exists; K1 (LLM query rewriting, conflict and gap report) only if recall fails on a larger KB.",
+      "tools": [
+        "search_knowledge(query) over this team's active documents (K1)"
+      ],
+      "permissions": {
+        "read": [
+          "KB catalog and snippets, this team, active only",
+          "case text as query"
+        ],
+        "write": [],
+        "externalActions": false,
+        "customerData": "query only",
+        "knowledgeBase": "this team, active",
+        "billingOrAccount": false
+      },
+      "inputs": [
+        "case query",
+        "KB catalog"
+      ],
+      "outputs": [
+        "documents[]",
+        "coverage: none|weak|ok",
+        "queries[]",
+        "conflicts[]",
+        "gaps[]"
+      ],
+      "handoffs": [
+        "A1",
+        "escalation result when coverage is none"
+      ],
+      "model": "K1: gpt-4o-mini; D2: none",
+      "estimatedCost": "K1 ~+$0.0003 per case [estimate]; D2 $0",
+      "estimatedLatency": "K1 +1.0-1.5 s [estimate]; D2 <100 ms",
+      "evaluationMetrics": [
+        "recall@5",
+        "MRR",
+        "citation correctness",
+        "unsupported-claim rate"
+      ],
+      "status": "VALIDATE FIRST (D2 coverage: BUILD NOW)"
+    },
+    {
+      "role": "Resolution / Recommendation Agent (separate)",
+      "purpose": "Recommend the next action from the case and trusted knowledge.",
+      "responsibility": "Currently inside A1; separate call would add a step without a new human decision point.",
+      "tools": [],
+      "permissions": {
+        "read": [
+          "validated case summary",
+          "retrieved documents"
+        ],
+        "write": [],
+        "externalActions": false,
+        "customerData": "this case only",
+        "knowledgeBase": "retrieved documents",
+        "billingOrAccount": false
+      },
+      "inputs": [
+        "case",
+        "documents"
+      ],
+      "outputs": [
+        "recommendedAction",
+        "rationale",
+        "requiredHumanAction",
+        "unresolvedUncertainty"
+      ],
+      "handoffs": [
+        "Draft agent"
+      ],
+      "model": "gpt-4o-mini",
+      "estimatedCost": "~$0.00035 per case [estimate]",
+      "estimatedLatency": "+3 s serial [estimate]",
+      "evaluationMetrics": [
+        "human acceptance",
+        "action correctness",
+        "escalation correctness"
+      ],
+      "status": "REJECT"
+    },
+    {
+      "role": "Response Drafting / Refinement Agent (R1)",
+      "purpose": "Adapt the validated recommendation into tone/language/brand voice using the team's accepted edits.",
+      "responsibility": "Customer-facing draft using only supported facts; must not override upstream safety or knowledge constraints.",
+      "tools": [],
+      "permissions": {
+        "read": [
+          "validated recommendation",
+          "cited sources",
+          "team tone guide",
+          "anonymized past edits"
+        ],
+        "write": [],
+        "externalActions": false,
+        "customerData": "this case only",
+        "knowledgeBase": "cited sources only",
+        "billingOrAccount": false
+      },
+      "inputs": [
+        "validated A1 output",
+        "sources",
+        "tone guide",
+        "edit examples"
+      ],
+      "outputs": [
+        "draft",
+        "supportingSourceIds[]",
+        "caveats[]"
+      ],
+      "handoffs": [
+        "D3",
+        "D4",
+        "human"
+      ],
+      "model": "gpt-4o-mini",
+      "estimatedCost": "~$0.0003 per case [estimate]",
+      "estimatedLatency": "+2-3 s [estimate]",
+      "evaluationMetrics": [
+        "copied-unedited rate",
+        "edit distance",
+        "time-to-usable",
+        "error rate"
+      ],
+      "status": "DEFER (needs pilot edit data)"
+    },
+    {
+      "role": "Quality / Safety - deterministic guard (D3 grounding + D4 safety, two tiers)",
+      "purpose": "Verify cited sources are retrieved documents and hold/reject unsupported commitments.",
+      "responsibility": "SAFE / MANUAL_REVIEW / VIOLATION; human review is the final authority.",
+      "tools": [],
+      "permissions": {
+        "read": [
+          "analysis text",
+          "retrieved document ids"
+        ],
+        "write": [],
+        "externalActions": false,
+        "customerData": "this case output only",
+        "knowledgeBase": "ids only",
+        "billingOrAccount": false
+      },
+      "inputs": [
+        "summary",
+        "recommendedAction",
+        "draftResponse",
+        "fragment tiers",
+        "retrieved ids"
+      ],
+      "outputs": [
+        "SAFE | MANUAL_REVIEW | VIOLATION",
+        "fragments"
+      ],
+      "handoffs": [
+        "persistence",
+        "human"
+      ],
+      "model": "none",
+      "estimatedCost": "$0",
+      "estimatedLatency": "<10 ms",
+      "evaluationMetrics": [
+        "true-positive rate on held-out paraphrases",
+        "false-hold rate on real outputs",
+        "hold rate per 100 cases"
+      ],
+      "status": "BUILD NOW (done)"
+    },
+    {
+      "role": "Quality / Safety - LLM judge",
+      "purpose": "Second model reviewing the first model's output.",
+      "responsibility": "Verify consistency, unsupported claims and contradictions with a model.",
+      "tools": [],
+      "permissions": {
+        "read": [
+          "analysis text",
+          "documents"
+        ],
+        "write": [],
+        "externalActions": false,
+        "customerData": "this case output only",
+        "knowledgeBase": "cited sources",
+        "billingOrAccount": false
+      },
+      "inputs": [
+        "A1 output",
+        "sources"
+      ],
+      "outputs": [
+        "SAFE | MANUAL_REVIEW | VIOLATION"
+      ],
+      "handoffs": [
+        "human"
+      ],
+      "model": "gpt-4o-mini",
+      "estimatedCost": "~$0.0003 per case [estimate]",
+      "estimatedLatency": "+2-3 s [estimate]",
+      "evaluationMetrics": [
+        "true-positive rate",
+        "false-positive rate",
+        "manual-review rate"
+      ],
+      "status": "REJECT (cost, latency, shared failure modes, out of project scope)"
+    },
+    {
+      "role": "Orchestrator / agent framework",
+      "purpose": "Coordinate multiple model calls.",
+      "responsibility": "None needed: the only orchestration is a short sequential flow inside the existing server action.",
+      "tools": [],
+      "permissions": {
+        "read": [],
+        "write": [],
+        "externalActions": false,
+        "customerData": false,
+        "knowledgeBase": false,
+        "billingOrAccount": false
+      },
+      "inputs": [],
+      "outputs": [],
+      "handoffs": [],
+      "model": "none",
+      "estimatedCost": "n/a",
+      "estimatedLatency": "n/a",
+      "evaluationMetrics": [],
+      "status": "REJECT"
+    }
+  ],
+  "costModel": {
+    "measuredBaseline": {
+      "source": "docs/PHASES/phase6-results.json (real run, 41 cases)",
+      "calls": 1,
+      "avgLatencyMs": 3666,
+      "p95LatencyMs": 5163,
+      "promptTokensPerCase": 1603,
+      "completionTokensPerCase": 267,
+      "usdPerCase": 0.0004
+    },
+    "estimates": [
+      {
+        "architecture": "current / recommended hybrid",
+        "calls": 1,
+        "latencySeconds": 3.7,
+        "usdPerCase": 0.0004,
+        "kind": "measured"
+      },
+      {
+        "architecture": "+ Knowledge agent",
+        "calls": 2,
+        "latencySeconds": 5,
+        "usdPerCase": 0.0007,
+        "kind": "estimate"
+      },
+      {
+        "architecture": "Triage + Recommendation + Draft split",
+        "calls": 4,
+        "latencySeconds": 10.5,
+        "usdPerCase": 0.0012,
+        "kind": "estimate"
+      },
+      {
+        "architecture": "Full 5-agent chain with LLM judge",
+        "calls": 5,
+        "latencySeconds": 13,
+        "usdPerCase": 0.0015,
+        "kind": "estimate"
+      }
+    ]
+  },
+  "implementedDuringAudit": [
+    "SEC-01 client-safe user/team projections",
+    "UX-01 case intake",
+    "UX-02 draft-first workspace layout, edit-loss confirm, confidence caption",
+    "UX-03 cases list filter/order/urgency",
+    "AI-07 source version/title snapshot with drift flags",
+    "AI-01 generic commitment review tier and normalization",
+    "AI-03 Unicode-aware tokenizer",
+    "AI-08 provider timeout",
+    "case_events table, events and pnpm db:pilot-metrics",
+    "migration 0002 (case_events + 4 indexes) applied to the shared dev database",
+    "removal of unused dependencies and the template landing page/terminal",
+    "test repairs and new tests (retrieval-tokenizer, safety-generalization, audit E2E)",
+    "DATA-01 E2E cleanup and legacy duplicate documents set to draft"
+  ],
+  "tests": {
+    "typecheck": "pass",
+    "unit": "7 suites pass",
+    "build": "pass",
+    "e2e": {
+      "phase2": "10/10",
+      "phase3": "12/12",
+      "phase4": "6/6",
+      "phase4-failure": "1/1 (server AI_MOCK_BEHAVIOR=error)",
+      "phase8": "1/1 unsafe-output + 1/1 ambiguous-output (separate server modes)",
+      "phase9": "3/3",
+      "audit": "8/8"
+    },
+    "baselineBeforeChanges": "phase2 failed at test 2 (8 dependent tests did not run); other baselines not re-observed",
+    "modelCalls": 0,
+    "costUsd": 0
+  }
+}

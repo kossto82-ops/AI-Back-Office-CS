@@ -11,10 +11,15 @@ máquina nueva", el flujo diario es idéntico en todos tus equipos.
 
 ## 1. Estado actual del proyecto
 
-- Fases 1–3 implementadas y validadas: login/registro, tenant, casos, Knowledge
-  Base (con búsqueda y capa de recuperación `lib/ai/retrieval.ts`).
-- Pendiente: fase 4 (pipeline IA) y fase 5 (endurecer + evaluación).
+- Fases 2–9 implementadas; el estado y la evidencia de cada fase están en
+  `docs/ROADMAP.md` y `docs/PHASES/` (esta sección ya no se actualiza fase a fase).
+- La auditoría de producto/ingeniería/agentes está en
+  `docs/PHASES/PRODUCT-ENGINEERING-AGENT-AUDIT.md`.
+- Pipeline IA: `retrieveRelevantKnowledge` → proveedor → esquema Zod → grounding →
+  puerta de seguridad en runtime → persistencia. `AI_PROVIDER=mock` para E2E.
 - No se ha desplegado a producción; todo vive en la rama `main`.
+- Ojo: la BD de Neon es compartida y los E2E escriben en ella (ver auditoría).
+  Para un piloto real usa un equipo (team) nuevo y dedicado, no `Test Team`.
 
 ## 2. Repositorio
 

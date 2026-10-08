@@ -52,8 +52,15 @@ test.describe.serial('Phase 2 E2E', () => {
   test('2. Cases nav shows the seeded list', async () => {
     await page.getByRole('link', { name: 'Cases' }).click();
     await page.waitForURL('**/dashboard/cases');
-    await expect(page.getByText('21 cases for Test Team')).toBeVisible();
-    const links = page.locator('a[href*="/dashboard/cases/"]');
+    // The list defaults to open cases; the full seed is checked on the "All"
+    // view. Phase 9 ([P9]) and audit ([E2E]) cases share the team, so the seeded
+    // set is counted by excluding those prefixes instead of asserting the whole
+    // table size.
+    await page.goto('/dashboard/cases?status=all');
+    await expect(page.getByText(/\d+ cases for Test Team/)).toBeVisible();
+    const links = page
+      .locator('a[href^="/dashboard/cases/"]:not([href$="/new"])')
+      .filter({ hasNotText: /\[(P9|E2E)\]/ });
     await expect(links).toHaveCount(21);
     await page.screenshot({
       path: 'e2e/screenshots/02-cases-list.png',
@@ -137,7 +144,7 @@ test.describe.serial('Phase 2 E2E', () => {
       fullPage: true
     });
     // list no longer shows the case as queued
-    await page.goto('/dashboard/cases');
+    await page.goto('/dashboard/cases?status=all');
     const caseLink = page.locator(`a[href="/dashboard/cases/${caseId}"]`);
     const row = page.locator('tr').filter({ has: caseLink });
     await expect(row).toBeVisible();
@@ -188,8 +195,8 @@ test.describe.serial('Phase 2 E2E', () => {
     const p = await ctxB.newPage();
     await signIn(p, TEAM_B);
     await p.goto('/dashboard/cases');
-    await expect(p.getByText('No cases yet.')).toBeVisible();
-    await expect(p.locator('a[href*="/dashboard/cases/"]')).toHaveCount(0);
+    await expect(p.getByText(/No open cases/)).toBeVisible();
+    await expect(p.locator('a[href*="/dashboard/cases/"]:not([href$="/new"])')).toHaveCount(0);
     await p.screenshot({
       path: 'e2e/screenshots/10-isolation-empty.png',
       fullPage: true

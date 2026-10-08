@@ -7,6 +7,7 @@ import {
   integer,
   jsonb,
   real,
+  index,
 } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 
@@ -75,7 +76,9 @@ export type ConversationTurn = {
   content: string;
 };
 
-export const cases = pgTable('cases', {
+export const cases = pgTable(
+  'cases',
+  {
   id: serial('id').primaryKey(),
   teamId: integer('team_id')
     .notNull()
@@ -91,14 +94,22 @@ export const cases = pgTable('cases', {
     .default([]),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
-});
+  },
+  (t) => [index('cases_team_created_idx').on(t.teamId, t.createdAt)]
+);
 
 export type AnalysisSource = {
   documentId: number;
   relevance: number;
+  /** Version of the document at analysis time (absent on pre-audit rows). */
+  version?: number;
+  /** Title of the document at analysis time (absent on pre-audit rows). */
+  title?: string;
 };
 
-export const caseAnalyses = pgTable('case_analyses', {
+export const caseAnalyses = pgTable(
+  'case_analyses',
+  {
   id: serial('id').primaryKey(),
   caseId: integer('case_id')
     .notNull()
@@ -117,9 +128,50 @@ export const caseAnalyses = pgTable('case_analyses', {
   confidence: real('confidence'),
   model: varchar('model', { length: 100 }),
   createdAt: timestamp('created_at').notNull().defaultNow(),
-});
+  },
+  (t) => [index('case_analyses_case_created_idx').on(t.caseId, t.createdAt)]
+);
 
-export const documents = pgTable('documents', {
+export const caseEventTypes = [
+  'case_created',
+  'case_opened',
+  'analysis_succeeded',
+  'analysis_blocked',
+  'draft_copied',
+  'case_resolved',
+] as const;
+
+export type CaseEventType = (typeof caseEventTypes)[number];
+
+/**
+ * Lightweight, content-free usage events (no customer text, no draft text).
+ * They exist to measure pilot value (handling time, copy-without-edit rate,
+ * AI failure/hold rate) per tenant; see docs/PHASES/PRODUCT-ENGINEERING-AGENT-AUDIT.md.
+ */
+export const caseEvents = pgTable(
+  'case_events',
+  {
+    id: serial('id').primaryKey(),
+    teamId: integer('team_id')
+      .notNull()
+      .references(() => teams.id),
+    caseId: integer('case_id')
+      .notNull()
+      .references(() => cases.id),
+    userId: integer('user_id').references(() => users.id),
+    type: varchar('type', { length: 40 }).notNull(),
+    meta: jsonb('meta').$type<Record<string, unknown>>().notNull().default({}),
+    createdAt: timestamp('created_at').notNull().defaultNow(),
+  },
+  (t) => [
+    index('case_events_case_created_idx').on(t.caseId, t.createdAt),
+    index('case_events_team_type_created_idx').on(t.teamId, t.type, t.createdAt),
+  ]
+);
+
+export const documents = pgTable(
+  'documents',
+  {
   id: serial('id').primaryKey(),
   teamId: integer('team_id')
     .notNull()
@@ -132,7 +184,9 @@ export const documents = pgTable('documents', {
   creatorId: integer('creator_id').references(() => users.id),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
-});
+  },
+  (t) => [index('documents_team_status_idx').on(t.teamId, t.status)]
+);
 
 export const teamsRelations = relations(teams, ({ many }) => ({
   teamMembers: many(teamMembers),
@@ -220,6 +274,8 @@ export type Case = typeof cases.$inferSelect;
 export type NewCase = typeof cases.$inferInsert;
 export type CaseAnalysis = typeof caseAnalyses.$inferSelect;
 export type NewCaseAnalysis = typeof caseAnalyses.$inferInsert;
+export type CaseEvent = typeof caseEvents.$inferSelect;
+export type NewCaseEvent = typeof caseEvents.$inferInsert;
 export type Document = typeof documents.$inferSelect;
 export type NewDocument = typeof documents.$inferInsert;
 export type TeamDataWithMembers = Team & {

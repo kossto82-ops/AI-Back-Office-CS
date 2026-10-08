@@ -30,7 +30,13 @@ import {
   caseStatusLabel,
   documentTypeLabel
 } from '@/lib/db/case-categories';
-import { markCaseResolved, recordExperimentResult, runCaseAnalysis } from '../actions';
+import {
+  markCaseResolved,
+  recordCaseOpened,
+  recordDraftCopied,
+  recordExperimentResult,
+  runCaseAnalysis
+} from '../actions';
 import type { ConversationTurn } from '@/lib/db/schema';
 import type { P9Condition } from '@/scripts/phase9/dataset';
 
@@ -41,6 +47,10 @@ export type WorkspaceSource = {
   title?: string;
   type?: string;
   version?: number;
+  /** Version the analysis actually used (snapshot taken at analysis time). */
+  usedVersion?: number;
+  /** The document no longer exists / is no longer visible to this team. */
+  missing?: boolean;
 };
 
 type WorkspaceAnalysis = {
@@ -168,6 +178,16 @@ export function CaseWorkspace({
     }
   }, [runState.success]);
 
+  // Content-free usage signal (no text): the workspace was opened.
+  const openedRecordedRef = useRef(false);
+  useEffect(() => {
+    if (openedRecordedRef.current) return;
+    openedRecordedRef.current = true;
+    const data = new FormData();
+    data.set('caseId', String(caseRow.id));
+    recordCaseOpened({}, data).catch(() => {});
+  }, [caseRow.id]);
+
   useEffect(() => {
     setIsEditing(false);
     if (analysis?.createdAt) {
@@ -207,10 +227,27 @@ export function CaseWorkspace({
     }
   }
 
+  function handleRunSubmit(e: React.FormEvent<HTMLFormElement>) {
+    const hasEdits =
+      analysis !== null && draft !== (analysis.draftResponse ?? '');
+    if (
+      hasEdits &&
+      !window.confirm(
+        'Re-running the analysis replaces your edited draft with a new AI draft. Continue?'
+      )
+    ) {
+      e.preventDefault();
+    }
+  }
+
   async function handleCopy() {
     if (!draft) return;
     try {
       await navigator.clipboard.writeText(draft);
+      const data = new FormData();
+      data.set('caseId', String(caseRow.id));
+      data.set('edited', String(draft !== (analysis?.draftResponse ?? '')));
+      recordDraftCopied({}, data).catch(() => {});
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
@@ -241,9 +278,9 @@ export function CaseWorkspace({
       </div>
 
       <div className="mb-6 flex flex-wrap items-center gap-2">
-        {caseRow.category ? (
+        {analysis?.category ?? caseRow.category ? (
           <span className="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-700">
-            {caseCategoryLabel(caseRow.category)}
+            {caseCategoryLabel((analysis?.category ?? caseRow.category) as string)}
           </span>
         ) : (
           <span className="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-400">
@@ -290,6 +327,11 @@ export function CaseWorkspace({
         </div>
       )}
 
+      {/* Mobile order: message, recommendation, draft, checks, details.
+          Desktop: customer + evidence on the left, answer on the right. */}
+      <div className="flex flex-col lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-6">
+        <div className="contents lg:block">
+          <div className="order-1">
       {/* WHAT CUSTOMER SAID */}
       <Card className="mb-6 bg-gray-50 border-gray-200">
         <CardHeader>
@@ -331,6 +373,8 @@ export function CaseWorkspace({
         </details>
       )}
 
+          </div>
+          <div className="order-5">
       {/* SYSTEM UNDERSTOOD */}
       {!manualMode && (
       <Card className="mb-6">
@@ -396,6 +440,8 @@ export function CaseWorkspace({
       </Card>
       )}
 
+          </div>
+          <div className="order-6">
       {/* KNOWLEDGE */}
       {!manualMode && (
       <Card className="mb-6">
@@ -426,10 +472,24 @@ export function CaseWorkspace({
                       </span>
                       <span className="text-gray-500">
                         {source.type ? ` · ${documentTypeLabel(source.type)}` : ''}
-                        {source.version ? ` · v${source.version}` : ''}
+                        {source.usedVersion ?? source.version
+                          ? ` · v${source.usedVersion ?? source.version}`
+                          : ''}
                         {' · relevance '}
                         {source.relevance}
                       </span>
+                      {source.missing ? (
+                        <span className="ml-2 text-xs font-medium text-red-700">
+                          Document no longer available
+                        </span>
+                      ) : source.usedVersion &&
+                        source.version &&
+                        source.version > source.usedVersion ? (
+                        <span className="ml-2 text-xs font-medium text-amber-700">
+                          Updated since this analysis (now v{source.version}).
+                          Re-run to use the current text.
+                        </span>
+                      ) : null}
                     </span>
                   )}
                 </li>
@@ -442,6 +502,10 @@ export function CaseWorkspace({
       </Card>
       )}
 
+          </div>
+        </div>
+        <div className="contents lg:block">
+          <div className="order-2">
       {/* RECOMMENDS */}
       {!manualMode && (
       <Card
@@ -468,6 +532,8 @@ export function CaseWorkspace({
       </Card>
       )}
 
+          </div>
+          <div className="order-3">
       {/* RESPONSE + HUMAN REVIEW */}
       <Card className="mb-6">
         <CardHeader>
@@ -538,8 +604,10 @@ export function CaseWorkspace({
         </CardFooter>
       </Card>
 
+          </div>
+          <div className="order-4">
       {!manualMode && (
-      <div className="mb-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
+      <div className="mb-6 grid grid-cols-1 gap-6 xl:grid-cols-2">
         <Card>
           <CardHeader>
             <CardTitle className="text-sm text-gray-700">
@@ -563,6 +631,10 @@ export function CaseWorkspace({
                     }}
                   />
                 </div>
+                <p className="text-xs text-gray-500">
+                  Self-reported by the model; it is not a measure of
+                  correctness. Check the draft against the sources.
+                </p>
                 {analysis.model && (
                   <p className="text-xs text-gray-400">
                     Model: {analysis.model}
@@ -597,6 +669,10 @@ export function CaseWorkspace({
         </Card>
       </div>
       )}
+
+          </div>
+        </div>
+      </div>
 
       {isExperiment && (
         <Card className="mb-6 border-indigo-200">
@@ -653,7 +729,7 @@ export function CaseWorkspace({
         <CardFooter className="flex flex-wrap items-center justify-between gap-3 pt-6">
           <div className="flex items-center gap-3">
             {!manualMode && (
-              <form action={runAction}>
+              <form action={runAction} onSubmit={handleRunSubmit}>
                 <input type="hidden" name="caseId" value={caseRow.id} />
                 <Button
                   type="submit"

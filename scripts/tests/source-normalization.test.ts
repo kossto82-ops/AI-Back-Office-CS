@@ -76,25 +76,25 @@ check('nested "[[92]]" -> null', () =>
 console.log('[source-ids] resolveSources — accepted variations of retrieved id 92');
 check('"92" resolves to doc 92', () => {
   const refs = resolveSources(sources('92'), TEAM_A_RETRIEVED);
-  assert.deepEqual(refs, [{ documentId: 92, relevance: 5 }]);
+  assert.deepEqual(refs, [{ documentId: 92, relevance: 5, version: 1, title: 'Invoice Adjustment and Refund Limits' }]);
 });
 check('"[92]" resolves to doc 92', () => {
   const refs = resolveSources(sources('[92]'), TEAM_A_RETRIEVED);
-  assert.deepEqual(refs, [{ documentId: 92, relevance: 5 }]);
+  assert.deepEqual(refs, [{ documentId: 92, relevance: 5, version: 1, title: 'Invoice Adjustment and Refund Limits' }]);
 });
 check('" 92 " resolves to doc 92', () => {
   const refs = resolveSources(sources(' 92 '), TEAM_A_RETRIEVED);
-  assert.deepEqual(refs, [{ documentId: 92, relevance: 5 }]);
+  assert.deepEqual(refs, [{ documentId: 92, relevance: 5, version: 1, title: 'Invoice Adjustment and Refund Limits' }]);
 });
 check('"[ 92 ]" resolves to doc 92', () => {
   const refs = resolveSources(sources('[ 92 ]'), TEAM_A_RETRIEVED);
-  assert.deepEqual(refs, [{ documentId: 92, relevance: 5 }]);
+  assert.deepEqual(refs, [{ documentId: 92, relevance: 5, version: 1, title: 'Invoice Adjustment and Refund Limits' }]);
 });
 check('mixed forms + multiple docs resolve in order', () => {
   const refs = resolveSources(sources('[92]', ' 93 '), TEAM_A_RETRIEVED);
   assert.deepEqual(refs, [
-    { documentId: 92, relevance: 5 },
-    { documentId: 93, relevance: 4 }
+    { documentId: 92, relevance: 5, version: 1, title: 'Invoice Adjustment and Refund Limits' },
+    { documentId: 93, relevance: 4, version: 1, title: 'Expired Promotional Discount Policy' }
   ]);
 });
 check('empty sources -> empty result', () => {

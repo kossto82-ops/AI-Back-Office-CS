@@ -5,6 +5,8 @@ import type { RetrievedDocument } from './retrieval';
 export type AnalysisSourceRef = {
   documentId: number;
   relevance: number;
+  version: number;
+  title: string;
 };
 
 /**
@@ -59,7 +61,12 @@ export function resolveSources(
         'AI output references a source that was not retrieved from the knowledge base'
       );
     }
-    sources.push({ documentId: doc.documentId, relevance: doc.score });
+    sources.push({
+      documentId: doc.documentId,
+      relevance: doc.score,
+      version: doc.version,
+      title: doc.title
+    });
   }
 
   return sources;

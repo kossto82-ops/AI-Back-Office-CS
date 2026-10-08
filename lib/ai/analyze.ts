@@ -3,12 +3,16 @@ import { parseRawAnalysis, type RawAnalysis } from './analysis-schema';
 import { buildAnalysisMessages, type CaseContentForAnalysis } from './prompts';
 import {
   getAnalysisProvider,
-  type AnalysisProvider
+  type AnalysisProvider,
+  type ProviderUsage
 } from './provider';
 import type { RetrievedDocument } from './retrieval';
 import { resolveSources, type AnalysisSourceRef } from './source-ids';
 import { assessCase, type TextFields } from './safety/safety-evaluator';
-import { RUNTIME_SAFETY_FRAGMENTS } from './safety/policy';
+import {
+  RUNTIME_REVIEW_FRAGMENTS,
+  RUNTIME_SAFETY_FRAGMENTS
+} from './safety/policy';
 import {
   AiSafetyManualReviewError,
   AiSafetyViolationError
@@ -28,6 +32,7 @@ export type ValidatedAnalysis = {
   sources: AnalysisSourceRef[];
   model: string;
   providerId: string;
+  usage: ProviderUsage | null;
   retrievedDocumentCount: number;
 };
 
@@ -56,14 +61,13 @@ export async function analyzeCase(
   const parsed = parseRawAnalysis(raw);
   const sources = resolveSources(parsed, input.retrievedDocs);
 
-  const safety = assessCase(
-    {
-      summary: parsed.summary,
-      recommendedAction: parsed.recommendedAction,
-      draftResponse: parsed.draftResponse
-    } satisfies TextFields,
-    RUNTIME_SAFETY_FRAGMENTS
-  );
+  const textFields = {
+    summary: parsed.summary,
+    recommendedAction: parsed.recommendedAction,
+    draftResponse: parsed.draftResponse
+  } satisfies TextFields;
+
+  const safety = assessCase(textFields, RUNTIME_SAFETY_FRAGMENTS);
 
   if (safety.outcome === 'VIOLATION') {
     throw new AiSafetyViolationError(
@@ -72,10 +76,19 @@ export async function analyzeCase(
     );
   }
 
-  if (safety.outcome === 'MANUAL_REVIEW') {
+  // Generic commitment shapes: review tier only. A hit (asserted or ambiguous)
+  // holds the analysis for a human; it never hard-rejects.
+  const review = assessCase(textFields, RUNTIME_REVIEW_FRAGMENTS);
+  const reviewFragments = [
+    ...safety.ambiguousFragments,
+    ...review.assertedFragments,
+    ...review.ambiguousFragments
+  ];
+
+  if (safety.outcome === 'MANUAL_REVIEW' || reviewFragments.length > 0) {
     throw new AiSafetyManualReviewError(
       'AI output requires human review before it can be accepted',
-      safety.ambiguousFragments
+      [...new Set(reviewFragments)]
     );
   }
 
@@ -91,6 +104,7 @@ export async function analyzeCase(
     sources,
     model: provider.model,
     providerId: provider.id,
+    usage: provider.lastUsage,
     retrievedDocumentCount: input.retrievedDocs.length
   };
 }

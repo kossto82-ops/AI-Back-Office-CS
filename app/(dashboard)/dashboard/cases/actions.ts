@@ -3,10 +3,12 @@
 import { z } from 'zod';
 import path from 'node:path';
 import { promises as fs } from 'node:fs';
-import { and, eq } from 'drizzle-orm';
+import { and, eq, isNull } from 'drizzle-orm';
 import { db } from '@/lib/db/drizzle';
 import { cases, caseAnalyses } from '@/lib/db/schema';
 import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
+import { recordCaseEvent } from '@/lib/db/events';
 import { validatedActionWithUser } from '@/lib/auth/middleware';
 import { getTeamForUser, getCaseByIdForTeam } from '@/lib/db/queries';
 import { retrieveRelevantKnowledge } from '@/lib/ai/retrieval';
@@ -26,7 +28,7 @@ const markCaseResolvedSchema = z.object({
 
 export const markCaseResolved = validatedActionWithUser(
   markCaseResolvedSchema,
-  async (data) => {
+  async (data, _formData, user) => {
     const team = await getTeamForUser();
     if (!team) {
       return { error: 'User is not part of a team' };
@@ -41,6 +43,13 @@ export const markCaseResolved = validatedActionWithUser(
     if (!updated) {
       return { error: 'Case not found' };
     }
+
+    await recordCaseEvent({
+      teamId: team.id,
+      caseId: updated.id,
+      userId: user.id,
+      type: 'case_resolved'
+    });
 
     revalidatePath('/dashboard/cases');
     revalidatePath(`/dashboard/cases/${data.caseId}`);
@@ -71,9 +80,18 @@ function analysisErrorMessage(error: unknown): string {
   return 'Analysis failed. Please try again.';
 }
 
+function blockedReason(error: unknown): string {
+  if (error instanceof AiSafetyViolationError) return 'safety_violation';
+  if (error instanceof AiSafetyManualReviewError) return 'manual_review';
+  if (error instanceof AiInvalidOutputError) return 'invalid_output';
+  if (error instanceof AiProviderUnavailableError) return 'provider_unavailable';
+  if (error instanceof AiProviderError) return 'provider_error';
+  return 'unknown';
+}
+
 export const runCaseAnalysis = validatedActionWithUser(
   runCaseAnalysisSchema,
-  async (data) => {
+  async (data, _formData, user) => {
     const team = await getTeamForUser();
     if (!team) {
       return { error: 'User is not part of a team' };
@@ -90,12 +108,20 @@ export const runCaseAnalysis = validatedActionWithUser(
     });
 
     if (retrievedDocs.length === 0) {
+      await recordCaseEvent({
+        teamId: team.id,
+        caseId: caseRow.id,
+        userId: user.id,
+        type: 'analysis_blocked',
+        meta: { reason: 'no_knowledge', retrievedCount: 0 }
+      });
       return {
         error:
           'No matching knowledge found for this case. Add relevant documents to the knowledge base first, then re-run the analysis.'
       };
     }
 
+    const startedAt = Date.now();
     let analysis;
     try {
       analysis = await analyzeCase({
@@ -107,6 +133,22 @@ export const runCaseAnalysis = validatedActionWithUser(
         retrievedDocs
       });
     } catch (error) {
+      await recordCaseEvent({
+        teamId: team.id,
+        caseId: caseRow.id,
+        userId: user.id,
+        type: 'analysis_blocked',
+        meta: {
+          reason: blockedReason(error),
+          latencyMs: Date.now() - startedAt,
+          retrievedCount: retrievedDocs.length,
+          fragments:
+            error instanceof AiSafetyViolationError ||
+            error instanceof AiSafetyManualReviewError
+              ? error.fragments
+              : undefined
+        }
+      });
       if (error instanceof AiSafetyViolationError) {
         console.warn(
           `[safety] case ${caseRow.id} rejected with asserted fragments: ${error.fragments.join(', ')}`
@@ -141,9 +183,128 @@ export const runCaseAnalysis = validatedActionWithUser(
       model: analysis.model
     });
 
+    // Cases created through intake start unclassified: adopt the first AI
+    // category. An existing category (seeded / human-set) is never overwritten.
+    await db
+      .update(cases)
+      .set({ category: analysis.category, updatedAt: new Date() })
+      .where(
+        and(
+          eq(cases.id, caseRow.id),
+          eq(cases.teamId, team.id),
+          isNull(cases.category)
+        )
+      );
+
+    await recordCaseEvent({
+      teamId: team.id,
+      caseId: caseRow.id,
+      userId: user.id,
+      type: 'analysis_succeeded',
+      meta: {
+        latencyMs: Date.now() - startedAt,
+        provider: analysis.providerId,
+        model: analysis.model,
+        category: analysis.category,
+        confidence: analysis.confidence,
+        retrievedCount: analysis.retrievedDocumentCount,
+        sourceCount: analysis.sources.length,
+        rerun: caseRow.latestAnalysis !== null,
+        usage: analysis.usage ?? undefined
+      }
+    });
+
     revalidatePath('/dashboard/cases');
     revalidatePath(`/dashboard/cases/${caseRow.id}`);
     return { success: 'Analysis complete' };
+  }
+);
+
+const createCaseSchema = z.object({
+  subject: z.string().trim().min(1, 'Subject is required').max(255),
+  customerEmail: z
+    .string()
+    .trim()
+    .max(255)
+    .optional()
+    .transform((value) => (value ? value : undefined))
+    .pipe(z.string().email('Customer email is not valid').optional()),
+  customerMessage: z
+    .string()
+    .trim()
+    .min(1, 'The customer message is required')
+    .max(10000, 'The customer message is too long (max 10,000 characters)')
+});
+
+export const createCase = validatedActionWithUser(
+  createCaseSchema,
+  async (data, _formData, user) => {
+    const team = await getTeamForUser();
+    if (!team) {
+      return { error: 'User is not part of a team' };
+    }
+
+    const [created] = await db
+      .insert(cases)
+      .values({
+        teamId: team.id,
+        subject: data.subject,
+        customerEmail: data.customerEmail ?? null,
+        customerMessage: data.customerMessage
+      })
+      .returning({ id: cases.id });
+
+    await recordCaseEvent({
+      teamId: team.id,
+      caseId: created.id,
+      userId: user.id,
+      type: 'case_created'
+    });
+
+    revalidatePath('/dashboard/cases');
+    redirect(`/dashboard/cases/${created.id}`);
+  }
+);
+
+const caseSignalSchema = z.object({
+  caseId: z.coerce.number().int().positive(),
+  edited: z.enum(['true', 'false']).optional()
+});
+
+/** Fire-and-forget usage signal: the agent opened the workspace. */
+export const recordCaseOpened = validatedActionWithUser(
+  caseSignalSchema,
+  async (data, _formData, user) => {
+    const team = await getTeamForUser();
+    if (!team) return { error: 'User is not part of a team' };
+    const caseRow = await getCaseByIdForTeam(data.caseId, team.id);
+    if (!caseRow) return { error: 'Case not found' };
+    await recordCaseEvent({
+      teamId: team.id,
+      caseId: caseRow.id,
+      userId: user.id,
+      type: 'case_opened'
+    });
+    return { success: 'recorded' };
+  }
+);
+
+/** Fire-and-forget usage signal: the agent copied the draft (edited or not). */
+export const recordDraftCopied = validatedActionWithUser(
+  caseSignalSchema,
+  async (data, _formData, user) => {
+    const team = await getTeamForUser();
+    if (!team) return { error: 'User is not part of a team' };
+    const caseRow = await getCaseByIdForTeam(data.caseId, team.id);
+    if (!caseRow) return { error: 'Case not found' };
+    await recordCaseEvent({
+      teamId: team.id,
+      caseId: caseRow.id,
+      userId: user.id,
+      type: 'draft_copied',
+      meta: { edited: data.edited === 'true' }
+    });
+    return { success: 'recorded' };
   }
 );
 

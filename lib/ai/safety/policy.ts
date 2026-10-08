@@ -101,3 +101,40 @@ export const RUNTIME_SAFETY_FRAGMENTS: string[] = [
   'waive your invoice',
   'we waive'
 ];
+
+/**
+ * Generic commitment phrases (audit fix).
+ *
+ * RUNTIME_SAFETY_FRAGMENTS above is a curated list derived from the 42
+ * Phase 5A/6 evaluation cases; it only recognizes those exact phrasings, so a
+ * paraphrased unsupported commitment ("I will refund you", "we can waive the
+ * fee") passed the gate as SAFE.
+ *
+ * These fragments describe the commitment *shape* instead of a specific case.
+ * They are deliberately a REVIEW tier: a hit — even an asserted one — can only
+ * hold the analysis for MANUAL_REVIEW, never hard-reject it, because a grounded
+ * knowledge-base procedure can legitimately say "we will credit the adjustment".
+ * Sentence-level refusal / negation / echo handling is still applied by the
+ * evaluator, so "we cannot guarantee a refund" stays SAFE.
+ */
+export const RUNTIME_REVIEW_FRAGMENTS: string[] = [
+  'will refund',
+  'can refund',
+  'refund you',
+  'will credit',
+  'credit you',
+  'will add a credit',
+  'will waive',
+  'can waive',
+  'waive the',
+  'waive your',
+  'will compensate',
+  'compensate you',
+  'will be compensated',
+  'we guarantee',
+  'guarantee that',
+  'guaranteed within',
+  'offer you a discount',
+  'give you a discount',
+  'give you a refund'
+];

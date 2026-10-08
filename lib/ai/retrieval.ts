@@ -1,6 +1,7 @@
 import { and, desc, eq, ilike, or } from 'drizzle-orm';
 import { db } from '@/lib/db/drizzle';
 import { documents } from '@/lib/db/schema';
+import { scoreDocument, tokenize } from './retrieval-scoring';
 
 export type RetrievedDocument = {
   documentId: number;
@@ -26,88 +27,6 @@ export type RetrievalProvider = {
 
 function escapeLike(input: string): string {
   return input.replace(/[\\%_]/g, (m) => `\\${m}`);
-}
-
-const STOPWORDS = new Set([
-  'the',
-  'and',
-  'are',
-  'for',
-  'but',
-  'not',
-  'you',
-  'your',
-  'that',
-  'this',
-  'with',
-  'from',
-  'have',
-  'has',
-  'had',
-  'was',
-  'were',
-  'will',
-  'would',
-  'which',
-  'than',
-  'into',
-  'been',
-  'being',
-  'their',
-  'them',
-  'they',
-  'there',
-  'here',
-  'when',
-  'where',
-  'about',
-  'between',
-  'because',
-  'what',
-  'how',
-  'can',
-  'could',
-  'should',
-  'just',
-  'then',
-  'want',
-  'would',
-  'also',
-  'more'
-]);
-
-function tokenize(input: string): string[] {
-  const words = input.toLowerCase().match(/[a-z0-9]+/g) ?? [];
-  const seen = new Set<string>();
-  const keywords: string[] = [];
-  for (const word of words) {
-    if (word.length < 4) continue;
-    if (STOPWORDS.has(word)) continue;
-    if (seen.has(word)) continue;
-    seen.add(word);
-    keywords.push(word);
-  }
-  return keywords.slice(0, 12);
-}
-
-function scoreDocument(
-  doc: { title: string; content: string; status: string },
-  keywords: string[],
-  phrase: string
-): number {
-  const titleLower = doc.title.toLowerCase();
-  const contentLower = doc.content.toLowerCase();
-  let score = 0;
-  for (const keyword of keywords) {
-    if (titleLower.includes(keyword)) score += 3;
-    else if (contentLower.includes(keyword)) score += 1;
-  }
-  if (phrase.length > 0) {
-    if (titleLower.includes(phrase)) score += 3;
-    else if (contentLower.includes(phrase)) score += 1;
-  }
-  if (doc.status === 'active') score += 1;
-  return score;
 }
 
 class PostgresTextRetrievalProvider implements RetrievalProvider {

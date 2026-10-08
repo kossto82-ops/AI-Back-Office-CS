@@ -1,4 +1,4 @@
-import { desc, and, eq, isNull, inArray, or, ilike } from 'drizzle-orm';
+import { desc, and, eq, isNull, inArray, or, ilike, ne, sql } from 'drizzle-orm';
 import { db } from './drizzle';
 import {
   activityLogs,
@@ -11,6 +11,7 @@ import {
   Case,
   CaseAnalysis,
   Document,
+  User,
 } from './schema';
 import { cookies } from 'next/headers';
 import { verifyToken } from '@/lib/auth/session';
@@ -140,34 +141,73 @@ export async function getTeamForUser() {
   return result?.team || null;
 }
 
+/**
+ * Client-safe projections. getUser()/getTeamForUser() return full rows (password
+ * hash, Stripe ids); those must never be serialized into a page payload or an
+ * API response, so everything that crosses the server/client boundary goes
+ * through these.
+ */
+export type PublicUser = Pick<User, 'id' | 'name' | 'email' | 'role'>;
+
+export async function getPublicUser(): Promise<PublicUser | null> {
+  const user = await getUser();
+  if (!user) return null;
+  return { id: user.id, name: user.name, email: user.email, role: user.role };
+}
+
+export async function getPublicTeamForUser() {
+  const team = await getTeamForUser();
+  if (!team) return null;
+  const {
+    stripeCustomerId: _customerId,
+    stripeSubscriptionId: _subscriptionId,
+    stripeProductId: _productId,
+    ...publicTeam
+  } = team;
+  return publicTeam;
+}
+
 export type CaseWithLatestAnalysis = Case & {
   latestAnalysis: CaseAnalysis | null;
 };
 
+export type CaseListFilter = 'open' | 'resolved' | 'all';
+
+/**
+ * Cases for the team's list. Open cases come first (the working queue), then
+ * resolved ones; newest first inside each group. Only the LATEST analysis per
+ * case is loaded (DISTINCT ON), not every historical re-run.
+ */
 export async function getCasesForTeam(
-  teamId: number
+  teamId: number,
+  filter: CaseListFilter = 'all'
 ): Promise<CaseWithLatestAnalysis[]> {
+  const conditions = [eq(cases.teamId, teamId)];
+  if (filter === 'open') conditions.push(ne(cases.status, 'resolved'));
+  if (filter === 'resolved') conditions.push(eq(cases.status, 'resolved'));
+
   const teamCases = await db
     .select()
     .from(cases)
-    .where(eq(cases.teamId, teamId))
-    .orderBy(desc(cases.createdAt));
+    .where(and(...conditions))
+    .orderBy(
+      sql`case when ${cases.status} = 'resolved' then 1 else 0 end`,
+      desc(cases.createdAt)
+    );
 
   if (teamCases.length === 0) {
     return [];
   }
 
   const analyses = await db
-    .select()
+    .selectDistinctOn([caseAnalyses.caseId])
     .from(caseAnalyses)
     .where(inArray(caseAnalyses.caseId, teamCases.map((c) => c.id)))
-    .orderBy(desc(caseAnalyses.createdAt));
+    .orderBy(caseAnalyses.caseId, desc(caseAnalyses.createdAt));
 
   const latestByCase = new Map<number, CaseAnalysis>();
   for (const analysis of analyses) {
-    if (!latestByCase.has(analysis.caseId)) {
-      latestByCase.set(analysis.caseId, analysis);
-    }
+    latestByCase.set(analysis.caseId, analysis);
   }
 
   return teamCases.map((caseRow) => ({

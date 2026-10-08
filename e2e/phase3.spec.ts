@@ -1,4 +1,18 @@
 import { test, expect, Page, Browser } from '@playwright/test';
+import { neon } from '@neondatabase/serverless';
+import { config as loadEnv } from 'dotenv';
+
+loadEnv();
+
+const sql = neon(process.env.POSTGRES_URL!);
+
+// Documents this suite creates. They are ACTIVE in a team whose knowledge base
+// the AI retrieves from, so they are removed after the run (audit finding:
+// 15 leftover copies had accumulated in the Test Team KB).
+const CREATED_TITLES = [
+  'E2E Guide: Handling Refund Requests',
+  'Isolation Team Document'
+];
 
 const TEAM_A = { email: 'test@test.com', password: 'admin123' };
 const TEAM_B = { email: 'isolation@test.com', password: 'password1' };
@@ -43,6 +57,14 @@ test.describe.serial('Phase 3 E2E - Knowledge Base', () => {
   let page: Page;
   let context: Awaited<ReturnType<Browser['newContext']>>;
   let teamADocId: number;
+
+  const runStartedAt = new Date(Date.now() - 1000);
+
+  // Only rows created during THIS run are removed, so historical analyses that
+  // cite older copies keep a resolvable source.
+  test.afterAll(async () => {
+    await sql`delete from documents where title = any(${CREATED_TITLES}) and created_at >= ${runStartedAt.toISOString()}`;
+  });
 
   test.beforeAll(async ({ browser }) => {
     context = await browser.newContext({

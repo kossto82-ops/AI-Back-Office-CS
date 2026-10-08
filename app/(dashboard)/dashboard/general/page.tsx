@@ -1,5 +1,6 @@
 'use client';
 
+import type { PublicUser } from '@/lib/db/queries';
 import { useActionState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -62,7 +63,7 @@ function AccountForm({
 }
 
 function AccountFormWithData({ state }: { state: ActionState }) {
-  const { data: user } = useSWR<User>('/api/user', fetcher);
+  const { data: user } = useSWR<PublicUser>('/api/user', fetcher);
   return (
     <AccountForm
       state={state}
