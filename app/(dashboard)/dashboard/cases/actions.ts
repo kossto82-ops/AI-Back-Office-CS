@@ -13,6 +13,7 @@ import { validatedActionWithUser } from '@/lib/auth/middleware';
 import { getTeamForUser, getCaseByIdForTeam } from '@/lib/db/queries';
 import { retrieveRelevantKnowledge } from '@/lib/ai/retrieval';
 import { analyzeCase } from '@/lib/ai/analyze';
+import { buildNoCoverageAnalysis, NO_COVERAGE_MODEL } from '@/lib/ai/no-coverage';
 import { isExperimentSubject, p9CaseBySubject } from '@/scripts/phase9/dataset';
 import {
   AiInvalidOutputError,
@@ -108,16 +109,34 @@ export const runCaseAnalysis = validatedActionWithUser(
     });
 
     if (retrievedDocs.length === 0) {
+      // Nothing to ground an answer on: do not call the model. Store a
+      // deterministic escalation so the agent gets a next step, not an error.
+      const escalation = buildNoCoverageAnalysis();
+      await db.insert(caseAnalyses).values({
+        caseId: caseRow.id,
+        category: null,
+        summary: escalation.summary,
+        intent: escalation.intent,
+        urgency: null,
+        recommendedAction: escalation.recommendedAction,
+        draftResponse: escalation.draftResponse,
+        missingInformation: escalation.missingInformation,
+        sources: [],
+        confidence: null,
+        model: NO_COVERAGE_MODEL
+      });
       await recordCaseEvent({
         teamId: team.id,
         caseId: caseRow.id,
         userId: user.id,
         type: 'analysis_blocked',
-        meta: { reason: 'no_knowledge', retrievedCount: 0 }
+        meta: { reason: 'no_knowledge', retrievedCount: 0, persistedEscalation: true }
       });
+      revalidatePath('/dashboard/cases');
+      revalidatePath(`/dashboard/cases/${caseRow.id}`);
       return {
-        error:
-          'No matching knowledge found for this case. Add relevant documents to the knowledge base first, then re-run the analysis.'
+        success:
+          'No knowledge matched this case, so no AI analysis was run. A standard escalation was prepared.'
       };
     }
 

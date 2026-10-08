@@ -25,6 +25,7 @@ import {
   CardFooter
 } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
+import { NO_COVERAGE_MODEL } from '@/lib/ai/no-coverage';
 import {
   caseCategoryLabel,
   caseStatusLabel,
@@ -183,6 +184,7 @@ export function CaseWorkspace({
   // A held analysis must be acknowledged before its draft can be copied.
   const [reviewAcknowledged, setReviewAcknowledged] = useState(false);
   const isHeld = analysis?.safetyStatus === 'manual_review';
+  const isNoCoverage = analysis?.model === NO_COVERAGE_MODEL;
   useEffect(() => {
     setReviewAcknowledged(false);
   }, [analysis?.createdAt]);
@@ -413,13 +415,23 @@ export function CaseWorkspace({
               {runState.success}
             </p>
           ) : null}
+          {isNoCoverage ? (
+            <p className="mb-4 rounded-md border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-900">
+              No document in the knowledge base matches this case, so no AI
+              analysis was run. This is a standard escalation, not an AI
+              answer. Add a document that covers this topic and re-run to get
+              a grounded analysis.
+            </p>
+          ) : null}
           {analysis ? (
             <div className="space-y-5">
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
                   <SectionLabel>Category</SectionLabel>
                   <p className="text-sm font-medium text-gray-900">
-                    {caseCategoryLabel(analysis.category ?? caseRow.category ?? '')}
+                    {analysis.category ?? caseRow.category
+                      ? caseCategoryLabel((analysis.category ?? caseRow.category) as string)
+                      : '—'}
                   </p>
                 </div>
                 <div>

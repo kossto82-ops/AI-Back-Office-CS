@@ -51,11 +51,11 @@
       "area": "product-workflow",
       "severity": "medium",
       "problem": "Empty retrieval returns an error before any triage; out-of-KB cases get no help.",
-      "evidence": "runCaseAnalysis: retrievedDocs.length === 0 returns an error. The prompt already instructs behaviour for empty knowledge.",
+      "evidence": "runCaseAnalysis: retrievedDocs.length === 0 returns an error. The prompt already instructs behaviour for empty knowledge. Follow-up 2026-10-08: empty retrieval now stores a deterministic no-coverage escalation (no model call); tests and audit E2E #9.",
       "recommendation": "Coverage 'none' produces a deterministic escalation result without invention.",
       "effort": "S",
       "impact": "medium",
-      "status": "open"
+      "status": "fixed"
     },
     {
       "id": "AI-05",

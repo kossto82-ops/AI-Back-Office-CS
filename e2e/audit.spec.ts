@@ -34,6 +34,7 @@ test.describe.serial('Audit E2E', () => {
   let page: Page;
   let context: Awaited<ReturnType<Browser['newContext']>>;
   let caseId = 0;
+  let uncoveredCaseId = 0;
 
   test.beforeAll(async ({ browser }) => {
     context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
@@ -45,10 +46,11 @@ test.describe.serial('Audit E2E', () => {
   });
 
   test.afterAll(async () => {
-    if (caseId > 0) {
-      await sql`delete from case_events where case_id=${caseId}`;
-      await sql`delete from case_analyses where case_id=${caseId}`;
-      await sql`delete from cases where id=${caseId}`;
+    for (const id of [caseId, uncoveredCaseId]) {
+      if (id > 0) {
+        await sql`delete from case_analyses where case_id=${id}`;
+        await sql`delete from cases where id=${id}`; // events cascade
+      }
     }
     await context.close();
   });
@@ -165,6 +167,32 @@ test.describe.serial('Audit E2E', () => {
 
     const html = await (await page.request.get('/dashboard/cases')).text();
     expect(html).not.toMatch(/passwordHash|\$2[aby]\$/);
+  });
+
+  test('9. a case the knowledge base cannot cover gets an escalation, not an AI call or an error', async () => {
+    await page.goto('/dashboard/cases/new');
+    await page.getByLabel('Subject').fill('[E2E] Uncovered topic');
+    await page
+      .getByLabel('Customer message')
+      .fill('Zorblaxian quindleflux frumpetaria blorptangle wumbleshank.');
+    await page.getByRole('button', { name: 'Create case' }).click();
+    await page.waitForURL(/\/dashboard\/cases\/\d+$/);
+    uncoveredCaseId = Number(page.url().split('/').pop());
+
+    await page.getByRole('button', { name: 'Run analysis' }).click();
+    await expect(page.getByText(/No knowledge matched this case/).first()).toBeVisible({ timeout: 20_000 });
+    await expect(page.getByText(/standard escalation, not an AI/)).toBeVisible();
+    await expect(page.getByText(/Handle this case manually or escalate/)).toBeVisible();
+    await expect(page.getByText('No confidence score yet.')).toBeVisible();
+    await expect(page.getByText('Unclassified')).toBeVisible();
+
+    const rows = await sql`select model, category, confidence from case_analyses where case_id=${uncoveredCaseId}`;
+    expect(rows).toHaveLength(1);
+    expect(rows[0].model).toBe('no-coverage-escalation');
+    expect(rows[0].category).toBeNull();
+    const events = await eventsFor(uncoveredCaseId);
+    expect(events.find((e) => e.type === 'analysis_succeeded')).toBeUndefined();
+    expect(events.find((e) => e.type === 'analysis_blocked')?.meta.reason).toBe('no_knowledge');
   });
 
   test('8. anonymous requests get no user or team data', async ({ browser }) => {

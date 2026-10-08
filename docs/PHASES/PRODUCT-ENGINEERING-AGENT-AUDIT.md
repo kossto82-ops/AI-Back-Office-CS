@@ -552,6 +552,17 @@ Appended after the audit above; the audit text is not rewritten.
 - Note: during branch creation the CLI printed connection strings (database role password shared with `production`) to the
   session output. Consider rotating that role's password in the Neon console.
 
+### NOW #7 — no-knowledge cases get an escalation, not an error (done, 2026-10-08)
+- When retrieval finds nothing, no model is called (nothing to ground on, no spend, no invention). `lib/ai/no-coverage.ts`
+  returns a deterministic result stored with `model='no-coverage-escalation'`: no category/urgency/sources/confidence, a
+  recommended action (handle manually or escalate; add a document and re-run), the missing-knowledge item, and a neutral
+  acknowledgement draft with no promise about outcome, money or timing. The workspace shows a blue notice that this is not an AI answer.
+- Tests: `no-coverage.test.ts` (passes both safety tiers, no promise words/digits, fits schema); audit E2E #9 (no model call,
+  stored row, no `analysis_succeeded`, event reason `no_knowledge`). Phase 2/4/9 and audit E2E re-run green (28/28) on `dev`.
+- Known divergence: the Phase 5A/6 evaluation scripts still describe an empty retrieval as "server action would abort"
+  (historical wording, left untouched as evidence); the app now stores an escalation instead.
+- AI-04 → fixed. Whether the stored acknowledgement draft is what agents want to send is a pilot question, not measured.
+
 ## IMPLEMENTED DURING AUDIT
 
 Everything below was verified (tests/E2E/browser) — see TEST RESULTS. No model/provider/prompt change, no
