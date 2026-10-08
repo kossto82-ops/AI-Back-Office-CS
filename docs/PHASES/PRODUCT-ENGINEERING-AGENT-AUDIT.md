@@ -668,6 +668,17 @@ labelled outputs") is **not met or testable yet**: the false-hold side looks goo
 (`case_events` already count holds) and have two humans label them. Residual risk the check cannot see: invented *words* with no figure ("our premium team will personally…"), policies
 paraphrased wrongly, and unsupported claims about the customer's account.
 
+### NOW #6 — human pilot: protocol drafted, **not run** (2026-10-08)
+`docs/PHASES/PHASE9-PILOT-PROTOCOL.md` (DRAFT, awaiting owner sign-off). Reading the Phase 9 tooling for this exposed problems that would have made any
+multi-agent result invalid; none was visible to the Phase 9 E2E (one synthetic user):
+- results have **no agent identity** and are keyed `caseId + condition`, so a second agent overwrites the first; the arm of each case is frozen so a case is never seen in both arms;
+- the Phase 9 run guide (§12) says `AI_PROVIDER=mock`, which would measure editing a canned template, not the product;
+- results are written to a repo file by the server (fails off a single dev machine); the wall-clock timer has no interruption rule; the analysis has no uncertainty;
+  quality is a substring proxy.
+The protocol proposes a within-case crossover (4 agents, 21 pairs), blind human quality rating, a pre-registered decision rule (GO needs the ratio interval below 1.00, a point
+estimate ≤ 0.75 and non-inferior quality; otherwise NO EVIDENCE or INCONCLUSIVE), the precision this can reach (≈ ±26% on the ratio, assuming a log-ratio SD of 0.5), a list of tooling
+changes, and six decisions for the owner. **No pilot data exist; no productivity claim is made.** The roadmap item stays open until the owner approves and the tooling is built.
+
 ## IMPLEMENTED DURING AUDIT
 
 Everything below was verified (tests/E2E/browser) — see TEST RESULTS. No model/provider/prompt change, no

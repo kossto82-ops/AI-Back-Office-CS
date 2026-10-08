@@ -414,7 +414,7 @@
       "area": "product-value",
       "severity": "high",
       "problem": "No human timing data exists; no productivity, acceptance-rate or ROI claim is supportable.",
-      "evidence": "Phase 9 report: MECHANICS-VALIDATED, PILOT PENDING; phase9-agent-value-results.json does not exist.",
+      "evidence": "Phase 9 report: MECHANICS-VALIDATED, PILOT PENDING; phase9-agent-value-results.json does not exist. Follow-up 2026-10-08: docs/PHASES/PHASE9-PILOT-PROTOCOL.md drafted (not approved, not run). It records that the built experiment tooling cannot support a multi-agent pilot (no agent id, results overwrite, frozen single-arm assignment, mock provider in the run guide, file-based results).",
       "recommendation": "Run the Phase 9 two-arm experiment with a pre-agreed decision rule; use case_events for live-use measurement.",
       "effort": "M",
       "impact": "high",
