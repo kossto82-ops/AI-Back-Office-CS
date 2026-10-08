@@ -12,6 +12,11 @@ import {
   DOCUMENT_TYPES,
   DOCUMENT_STATUSES
 } from '@/lib/db/case-categories';
+import {
+  IMPORT_MAX_CONTENT_CHARS,
+  IMPORT_MAX_DOCUMENTS,
+  IMPORT_MAX_TITLE_CHARS
+} from '@/lib/knowledge/import-parse';
 
 const documentFields = {
   title: z.string().trim().min(1, 'Title is required').max(255),
@@ -132,5 +137,104 @@ export const updateDocument = validatedActionWithUser(
 
     revalidatePath('/dashboard/knowledge');
     redirect(`/dashboard/knowledge/${data.id}`);
+  }
+);
+
+const importSchema = z.object({
+  status: z.enum(['draft', 'active']),
+  payload: z
+    .string()
+    .min(2, 'Nothing to import')
+    .transform((value, ctx) => {
+      try {
+        return JSON.parse(value) as unknown;
+      } catch {
+        ctx.addIssue({ code: 'custom', message: 'Import data is not valid' });
+        return z.NEVER;
+      }
+    })
+    .pipe(
+      z
+        .array(
+          z.object({
+            title: z.string().trim().min(1).max(IMPORT_MAX_TITLE_CHARS),
+            type: z.enum(DOCUMENT_TYPES),
+            content: z.string().trim().min(1).max(IMPORT_MAX_CONTENT_CHARS)
+          })
+        )
+        .min(1, 'Nothing to import')
+        .max(IMPORT_MAX_DOCUMENTS, `At most ${IMPORT_MAX_DOCUMENTS} documents per import`)
+    )
+});
+
+/**
+ * Bulk import. Titles that already exist in the team (any status) or repeat
+ * inside the batch are skipped and reported, never overwritten. Imported
+ * documents default to `draft` so nothing reaches the AI before a human
+ * has reviewed it.
+ */
+export const importDocuments = validatedActionWithUser(
+  importSchema,
+  async (data, _formData, user) => {
+    const team = await getTeamForUser();
+    if (!team) return { error: 'User is not part of a team' };
+
+    const existing = await db
+      .select({ title: documents.title })
+      .from(documents)
+      .where(eq(documents.teamId, team.id));
+    const taken = new Set(existing.map((row) => row.title.trim().toLowerCase()));
+
+    const toInsert: typeof data.payload = [];
+    const skipped: string[] = [];
+    for (const doc of data.payload) {
+      const key = doc.title.trim().toLowerCase();
+      if (taken.has(key)) {
+        skipped.push(doc.title);
+        continue;
+      }
+      taken.add(key);
+      toInsert.push(doc);
+    }
+
+    if (toInsert.length > 0) {
+      const created = await db
+        .insert(documents)
+        .values(
+          toInsert.map((doc) => ({
+            teamId: team.id,
+            creatorId: user.id,
+            title: doc.title,
+            type: doc.type,
+            content: doc.content,
+            status: data.status,
+            version: 1
+          }))
+        )
+        .returning({ id: documents.id, title: documents.title });
+
+      const byTitle = new Map(toInsert.map((doc) => [doc.title, doc]));
+      await db.insert(documentVersions).values(
+        created.map((row) => {
+          const doc = byTitle.get(row.title)!;
+          return {
+            documentId: row.id,
+            teamId: team.id,
+            version: 1,
+            title: doc.title,
+            type: doc.type,
+            content: doc.content,
+            authorId: user.id
+          };
+        })
+      );
+    }
+
+    revalidatePath('/dashboard/knowledge');
+    return {
+      success: `Imported ${toInsert.length} document${toInsert.length === 1 ? '' : 's'} as ${data.status}.`,
+      imported: toInsert.length,
+      skipped
+    };
   }
 );

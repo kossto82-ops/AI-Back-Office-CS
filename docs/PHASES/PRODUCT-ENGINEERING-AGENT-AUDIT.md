@@ -574,7 +574,19 @@ Appended after the audit above; the audit text is not rewritten.
   Phase 3 test 8 now reads the first match because the history repeats the text.
 - **Retrieval bug found while testing:** with a single keyword the query only matched the whole-query phrase, so a short case could never match a
   document covering it. Keywords are now always matched (`lib/ai/retrieval.ts`). Only broadens candidates; scoring unchanged.
-- Part 2 (bulk import) follows.
+
+### NOW #4 — knowledge lifecycle (part 2: bulk import, done 2026-10-08)
+- `/dashboard/knowledge/import`: add several files and/or pasted text, review, import. Formats: `.md`/`.txt` (first `# Heading` = title;
+  two or more top-level headings split into one document each; headings inside code fences ignored) and `.csv` (`title`, `content`, optional
+  `type`; quoted commas/quotes/line breaks). Parsing is client-side and pure (`lib/knowledge/import-parse.ts`); the server re-validates
+  (≤200 documents, title ≤255, content ≤50,000 chars) and writes per team.
+- Safety by default: imports are **`draft`** unless the user chooses `active`, so unreviewed text never reaches the AI. Titles that already exist
+  (any status) or repeat in the batch are **skipped and reported, never overwritten**. Each imported document gets version 1 in the history.
+- Tests: `import-parse.test.ts` (10 unit checks); `import.spec.ts` (4 E2E): parse + problems flagged, import as draft with versions, re-import skips,
+  and the end-to-end proof that an imported draft is invisible to the AI (case escalates) until activated (then analysed and citing it).
+- Not done: Word/PDF/HTML extraction, per-row type editing in the review list, import from URL. Time to load 30 documents (the roadmap metric)
+  has not been measured with a real user.
+- Verification: typecheck, 9 unit suites, build, E2E import 4/4, knowledge 4/4, Phase 3 12/12, audit 9/9. Migration `0005` also applied to `pilot`.
 
 ## IMPLEMENTED DURING AUDIT
 

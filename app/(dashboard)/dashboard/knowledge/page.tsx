@@ -117,12 +117,17 @@ export default async function KnowledgePage({
             {documents.length === 1 ? '' : 's'} for {team.name}
           </p>
         </div>
-        <Button asChild>
-          <Link href="/dashboard/knowledge/new">
-            <Plus className="h-4 w-4" />
-            Create document
-          </Link>
-        </Button>
+        <div className="flex gap-2">
+          <Button asChild variant="outline">
+            <Link href="/dashboard/knowledge/import">Import documents</Link>
+          </Button>
+          <Button asChild>
+            <Link href="/dashboard/knowledge/new">
+              <Plus className="h-4 w-4" />
+              Create document
+            </Link>
+          </Button>
+        </div>
       </div>
 
       <form
