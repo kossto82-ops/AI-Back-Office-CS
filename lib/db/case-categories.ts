@@ -20,15 +20,15 @@ export function caseCategoryLabel(category: string): string {
   return CASE_CATEGORY_LABELS[category as CaseCategory] ?? category;
 }
 
-export const CASE_STATUSES = ['queued', 'approved', 'resolved', 'failed'] as const;
+// Only these two states are ever written. 'approved' and 'failed' existed in the
+// starter model but nothing sets them; add them back when a workflow needs them.
+export const CASE_STATUSES = ['queued', 'resolved'] as const;
 
 export type CaseStatus = (typeof CASE_STATUSES)[number];
 
 export const CASE_STATUS_LABELS: Record<CaseStatus, string> = {
   queued: 'Queued',
-  approved: 'Approved',
   resolved: 'Resolved',
-  failed: 'Failed',
 };
 
 export function caseStatusLabel(status: string): string {

@@ -139,22 +139,22 @@
       "area": "architecture",
       "severity": "low",
       "problem": "Unused dependencies and misplaced dev dependencies.",
-      "evidence": "Zero imports of postgres, autoprefixer, @neon/env; @types/* and drizzle-kit under dependencies.",
+      "evidence": "Zero imports of postgres, autoprefixer, @neon/env; @types/* and drizzle-kit under dependencies. Follow-up 2026-10-08: fixed in the cleanup pass.",
       "recommendation": "Unused removed (done); move @types/* and drizzle-kit to devDependencies.",
       "effort": "S",
       "impact": "low",
-      "status": "partially-fixed"
+      "status": "fixed"
     },
     {
       "id": "ARCH-04",
       "area": "architecture",
       "severity": "low",
       "problem": "Case statuses 'approved' and 'failed' are never set.",
-      "evidence": "grep: only 'queued' (default) and 'resolved' are written.",
+      "evidence": "grep: only 'queued' (default) and 'resolved' are written. Follow-up 2026-10-08: fixed in the cleanup pass.",
       "recommendation": "Remove or implement.",
       "effort": "S",
       "impact": "low",
-      "status": "open"
+      "status": "fixed"
     },
     {
       "id": "DATA-01",
@@ -271,7 +271,7 @@
       "area": "security",
       "severity": "low",
       "problem": "Next.js pinned to canary 15.6.0-canary.59; middleware convention deprecated (build warning).",
-      "evidence": "package.json; build output.",
+      "evidence": "package.json; build output. Follow-up 2026-10-08: middleware renamed to proxy (deprecation gone); canary pin remains.",
       "recommendation": "Move to a patched stable release and rename middleware to proxy when available.",
       "effort": "S",
       "impact": "low",

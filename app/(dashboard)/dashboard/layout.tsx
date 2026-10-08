@@ -51,20 +51,32 @@ export default function DashboardLayout({
           }`}
         >
           <nav className="h-full overflow-y-auto p-4">
-            {navItems.map((item) => (
-              <Link key={item.href} href={item.href} passHref>
+            {navItems.map((item) => {
+              // /dashboard is the Team page: exact match only. Other sections stay
+              // highlighted on their sub-pages (e.g. a case workspace).
+              const isActive =
+                pathname === item.href ||
+                (item.href !== '/dashboard' && pathname.startsWith(item.href + '/'));
+              return (
                 <Button
-                  variant={pathname === item.href ? 'secondary' : 'ghost'}
+                  key={item.href}
+                  asChild
+                  variant={isActive ? 'secondary' : 'ghost'}
                   className={`shadow-none my-1 w-full justify-start ${
-                    pathname === item.href ? 'bg-gray-100' : ''
+                    isActive ? 'bg-gray-100' : ''
                   }`}
-                  onClick={() => setIsSidebarOpen(false)}
                 >
-                  <item.icon className="h-4 w-4" />
-                  {item.label}
+                  <Link
+                    href={item.href}
+                    aria-current={isActive ? 'page' : undefined}
+                    onClick={() => setIsSidebarOpen(false)}
+                  >
+                    <item.icon className="h-4 w-4" />
+                    {item.label}
+                  </Link>
                 </Button>
-              </Link>
-            ))}
+              );
+            })}
           </nav>
         </aside>
 

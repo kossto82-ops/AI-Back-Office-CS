@@ -622,6 +622,18 @@ Appended after the audit above; the audit text is not rewritten.
   behaviour) — a small separate cleanup.
 - SEC-04 and SEC-05 → fixed.
 
+### Cleanup pass (done, 2026-10-08)
+- Sign-in/sign-up no longer send the typed password back into the form state (starter behaviour); the field is not pre-filled after an error.
+- Sidebar items are links styled as buttons (no `<a><button>` nesting, UX-07 partly) with `aria-current`, and stay highlighted on sub-pages such as a case workspace.
+- Case statuses reduced to the two that are ever written (`queued`, `resolved`); a query showed only those values in `dev` (ARCH-04 fixed).
+- `@types/*` and `drizzle-kit` moved to devDependencies (ARCH-03 fixed).
+- `middleware.ts` renamed to `proxy.ts` (Next's current convention; the deprecation warning is gone, the build lists it as Proxy). The explicit
+  `runtime: 'nodejs'` option was dropped because it is the default there. Auth redirects were re-verified by E2E.
+- Verified: typecheck, build, E2E security 7, insights 4, audit 9, Phase 2 10, Phase 3 12, Phase 4 6.
+- Left on purpose: Phase 9 experiment code (pilot pending), the numeric "relevance" label (Phase 4 E2E asserts the word), case actions open to all members
+  (agents are expected to resolve and re-run cases), the Stripe/pricing starter pages. A stray `package.json`/lockfile in the parent folder of the
+  repo makes Next print a workspace-root warning; it is outside the repository.
+
 ## IMPLEMENTED DURING AUDIT
 
 Everything below was verified (tests/E2E/browser) — see TEST RESULTS. No model/provider/prompt change, no

@@ -28,15 +28,11 @@
     "@neon/config": "^1.4.2",
     "@neondatabase/serverless": "^1.1.0",
     "@tailwindcss/postcss": "4.1.7",
-    "@types/node": "^22.15.18",
-    "@types/react": "19.1.4",
-    "@types/react-dom": "19.1.5",
     "ai": "^5.0.257",
     "bcryptjs": "^3.0.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dotenv": "^16.5.0",
-    "drizzle-kit": "^0.31.1",
     "drizzle-orm": "^0.43.1",
     "jose": "^6.0.11",
     "lucide-react": "^0.511.0",
@@ -56,6 +52,10 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.63.0",
+    "@types/node": "^22.15.18",
+    "@types/react": "19.1.4",
+    "@types/react-dom": "19.1.5",
+    "drizzle-kit": "^0.31.1",
     "tsx": "^4.23.15"
   }
 }
