@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { getUser, getTeamForUser } from '@/lib/db/queries';
+import { canPublish, roleInTeam } from '@/lib/knowledge/permissions';
 import { DocumentEditor } from '../document-editor';
 
 export const dynamic = 'force-dynamic';
@@ -40,6 +41,7 @@ export default async function NewDocumentPage() {
         <CardContent>
           <DocumentEditor
             document={{ title: '', type: 'procedure', content: '', status: 'active' }}
+            canPublish={canPublish(roleInTeam(team, user.id))}
           />
         </CardContent>
       </Card>

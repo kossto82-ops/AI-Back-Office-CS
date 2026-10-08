@@ -603,6 +603,25 @@ Appended after the audit above; the audit text is not rewritten.
 - Not done: per-agent breakdowns, charts, export, case-level drill-down, alerts. Whether leads can answer their questions from this page
   without help has not been tested with a real lead.
 
+### NOW #8 — sign-in throttling and knowledge publishing permissions (done, 2026-10-08)
+- **Throttling (SEC-04).** `lib/auth/rate-limit.ts` (pure policy) + Postgres-backed store (`auth_attempts`, migration `0006`, applied to `dev`
+  and `pilot`; works across serverless instances). Sign-in is locked after 5 failed attempts per email in 15 minutes or 20 per IP; a
+  successful sign-in clears that email's failures; locked accounts refuse even a correct password (no guessing oracle). Sign-up is limited to
+  10 attempts per IP per hour. An unknown IP (no `x-forwarded-for`) creates no shared bucket, so local development and E2E are never locked
+  together. The limits are modest on purpose: a small team that mistypes a few times is not locked out.
+- **Publishing control (SEC-05).** `lib/knowledge/permissions.ts`: only team **owners** can activate or archive documents or edit
+  published/archived ones; **members** can create, edit and import **drafts**, which the AI never sees until an owner activates them. The same
+  pure rule is enforced in the create/update/import server actions and reflected in the UI (members see only "Draft", no Edit button on
+  published documents, import offers only Draft). Editing a published document is blocked for members so it cannot be used to bypass the rule.
+- Tests: `rate-limit.test.ts` (8, fake clock + in-memory store), `permissions.test.ts` (6); E2E `security.spec.ts` (7): lockout after five
+  failures and unaffected accounts, success clears failures, a member sees only Draft, **the server rejects a member who forces `active`
+  through the DOM**, no Edit on published docs with content intact, import limited to Draft, owner keeps full control.
+- Limits of this change: no CAPTCHA, no per-account notification, no exponential backoff, no IP allow-list; the IP is read from
+  `x-forwarded-for`, so behind a proxy that does not set it the IP bucket is inactive and only the per-email lock applies. Case actions
+  (resolve, re-run) remain open to every member. The sign-in action still echoes the typed password back into the form state (starter
+  behaviour) — a small separate cleanup.
+- SEC-04 and SEC-05 → fixed.
+
 ## IMPLEMENTED DURING AUDIT
 
 Everything below was verified (tests/E2E/browser) — see TEST RESULTS. No model/provider/prompt change, no

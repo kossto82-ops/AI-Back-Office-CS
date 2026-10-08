@@ -8,6 +8,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { validatedActionWithUser } from '@/lib/auth/middleware';
 import { getTeamForUser } from '@/lib/db/queries';
+import { checkDocumentChange, roleInTeam } from '@/lib/knowledge/permissions';
 import {
   DOCUMENT_TYPES,
   DOCUMENT_STATUSES
@@ -37,6 +38,12 @@ export const createDocument = validatedActionWithUser(
   async (data, _formData, user) => {
     const team = await getTeamForUser();
     if (!team) return { error: 'User is not part of a team' };
+
+    const createCheck = checkDocumentChange({
+      role: roleInTeam(team, user.id),
+      newStatus: data.status
+    });
+    if (!createCheck.allowed) return { error: createCheck.reason };
 
     const [created] = await db
       .insert(documents)
@@ -77,6 +84,7 @@ export const updateDocument = validatedActionWithUser(
         title: documents.title,
         type: documents.type,
         content: documents.content,
+        status: documents.status,
         version: documents.version
       })
       .from(documents)
@@ -84,6 +92,13 @@ export const updateDocument = validatedActionWithUser(
       .limit(1);
 
     if (!existing) return { error: 'Document not found' };
+
+    const updateCheck = checkDocumentChange({
+      role: roleInTeam(team, user.id),
+      existingStatus: existing.status,
+      newStatus: data.status
+    });
+    if (!updateCheck.allowed) return { error: updateCheck.reason };
 
     const contentChanged =
       existing.title !== data.title ||
@@ -178,6 +193,12 @@ export const importDocuments = validatedActionWithUser(
   async (data, _formData, user) => {
     const team = await getTeamForUser();
     if (!team) return { error: 'User is not part of a team' };
+
+    const importCheck = checkDocumentChange({
+      role: roleInTeam(team, user.id),
+      newStatus: data.status
+    });
+    if (!importCheck.allowed) return { error: importCheck.reason };
 
     const existing = await db
       .select({ title: documents.title })

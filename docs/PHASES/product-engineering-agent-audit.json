@@ -227,22 +227,22 @@
       "area": "security",
       "severity": "medium",
       "problem": "No rate limiting or lockout on sign-in/sign-up.",
-      "evidence": "No rate-limit logic in app/(login)/actions.ts.",
+      "evidence": "No rate-limit logic in app/(login)/actions.ts. Follow-up 2026-10-08: DB-backed sign-in/sign-up throttling (lib/auth/rate-limit.ts, migration 0006) with unit and E2E tests.",
       "recommendation": "Per-IP/account throttle on authentication actions.",
       "effort": "S",
       "impact": "medium",
-      "status": "open"
+      "status": "fixed"
     },
     {
       "id": "SEC-05",
       "area": "security",
       "severity": "medium",
       "problem": "Authorization is team membership only; any member can edit the KB, resolve cases and re-run analyses.",
-      "evidence": "knowledge/actions.ts and cases/actions.ts check team only; only invitations check the owner role.",
+      "evidence": "knowledge/actions.ts and cases/actions.ts check team only; only invitations check the owner role. Follow-up 2026-10-08: owner-only publishing, members limited to drafts, enforced server-side (lib/knowledge/permissions.ts) with unit and E2E tests.",
       "recommendation": "Optional owner-only KB publish/edit.",
       "effort": "S",
       "impact": "medium",
-      "status": "open"
+      "status": "fixed"
     },
     {
       "id": "SEC-06",

@@ -18,7 +18,17 @@ import {
 } from '@/lib/db/schema';
 import { comparePasswords, hashPassword, setSession } from '@/lib/auth/session';
 import { redirect } from 'next/navigation';
-import { cookies } from 'next/headers';
+import { cookies, headers } from 'next/headers';
+import { dbAttemptStore } from '@/lib/auth/rate-limit-store';
+import {
+  clientIp,
+  isSignInLocked,
+  recordSignInFailure,
+  recordSignInSuccess,
+  registerSignUpAttempt,
+  TOO_MANY_SIGNIN_MESSAGE,
+  TOO_MANY_SIGNUP_MESSAGE
+} from '@/lib/auth/rate-limit';
 import { createCheckoutSession } from '@/lib/payments/stripe';
 import { getUser, getUserWithTeam } from '@/lib/db/queries';
 import {
@@ -52,6 +62,11 @@ const signInSchema = z.object({
 export const signIn = validatedAction(signInSchema, async (data, formData) => {
   const { email, password } = data;
 
+  const ip = clientIp((await headers()).get('x-forwarded-for'));
+  if (await isSignInLocked(dbAttemptStore, email, ip)) {
+    return { error: TOO_MANY_SIGNIN_MESSAGE, email };
+  }
+
   const userWithTeam = await db
     .select({
       user: users,
@@ -64,6 +79,7 @@ export const signIn = validatedAction(signInSchema, async (data, formData) => {
     .limit(1);
 
   if (userWithTeam.length === 0) {
+    await recordSignInFailure(dbAttemptStore, email, ip);
     return {
       error: 'Invalid email or password. Please try again.',
       email,
@@ -79,6 +95,7 @@ export const signIn = validatedAction(signInSchema, async (data, formData) => {
   );
 
   if (!isPasswordValid) {
+    await recordSignInFailure(dbAttemptStore, email, ip);
     return {
       error: 'Invalid email or password. Please try again.',
       email,
@@ -86,6 +103,7 @@ export const signIn = validatedAction(signInSchema, async (data, formData) => {
     };
   }
 
+  await recordSignInSuccess(dbAttemptStore, email);
   await Promise.all([
     setSession(foundUser),
     logActivity(foundTeam?.id, foundUser.id, ActivityType.SIGN_IN)
@@ -108,6 +126,11 @@ const signUpSchema = z.object({
 
 export const signUp = validatedAction(signUpSchema, async (data, formData) => {
   const { email, password, inviteId } = data;
+
+  const signUpIp = clientIp((await headers()).get('x-forwarded-for'));
+  if ((await registerSignUpAttempt(dbAttemptStore, signUpIp)).limited) {
+    return { error: TOO_MANY_SIGNUP_MESSAGE, email };
+  }
 
   const existingUser = await db
     .select()

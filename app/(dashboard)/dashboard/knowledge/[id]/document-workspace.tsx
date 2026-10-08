@@ -67,11 +67,14 @@ function formatDate(date: string): string {
 
 export function DocumentWorkspace({
   document,
-  versions
+  versions,
+  canPublish
 }: {
   document: WorkspaceDocument;
   versions: WorkspaceVersion[];
+  canPublish: boolean;
 }) {
+  const canEdit = canPublish || document.status === 'draft';
   const [isEditing, setIsEditing] = useState(false);
 
   return (
@@ -108,7 +111,12 @@ export function DocumentWorkspace({
                 </span>
               </div>
             </div>
-            {!isEditing && (
+            {!isEditing && !canEdit && (
+              <p className="text-xs text-gray-500">
+                Only team owners can edit published documents.
+              </p>
+            )}
+            {!isEditing && canEdit && (
               <Button
                 variant="outline"
                 size="sm"
@@ -136,6 +144,7 @@ export function DocumentWorkspace({
                 content: document.content,
                 status: document.status
               }}
+              canPublish={canPublish}
               onCancel={() => setIsEditing(false)}
             />
           ) : (

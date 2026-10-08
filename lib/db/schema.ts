@@ -216,6 +216,18 @@ export const documentVersions = pgTable(
   (t) => [index('document_versions_doc_version_idx').on(t.documentId, t.version)]
 );
 
+/** Failed/attempted authentication events used for throttling (see lib/auth/rate-limit.ts). */
+export const authAttempts = pgTable(
+  'auth_attempts',
+  {
+    id: serial('id').primaryKey(),
+    kind: varchar('kind', { length: 10 }).notNull(),
+    identifier: varchar('identifier', { length: 300 }).notNull(),
+    createdAt: timestamp('created_at').notNull().defaultNow(),
+  },
+  (t) => [index('auth_attempts_lookup_idx').on(t.kind, t.identifier, t.createdAt)]
+);
+
 export const teamsRelations = relations(teams, ({ many }) => ({
   teamMembers: many(teamMembers),
   activityLogs: many(activityLogs),

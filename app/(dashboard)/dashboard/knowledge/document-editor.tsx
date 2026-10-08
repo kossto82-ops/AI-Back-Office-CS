@@ -27,10 +27,13 @@ type EditorValues = {
 
 export function DocumentEditor({
   document,
-  onCancel
+  onCancel,
+  canPublish = true
 }: {
   document: EditorValues;
   onCancel?: () => void;
+  /** Members may only save drafts; the server enforces the same rule. */
+  canPublish?: boolean;
 }) {
   const isEdit = typeof document.id === 'number';
 
@@ -78,15 +81,21 @@ export function DocumentEditor({
           <select
             id="status"
             name="status"
-            defaultValue={document.status}
+            defaultValue={canPublish ? document.status : 'draft'}
             className="h-9 rounded-md border border-gray-300 bg-white px-3 text-sm text-gray-900 focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
           >
-            {DOCUMENT_STATUSES.map((s) => (
+            {DOCUMENT_STATUSES.filter((s) => canPublish || s === 'draft').map((s) => (
               <option key={s} value={s}>
                 {documentStatusLabel(s)}
               </option>
             ))}
           </select>
+          {!canPublish ? (
+            <p className="text-xs text-gray-500">
+              Only team owners can publish. Your changes are saved as a draft
+              until an owner activates them.
+            </p>
+          ) : null}
         </div>
       </div>
 

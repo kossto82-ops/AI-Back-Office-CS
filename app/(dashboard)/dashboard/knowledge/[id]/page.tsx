@@ -6,6 +6,7 @@ import {
   getDocumentVersionsForTeam
 } from '@/lib/db/queries';
 import { DocumentWorkspace } from './document-workspace';
+import { canPublish, roleInTeam } from '@/lib/knowledge/permissions';
 
 export const dynamic = 'force-dynamic';
 
@@ -39,6 +40,7 @@ export default async function DocumentPage({
 
   return (
     <DocumentWorkspace
+      canPublish={canPublish(roleInTeam(team, user.id))}
       versions={versions.map((v) => ({
         version: v.version,
         title: v.title,

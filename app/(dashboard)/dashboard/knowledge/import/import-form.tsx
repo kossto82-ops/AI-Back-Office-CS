@@ -34,7 +34,7 @@ type ActionState = {
 
 type Row = ParsedDocument & { id: number; include: boolean };
 
-export function ImportForm() {
+export function ImportForm({ canPublish }: { canPublish: boolean }) {
   const [state, action, isPending] = useActionState<ActionState, FormData>(
     importDocuments,
     {}
@@ -251,7 +251,9 @@ export function ImportForm() {
                 className="h-9 rounded-md border border-gray-300 px-2 text-sm"
               >
                 <option value="draft">Draft (not used by the AI until you activate it)</option>
-                <option value="active">Active (used by the AI immediately)</option>
+                {canPublish ? (
+                  <option value="active">Active (used by the AI immediately)</option>
+                ) : null}
               </select>
             </div>
             <Button

@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation';
 import { getUser, getTeamForUser } from '@/lib/db/queries';
 import { ImportForm } from './import-form';
+import { canPublish, roleInTeam } from '@/lib/knowledge/permissions';
 
 export const dynamic = 'force-dynamic';
 
@@ -14,5 +15,5 @@ export default async function ImportKnowledgePage() {
     redirect('/sign-in');
   }
 
-  return <ImportForm />;
+  return <ImportForm canPublish={canPublish(roleInTeam(team, user.id))} />;
 }
