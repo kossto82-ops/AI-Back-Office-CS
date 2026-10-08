@@ -12,6 +12,15 @@ import {
 } from '@/lib/db/case-categories';
 import { DocumentEditor } from '../document-editor';
 
+export type WorkspaceVersion = {
+  version: number;
+  title: string;
+  type: string;
+  content: string;
+  authorName: string | null;
+  createdAt: string;
+};
+
 type WorkspaceDocument = {
   id: number;
   title: string;
@@ -31,7 +40,8 @@ const typeClass: Record<string, string> = {
 
 const statusClass: Record<string, string> = {
   active: 'bg-emerald-100 text-emerald-800',
-  draft: 'bg-gray-100 text-gray-700'
+  draft: 'bg-gray-100 text-gray-700',
+  archived: 'bg-amber-100 text-amber-800'
 };
 
 function Badge({ className, children }: { className: string; children: React.ReactNode }) {
@@ -56,9 +66,11 @@ function formatDate(date: string): string {
 }
 
 export function DocumentWorkspace({
-  document
+  document,
+  versions
 }: {
   document: WorkspaceDocument;
+  versions: WorkspaceVersion[];
 }) {
   const [isEditing, setIsEditing] = useState(false);
 
@@ -144,6 +156,45 @@ export function DocumentWorkspace({
             data. Only your team can view or edit it.
           </p>
         </CardFooter>
+      </Card>
+
+      <Card className="mt-6">
+        <CardHeader>
+          <h2 className="text-sm font-medium text-gray-700">
+            Version history ({versions.length})
+          </h2>
+          <p className="text-xs text-gray-500">
+            Case analyses record the version they used, so you can see what an
+            older answer was based on.
+          </p>
+        </CardHeader>
+        <CardContent>
+          {versions.length === 0 ? (
+            <p className="text-sm text-gray-500">
+              History starts with the next edit of this document.
+            </p>
+          ) : (
+            <ul className="space-y-2">
+              {versions.map((v) => (
+                <li key={v.version}>
+                  <details className="rounded-md border border-gray-200 px-3 py-2">
+                    <summary className="cursor-pointer text-sm text-gray-800">
+                      v{v.version}
+                      {v.version === document.version ? ' (current)' : ''} ·{' '}
+                      {formatDate(v.createdAt)} · {v.authorName ?? 'Unknown'}
+                    </summary>
+                    <p className="mt-2 text-sm font-medium text-gray-900">
+                      {v.title}
+                    </p>
+                    <div className="mt-1 whitespace-pre-wrap rounded bg-gray-50 px-3 py-2 text-sm text-gray-700">
+                      {v.content}
+                    </div>
+                  </details>
+                </li>
+              ))}
+            </ul>
+          )}
+        </CardContent>
       </Card>
     </section>
   );

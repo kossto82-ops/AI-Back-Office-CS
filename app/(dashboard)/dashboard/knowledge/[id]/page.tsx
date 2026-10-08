@@ -1,5 +1,10 @@
 import { redirect, notFound } from 'next/navigation';
-import { getUser, getTeamForUser, getDocumentByIdForTeam } from '@/lib/db/queries';
+import {
+  getUser,
+  getTeamForUser,
+  getDocumentByIdForTeam,
+  getDocumentVersionsForTeam
+} from '@/lib/db/queries';
 import { DocumentWorkspace } from './document-workspace';
 
 export const dynamic = 'force-dynamic';
@@ -30,8 +35,18 @@ export default async function DocumentPage({
     notFound();
   }
 
+  const versions = await getDocumentVersionsForTeam(document.id, team.id);
+
   return (
     <DocumentWorkspace
+      versions={versions.map((v) => ({
+        version: v.version,
+        title: v.title,
+        type: v.type,
+        content: v.content,
+        authorName: v.authorName,
+        createdAt: v.createdAt.toISOString()
+      }))}
       document={{
         id: document.id,
         title: document.title,

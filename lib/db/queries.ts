@@ -8,6 +8,7 @@ import {
   cases,
   caseAnalyses,
   documents,
+  documentVersions,
   Case,
   CaseAnalysis,
   Document,
@@ -327,4 +328,37 @@ export async function getDocumentByIdForTeam(
     .limit(1);
 
   return row ?? null;
+}
+
+export type DocumentVersionRow = {
+  version: number;
+  title: string;
+  type: string;
+  content: string;
+  createdAt: Date;
+  authorName: string | null;
+};
+
+export async function getDocumentVersionsForTeam(
+  documentId: number,
+  teamId: number
+): Promise<DocumentVersionRow[]> {
+  return db
+    .select({
+      version: documentVersions.version,
+      title: documentVersions.title,
+      type: documentVersions.type,
+      content: documentVersions.content,
+      createdAt: documentVersions.createdAt,
+      authorName: users.name
+    })
+    .from(documentVersions)
+    .leftJoin(users, eq(documentVersions.authorId, users.id))
+    .where(
+      and(
+        eq(documentVersions.documentId, documentId),
+        eq(documentVersions.teamId, teamId)
+      )
+    )
+    .orderBy(desc(documentVersions.version));
 }

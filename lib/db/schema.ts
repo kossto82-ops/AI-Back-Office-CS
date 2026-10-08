@@ -191,6 +191,31 @@ export const documents = pgTable(
   (t) => [index('documents_team_status_idx').on(t.teamId, t.status)]
 );
 
+/**
+ * One row per document version (the state of that version). Lets a lead see what
+ * an older analysis actually relied on. Documents created before this table
+ * existed get their pre-edit state recorded the first time they change.
+ */
+export const documentVersions = pgTable(
+  'document_versions',
+  {
+    id: serial('id').primaryKey(),
+    documentId: integer('document_id')
+      .notNull()
+      .references(() => documents.id, { onDelete: 'cascade' }),
+    teamId: integer('team_id')
+      .notNull()
+      .references(() => teams.id),
+    version: integer('version').notNull(),
+    title: varchar('title', { length: 255 }).notNull(),
+    type: varchar('type', { length: 30 }).notNull(),
+    content: text('content').notNull(),
+    authorId: integer('author_id').references(() => users.id),
+    createdAt: timestamp('created_at').notNull().defaultNow(),
+  },
+  (t) => [index('document_versions_doc_version_idx').on(t.documentId, t.version)]
+);
+
 export const teamsRelations = relations(teams, ({ many }) => ({
   teamMembers: many(teamMembers),
   activityLogs: many(activityLogs),
@@ -279,6 +304,7 @@ export type CaseAnalysis = typeof caseAnalyses.$inferSelect;
 export type NewCaseAnalysis = typeof caseAnalyses.$inferInsert;
 export type CaseEvent = typeof caseEvents.$inferSelect;
 export type NewCaseEvent = typeof caseEvents.$inferInsert;
+export type DocumentVersion = typeof documentVersions.$inferSelect;
 export type Document = typeof documents.$inferSelect;
 export type NewDocument = typeof documents.$inferInsert;
 export type TeamDataWithMembers = Team & {

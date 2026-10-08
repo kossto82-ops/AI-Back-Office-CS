@@ -52,6 +52,8 @@ export type WorkspaceSource = {
   usedVersion?: number;
   /** The document no longer exists / is no longer visible to this team. */
   missing?: boolean;
+  /** Current document status (active, draft or archived). */
+  status?: string;
 };
 
 type WorkspaceAnalysis = {
@@ -502,6 +504,11 @@ export function CaseWorkspace({
                       {source.missing ? (
                         <span className="ml-2 text-xs font-medium text-red-700">
                           Document no longer available
+                        </span>
+                      ) : source.status && source.status !== 'active' ? (
+                        <span className="ml-2 text-xs font-medium text-amber-700">
+                          This document is now {source.status}; it may be out of
+                          date.
                         </span>
                       ) : source.usedVersion &&
                         source.version &&

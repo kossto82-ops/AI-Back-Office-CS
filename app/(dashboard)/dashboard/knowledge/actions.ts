@@ -3,7 +3,7 @@
 import { z } from 'zod';
 import { and, eq } from 'drizzle-orm';
 import { db } from '@/lib/db/drizzle';
-import { documents } from '@/lib/db/schema';
+import { documents, documentVersions } from '@/lib/db/schema';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { validatedActionWithUser } from '@/lib/auth/middleware';
@@ -46,6 +46,16 @@ export const createDocument = validatedActionWithUser(
       })
       .returning({ id: documents.id });
 
+    await db.insert(documentVersions).values({
+      documentId: created.id,
+      teamId: team.id,
+      version: 1,
+      title: data.title,
+      type: data.type,
+      content: data.content,
+      authorId: user.id
+    });
+
     revalidatePath('/dashboard/knowledge');
     redirect(`/dashboard/knowledge/${created.id}`);
   }
@@ -53,7 +63,7 @@ export const createDocument = validatedActionWithUser(
 
 export const updateDocument = validatedActionWithUser(
   updateSchema,
-  async (data) => {
+  async (data, _formData, user) => {
     const team = await getTeamForUser();
     if (!team) return { error: 'User is not part of a team' };
 
@@ -89,6 +99,36 @@ export const updateDocument = validatedActionWithUser(
       .returning({ id: documents.id });
 
     if (!updated) return { error: 'Document not found' };
+
+    if (contentChanged) {
+      // Documents that predate version history: record their pre-edit state
+      // first, so the history is complete from the first edit onward.
+      const [known] = await db
+        .select({ id: documentVersions.id })
+        .from(documentVersions)
+        .where(eq(documentVersions.documentId, data.id))
+        .limit(1);
+      if (!known) {
+        await db.insert(documentVersions).values({
+          documentId: data.id,
+          teamId: team.id,
+          version: existing.version,
+          title: existing.title,
+          type: existing.type,
+          content: existing.content,
+          authorId: null
+        });
+      }
+      await db.insert(documentVersions).values({
+        documentId: data.id,
+        teamId: team.id,
+        version: existing.version + 1,
+        title: data.title,
+        type: data.type,
+        content: data.content,
+        authorId: user.id
+      });
+    }
 
     revalidatePath('/dashboard/knowledge');
     redirect(`/dashboard/knowledge/${data.id}`);

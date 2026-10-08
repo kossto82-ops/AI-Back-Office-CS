@@ -31,7 +31,8 @@ const typeClass: Record<string, string> = {
 
 const statusClass: Record<string, string> = {
   active: 'bg-emerald-100 text-emerald-800',
-  draft: 'bg-gray-100 text-gray-700'
+  draft: 'bg-gray-100 text-gray-700',
+  archived: 'bg-amber-100 text-amber-800'
 };
 
 const typeIcon: Record<string, typeof FileText> = {
@@ -97,6 +98,9 @@ export default async function KnowledgePage({
   }
   if (status && DOCUMENT_STATUSES.includes(status as (typeof DOCUMENT_STATUSES)[number])) {
     documents = documents.filter((doc) => doc.status === status);
+  } else {
+    // Archived documents are history: hidden unless asked for explicitly.
+    documents = documents.filter((doc) => doc.status !== 'archived');
   }
 
   const hasFilters = Boolean(q) || Boolean(type) || Boolean(status);
@@ -152,7 +156,7 @@ export default async function KnowledgePage({
           className="h-9 rounded-md border border-gray-300 bg-white px-3 text-sm text-gray-900 focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
           aria-label="Filter by status"
         >
-          <option value="">All statuses</option>
+          <option value="">Active &amp; draft</option>
           {DOCUMENT_STATUSES.map((s) => (
             <option key={s} value={s}>
               {documentStatusLabel(s)}

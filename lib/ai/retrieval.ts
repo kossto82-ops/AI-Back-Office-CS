@@ -59,14 +59,15 @@ class PostgresTextRetrievalProvider implements RetrievalProvider {
       ilike(documents.title, `%${escapedPhrase}%`),
       ilike(documents.content, `%${escapedPhrase}%`)
     ];
-    if (keywords.length > 1) {
-      for (const keyword of keywords) {
-        const escaped = escapeLike(keyword);
-        termMatches.push(
-          ilike(documents.title, `%${escaped}%`),
-          ilike(documents.content, `%${escaped}%`)
-        );
-      }
+    // Always match on the keywords too. With a single keyword the old guard left
+    // only the whole-query phrase, so a short case ("Roaming" plus one filler
+    // word) could never match a document that clearly covered it.
+    for (const keyword of keywords) {
+      const escaped = escapeLike(keyword);
+      termMatches.push(
+        ilike(documents.title, `%${escaped}%`),
+        ilike(documents.content, `%${escaped}%`)
+      );
     }
     conditions.push(or(...termMatches)!);
 

@@ -106,6 +106,7 @@ export default async function CasePage({
         type: doc?.type,
         version: doc?.version,
         usedVersion: source.version,
+        status: doc?.status,
         missing: !doc
       };
     });

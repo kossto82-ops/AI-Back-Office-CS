@@ -563,6 +563,19 @@ Appended after the audit above; the audit text is not rewritten.
   (historical wording, left untouched as evidence); the app now stores an escalation instead.
 - AI-04 → fixed. Whether the stored acknowledgement draft is what agents want to send is a pilot question, not measured.
 
+### NOW #4 — knowledge lifecycle (part 1: archive + version history, done 2026-10-08)
+- New `archived` document status: excluded from retrieval (retrieval is `active`-only), hidden from the default list, reachable with the
+  status filter. Cases whose cited source is now archived/draft show "This document is now archived; it may be out of date".
+- `document_versions` table (migration `0005`, applied to `dev` and `pilot`): one row per version, written on create and on every
+  content/title/type change (status-only changes create none). Documents created before this table get their pre-edit state recorded on
+  their first edit. The document page shows a collapsible history; analyses already record the version they used.
+- E2E `knowledge.spec.ts` (4): history rows; an active document feeds the AI and is cited with its version; archiving removes it from the AI
+  (the same case then escalates as "no knowledge"); an older analysis flags the archived source. Phase 3 (12/12) and Phase 4 (6/6) re-run green;
+  Phase 3 test 8 now reads the first match because the history repeats the text.
+- **Retrieval bug found while testing:** with a single keyword the query only matched the whole-query phrase, so a short case could never match a
+  document covering it. Keywords are now always matched (`lib/ai/retrieval.ts`). Only broadens candidates; scoring unchanged.
+- Part 2 (bulk import) follows.
+
 ## IMPLEMENTED DURING AUDIT
 
 Everything below was verified (tests/E2E/browser) — see TEST RESULTS. No model/provider/prompt change, no

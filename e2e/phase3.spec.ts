@@ -177,7 +177,8 @@ test.describe.serial('Phase 3 E2E - Knowledge Base', () => {
     await expect(page.getByText('Guide', { exact: true }).first()).toBeVisible();
     await expect(page.getByText('Draft', { exact: true }).first()).toBeVisible();
     await expect(page.getByText('v2', { exact: true })).toBeVisible();
-    await expect(page.getByText(/obtain lead approval/)).toBeVisible();
+    // the same text also appears in the version history; the document body comes first
+    await expect(page.getByText(/obtain lead approval/).first()).toBeVisible();
   });
 
   test('9. status-only change keeps the version number', async () => {

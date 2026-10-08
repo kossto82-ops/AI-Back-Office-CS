@@ -49,13 +49,15 @@ export function documentTypeLabel(type: string): string {
   return DOCUMENT_TYPE_LABELS[type as DocumentType] ?? type;
 }
 
-export const DOCUMENT_STATUSES = ['draft', 'active'] as const;
+// archived: kept for history, excluded from retrieval and from the default list.
+export const DOCUMENT_STATUSES = ['draft', 'active', 'archived'] as const;
 
 export type DocumentStatus = (typeof DOCUMENT_STATUSES)[number];
 
 export const DOCUMENT_STATUS_LABELS: Record<DocumentStatus, string> = {
   draft: 'Draft',
   active: 'Active',
+  archived: 'Archived',
 };
 
 export function documentStatusLabel(status: string): string {
