@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 12
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      # Deterministic suites only: no database, no provider, $0.
+      - run: pnpm test:unit
+      # The build needs the variables to exist, not to be real: no connection
+      # is opened while building.
+      - run: pnpm build
+        env:
+          POSTGRES_URL: postgresql://ci:ci@localhost:5432/ci
+          AUTH_SECRET: ci-only-not-a-secret
+          STRIPE_SECRET_KEY: sk_test_ci
+          STRIPE_WEBHOOK_SECRET: whsec_ci
+          BASE_URL: http://localhost:3000

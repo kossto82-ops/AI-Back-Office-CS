@@ -18,8 +18,8 @@ máquina nueva", el flujo diario es idéntico en todos tus equipos.
 - Pipeline IA: `retrieveRelevantKnowledge` → proveedor → esquema Zod → grounding →
   puerta de seguridad en runtime → persistencia. `AI_PROVIDER=mock` para E2E.
 - No se ha desplegado a producción; todo vive en la rama `main`.
-- Ojo: la BD de Neon es compartida y los E2E escriben en ella (ver auditoría).
-  Para un piloto real usa un equipo (team) nuevo y dedicado, no `Test Team`.
+- Entornos: la BD ya no es una sola. Ramas de Neon `dev` / `pilot` / `production` y `pnpm db:use <rama>`;
+  detalle en `docs/DATABASE-ENVIRONMENTS.md`. Los E2E solo contra `dev`.
 
 ## 2. Repositorio
 

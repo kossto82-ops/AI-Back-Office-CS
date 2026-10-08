@@ -17,6 +17,7 @@
     "db:phase6-classify": "npx tsx scripts/phase6/classification-eval.ts",
     "db:phase9-seed": "npx tsx scripts/phase9/seed-experiment.ts",
     "db:phase9-analyze": "npx tsx scripts/phase9/analyze.ts",
+    "db:use": "npx tsx scripts/db-env.ts",
     "db:pilot-metrics": "npx tsx scripts/pilot-metrics.ts",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "npx tsx scripts/migrate.ts",

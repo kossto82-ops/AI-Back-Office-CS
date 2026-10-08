@@ -539,6 +539,19 @@ Appended after the audit above; the audit text is not rewritten.
 - Migrations `0003` and `0004` applied to the shared dev database (additive / constraint change only).
 - Result: AI-02 → fixed. The "discarded analysis" remaining risk is closed; the hold *rate* on real outputs is still unmeasured.
 
+### NOW #1 — isolated environments and CI (partly done, 2026-10-08)
+- Neon branches created with `neonctl` (owner approved the login): `dev` and `pilot`, both children of the old shared
+  `production` branch (left untouched, now a frozen snapshot). The local `.env` now points to `dev`; `pnpm db:use`
+  switches branches without printing credentials; Audit and Phase 2 E2E re-run green against `dev`.
+  Details in `docs/DATABASE-ENVIRONMENTS.md`.
+- **Not done:** the `pilot` branch still contains the copied test data. Truncating it was blocked by the session's permission
+  system and was not worked around; it needs the owner's explicit go-ahead (or to be run by the owner).
+- CI (`.github/workflows/ci.yml`): typecheck, unit suites, build with placeholder variables. **Unverified on GitHub** (not yet
+  run there). Writing it exposed that `/pricing` called Stripe at build time; it is now rendered on request.
+- E2E in CI (ephemeral Neon branch per run) remains open: needs a Neon API key as a GitHub secret.
+- Note: during branch creation the CLI printed connection strings (database role password shared with `production`) to the
+  session output. Consider rotating that role's password in the Neon console.
+
 ## IMPLEMENTED DURING AUDIT
 
 Everything below was verified (tests/E2E/browser) — see TEST RESULTS. No model/provider/prompt change, no
