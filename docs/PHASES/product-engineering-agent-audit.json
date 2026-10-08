@@ -18,7 +18,7 @@
       "area": "ai-safety",
       "severity": "high",
       "problem": "Runtime safety fragments are exact phrases from 42 eval cases; paraphrased unsupported commitments pass as SAFE while legitimate grounded sentences are held.",
-      "evidence": "Probe on pre-audit code: 0/7 paraphrases ('We'll refund', 'I will refund', 'We will credit', 'We can waive', 'We guarantee', curly apostrophe) detected; 3/5 legitimate sentences ('24 months', 'from today', 'by post') returned MANUAL_REVIEW.",
+      "evidence": "Probe on pre-audit code: 0/7 paraphrases ('We'll refund', 'I will refund', 'We will credit', 'We can waive', 'We guarantee', curly apostrophe) detected; 3/5 legitimate sentences ('24 months', 'from today', 'by post') returned MANUAL_REVIEW. Follow-up 2026-10-08: 60-output real corpus ($0.0238) found 1 unsupported commitment (invented figure) that the phrase tiers cannot see; deterministic grounded-commitment check detects it with 0/59 false flags; a false hold of the generic tier (summary text) was found and the tier now covers the draft only. Too few real positives to estimate a detection rate; labels are by the assistant, not independent.",
       "recommendation": "Generic commitment tier (done, hold-only) plus a grounded-commitment check against retrieved documents and a 100+ real-output labelled corpus.",
       "effort": "M",
       "impact": "high",
@@ -846,7 +846,8 @@
       "audit": "8/8"
     },
     "baselineBeforeChanges": "phase2 failed at test 2 (8 dependent tests did not run); other baselines not re-observed",
-    "modelCalls": 0,
-    "costUsd": 0
+    "modelCalls": 60,
+    "costUsd": 0.0238,
+    "modelCallsNote": "Spend occurred only in NOW #3 (60 gpt-4o-mini calls, owner-approved); everything else is deterministic or mock."
   }
 }

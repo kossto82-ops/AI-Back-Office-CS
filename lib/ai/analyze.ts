@@ -13,6 +13,7 @@ import {
   RUNTIME_REVIEW_FRAGMENTS,
   RUNTIME_SAFETY_FRAGMENTS
 } from './safety/policy';
+import { findUnsupportedCommitments } from './safety/grounded-commitments';
 import {
   AiSafetyManualReviewError,
   AiSafetyViolationError
@@ -94,11 +95,31 @@ export async function analyzeCase(
 
   // Generic commitment shapes: review tier only. A hit (asserted or ambiguous)
   // holds the analysis for a human; it never hard-rejects.
-  const review = assessCase(textFields, RUNTIME_REVIEW_FRAGMENTS);
+  // Scope: the customer-facing draft only. The summary and recommended action are
+  // written for the agent and routinely restate what the customer asked for
+  // ("requests to waive the early termination fee"), which is not a promise.
+  const review = assessCase(
+    { summary: '', recommendedAction: '', draftResponse: parsed.draftResponse },
+    RUNTIME_REVIEW_FRAGMENTS
+  );
+
+  // Figures and remedies the retrieved knowledge does not support.
+  const customerText = [
+    input.caseContent.subject,
+    input.caseContent.customerMessage,
+    ...input.caseContent.conversationHistory.map((turn) => turn.content)
+  ].join(' ');
+  const ungrounded = findUnsupportedCommitments({
+    draftResponse: parsed.draftResponse,
+    caseText: customerText,
+    docs: input.retrievedDocs
+  });
+
   const reviewFragments = [
     ...safety.ambiguousFragments,
     ...review.assertedFragments,
-    ...review.ambiguousFragments
+    ...review.ambiguousFragments,
+    ...ungrounded.map((finding) => finding.sentence)
   ];
 
   if (safety.outcome === 'MANUAL_REVIEW' || reviewFragments.length > 0) {

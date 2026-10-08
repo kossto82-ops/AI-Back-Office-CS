@@ -5,7 +5,7 @@
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
-    "test:unit": "npx tsx scripts/tests/source-normalization.test.ts && npx tsx scripts/tests/classification-boundaries.test.ts && npx tsx scripts/tests/safety-evaluator.test.ts && npx tsx scripts/tests/runtime-safety.test.ts && npx tsx scripts/tests/phase9-dataset.test.ts && npx tsx scripts/tests/retrieval-tokenizer.test.ts && npx tsx scripts/tests/safety-generalization.test.ts && npx tsx scripts/tests/no-coverage.test.ts && npx tsx scripts/tests/import-parse.test.ts && npx tsx scripts/tests/insights.test.ts && npx tsx scripts/tests/rate-limit.test.ts && npx tsx scripts/tests/permissions.test.ts",
+    "test:unit": "npx tsx scripts/tests/source-normalization.test.ts && npx tsx scripts/tests/classification-boundaries.test.ts && npx tsx scripts/tests/safety-evaluator.test.ts && npx tsx scripts/tests/runtime-safety.test.ts && npx tsx scripts/tests/phase9-dataset.test.ts && npx tsx scripts/tests/retrieval-tokenizer.test.ts && npx tsx scripts/tests/safety-generalization.test.ts && npx tsx scripts/tests/no-coverage.test.ts && npx tsx scripts/tests/import-parse.test.ts && npx tsx scripts/tests/insights.test.ts && npx tsx scripts/tests/rate-limit.test.ts && npx tsx scripts/tests/permissions.test.ts && npx tsx scripts/tests/grounded-commitments.test.ts && npx tsx scripts/tests/analyze-grounded.test.ts",
     "db:phase7-audit": "npx tsx scripts/phase7/re-evaluate-safety.ts",
     "db:setup": "npx tsx lib/db/setup.ts",
     "db:seed": "npx tsx lib/db/seed.ts",
