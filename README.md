@@ -1,5 +1,7 @@
 # AI Back Office CS
 
+> Built on top of [Vercel's Next.js SaaS Starter](https://github.com/nextjs/saas-starter) (auth, Stripe billing, activity log, base dashboard). My work is the customer-service layer: cases, AI analysis, knowledge base and retrieval, safety checks and end-to-end tests.
+
 AI Back Office CS is a B2B SaaS for small customer-service teams. It helps
 agents process cases faster by analyzing customer requests, classifying them,
 and retrieving the relevant internal knowledge to draft a response — with a
